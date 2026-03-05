@@ -73,7 +73,7 @@ const quickstart = [
 export const metadata: Metadata = {
   title: "Start Here",
   description:
-    "Follow this 7-day longevity quickstart to install high-return sleep, nutrition, training, and recovery habits with a simple evidence-oriented system.",
+    "Follow this 7-day testosterone optimization quickstart to install high-return sleep, training, and recovery habits before medication escalation.",
   alternates: {
     canonical: "/start-here"
   }
@@ -82,11 +82,11 @@ export const metadata: Metadata = {
 export default function StartHerePage() {
   return (
     <>
-      <h1 className="page-title">Start Here: 7-Day Longevity Quickstart</h1>
+      <h1 className="page-title">Start Here: 7-Day Natural T Quickstart</h1>
       <p className="page-subtitle">
-        If you want better energy, stronger biomarkers, and a plan you can
-        sustain, use this 7-day setup week. Keep it simple, track objective
-        signals, and avoid stacking too many variables at once.
+        If you want better energy, strength, libido, and focus, use this 7-day setup
+        sprint first. Keep it simple, track objective signals, and avoid changing ten
+        variables at once.
       </p>
 
       <DisclosureNotice variant="medical" title="Medical Disclaimer" />

@@ -5,43 +5,43 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --bg: #f6f9f6;
-  --surface: #ffffff;
-  --text: #10211a;
-  --site-muted: #456355;
-  --muted: #f1f5f3;
-  --accent: #eef6f1;
-  --accent-2: #0f4f37;
-  --border: #d3e4d8;
+  --bg: #09090b;
+  --surface: #111114;
+  --text: #f4f4f5;
+  --site-muted: #a1a1aa;
+  --muted: #18181b;
+  --accent: #1f1f24;
+  --accent-2: #f43f5e;
+  --border: #27272a;
   --radius: 0.75rem;
-  --background: #ffffff;
-  --foreground: #10211a;
-  --card: #ffffff;
-  --card-foreground: #10211a;
-  --popover: #ffffff;
-  --popover-foreground: #10211a;
-  --primary: #1e6f4f;
-  --primary-foreground: #f2fff8;
-  --secondary: #e8f5ee;
-  --secondary-foreground: #164334;
-  --muted-foreground: #4b6358;
-  --accent-foreground: #123f2f;
-  --destructive: oklch(0.577 0.245 27.325);
-  --input: #c4dccf;
-  --ring: #6cae8f;
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --card: #111114;
+  --card-foreground: #f4f4f5;
+  --popover: #111114;
+  --popover-foreground: #f4f4f5;
+  --primary: #e11d48;
+  --primary-foreground: #fff1f2;
+  --secondary: #18181b;
+  --secondary-foreground: #fafafa;
+  --muted-foreground: #a1a1aa;
+  --accent-foreground: #ffe4e6;
+  --destructive: oklch(0.704 0.191 22.216);
+  --input: #27272a;
+  --ring: #fb7185;
+  --chart-1: oklch(0.62 0.23 18);
+  --chart-2: oklch(0.66 0.18 42);
+  --chart-3: oklch(0.73 0.17 90);
+  --chart-4: oklch(0.58 0.21 330);
+  --chart-5: oklch(0.68 0.2 270);
+  --sidebar: #09090b;
+  --sidebar-foreground: #f4f4f5;
+  --sidebar-primary: #e11d48;
+  --sidebar-primary-foreground: #fff1f2;
+  --sidebar-accent: #18181b;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #fb7185;
 }
 
 * {
@@ -52,18 +52,19 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: radial-gradient(circle at top right, #e5f1e8 0%, var(--bg) 42%) fixed;
+  background: radial-gradient(circle at top right, #3f0d1d 0%, #09090b 40%) fixed;
   color: var(--text);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Inter, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 a {
-  color: var(--accent-2);
+  color: #fb7185;
   text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: #fda4af;
+  text-decoration: none;
 }
 
 .container {
@@ -105,7 +106,7 @@ main {
 }
 
 .hero {
-  background: linear-gradient(140deg, #f0f8f2 0%, #ddede2 100%);
+  background: linear-gradient(140deg, #111114 0%, #0b0b0d 100%);
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 32px;
@@ -139,6 +140,7 @@ main {
 
 .card h3 {
   margin: 0 0 8px;
+  color: var(--foreground);
 }
 
 .card p {
@@ -353,11 +355,11 @@ main {
 
 .disclosure {
   margin-top: 20px;
-  border: 1px solid #e4cda1;
-  background: #fff7e8;
+  border: 1px solid #7f1d1d;
+  background: #1f0a0f;
   border-radius: 12px;
   padding: 14px 16px;
-  color: #5f4823;
+  color: #fecdd3;
   line-height: 1.6;
 }
 
