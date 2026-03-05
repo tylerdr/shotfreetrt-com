@@ -3,151 +3,77 @@ import Link from "next/link";
 
 import { DisclosureNotice } from "@/components/DisclosureNotice";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-type ResourceItem = {
-  name: string;
-  reason: string;
-  caution: string;
+type Option = {
+  title: string;
+  category: string;
+  summary: string;
+  fertility: string;
+  route: string;
+  caveat: string;
   href: string;
 };
 
-type ResourceCategory = {
-  title: string;
-  description: string;
-  items: ResourceItem[];
-};
+const pathways: Option[] = [
+  {
+    title: "Maximus-style enclomiphene programs",
+    category: "SERM / fertility-aware",
+    summary:
+      "Telemed pathway often used by men who want to stimulate endogenous signaling before exogenous testosterone.",
+    fertility: "Commonly positioned as fertility-preserving for selected patients",
+    route: "Oral capsules",
+    caveat:
+      "Response variability is real. Requires clinician oversight and follow-up labs.",
+    href: "https://example.com/maximus-placeholder?ref=shotfreetrt"
+  },
+  {
+    title: "Needle-free topical testosterone clinics",
+    category: "Exogenous testosterone",
+    summary:
+      "Gel/cream pathways for men avoiding injections but still choosing testosterone replacement.",
+    fertility: "May suppress fertility; discuss preservation planning upfront",
+    route: "Topical",
+    caveat:
+      "Transfer risk and dose consistency require strict protocol compliance.",
+    href: "https://example.com/topical-trt-placeholder?ref=shotfreetrt"
+  },
+  {
+    title: "Oral testosterone providers",
+    category: "Exogenous testosterone",
+    summary:
+      "Needle-free TRT option with fast symptom response for some men.",
+    fertility: "Typically similar suppression concerns to other TRT forms",
+    route: "Oral",
+    caveat:
+      "Lipid/liver and broader safety monitoring must be part of the plan.",
+    href: "https://example.com/oral-trt-placeholder?ref=shotfreetrt"
+  }
+];
 
-const categories: ResourceCategory[] = [
+const stack = [
   {
-    title: "Foundational Supplements",
-    description:
-      "High-intent options with broad human safety data when used responsibly and personalized to labs and medication context.",
-    items: [
-      {
-        name: "Third-Party Tested Omega-3",
-        reason:
-          "Useful for readers trying to improve cardiometabolic markers when diet quality is inconsistent.",
-        caution:
-          "Use caution if you take anticoagulants or have bleeding risk; review dose and interactions with your clinician.",
-        href: "https://example.com/omega-3-placeholder?ref=alivelongevity"
-      },
-      {
-        name: "Creatine Monohydrate",
-        reason:
-          "May support muscle retention, strength progression, and healthy aging training adherence.",
-        caution:
-          "Review kidney-related concerns and lab interpretation with a clinician before long-term use.",
-        href: "https://example.com/creatine-placeholder?ref=alivelongevity"
-      },
-      {
-        name: "Magnesium Glycinate",
-        reason:
-          "Often used to support sleep quality and recovery when routine, caffeine timing, and stress management are already addressed.",
-        caution:
-          "Start with conservative doses and monitor GI tolerance and medication interactions.",
-        href: "https://example.com/magnesium-placeholder?ref=alivelongevity"
-      }
-    ]
+    name: "Creatine monohydrate",
+    why: "Supports strength progression and lean mass retention during natural optimization phases.",
+    href: "https://example.com/creatine-placeholder?ref=shotfreetrt"
   },
   {
-    title: "Measurement Tools",
-    description:
-      "Simple, repeatable tools that improve adherence and help turn behavior changes into objective feedback loops.",
-    items: [
-      {
-        name: "Validated Home Blood Pressure Cuff",
-        reason:
-          "Home averages are often more useful than occasional office readings for trend-based decisions.",
-        caution:
-          "Use standardized positioning and timing; do not self-adjust medications without supervision.",
-        href: "https://example.com/bp-cuff-placeholder?ref=alivelongevity"
-      },
-      {
-        name: "Step Tracking Wearable",
-        reason:
-          "Supports daily movement consistency and helps maintain non-exercise activity volume.",
-        caution:
-          "Use as a guidance tool, not as a medical diagnosis device.",
-        href: "https://example.com/wearable-placeholder?ref=alivelongevity"
-      },
-      {
-        name: "Food Scale + Protein Prep Kit",
-        reason:
-          "Improves accuracy for protein targets and meal consistency during high-workload weeks.",
-        caution:
-          "Avoid turning tracking into restrictive behavior; prioritize sustainability.",
-        href: "https://example.com/food-scale-placeholder?ref=alivelongevity"
-      }
-    ]
+    name: "Magnesium glycinate",
+    why: "Useful for sleep quality support when bedtime routine and caffeine timing are dialed.",
+    href: "https://example.com/magnesium-placeholder?ref=shotfreetrt"
   },
   {
-    title: "Recovery and Sleep Support",
-    description:
-      "Tools that can reduce friction in evening routines and improve sleep opportunity when used with behavioral fundamentals.",
-    items: [
-      {
-        name: "Blackout Sleep Kit",
-        reason:
-          "Environmental light control is a practical lever for improved sleep continuity.",
-        caution:
-          "Sleep disruption with daytime fatigue may still require sleep apnea screening.",
-        href: "https://example.com/sleep-kit-placeholder?ref=alivelongevity"
-      },
-      {
-        name: "Cooling Sleep Pad",
-        reason:
-          "Can help readers who struggle with heat-related awakenings and fragmented sleep.",
-        caution:
-          "Treat as supportive comfort tech, not a replacement for schedule and caffeine control.",
-        href: "https://example.com/cooling-pad-placeholder?ref=alivelongevity"
-      },
-      {
-        name: "Sauna Access Membership",
-        reason:
-          "Useful for readers implementing consistent heat exposure protocols with hydration and blood pressure awareness.",
-        caution:
-          "Avoid high-intensity protocols if you have cardiovascular symptoms without medical clearance.",
-        href: "https://example.com/sauna-placeholder?ref=alivelongevity"
-      }
-    ]
-  },
-  {
-    title: "Lab and Planning Utilities",
-    description:
-      "Resources that support evidence-first decision making for readers who want measurable progress instead of trend chasing.",
-    items: [
-      {
-        name: "Quarterly Biomarker Tracker",
-        reason:
-          "Keeps ApoB, glucose, blood pressure, and adherence metrics in one review system.",
-        caution:
-          "Lab tracking should support clinical conversations, not self-diagnosis.",
-        href: "https://example.com/biomarker-tracker-placeholder?ref=alivelongevity"
-      },
-      {
-        name: "Meal Planning Template",
-        reason:
-          "Converts nutrition goals into repeatable weekly execution blocks for busy schedules.",
-        caution:
-          "Adjust portions and food choices for medical conditions and medication context.",
-        href: "https://example.com/meal-template-placeholder?ref=alivelongevity"
-      },
-      {
-        name: "Training Progress Dashboard",
-        reason:
-          "Helps connect strength and cardio progression with recovery quality and symptom trends.",
-        caution:
-          "Pain, dizziness, or persistent fatigue should trigger clinician evaluation before progression.",
-        href: "https://example.com/training-dashboard-placeholder?ref=alivelongevity"
-      }
-    ]
+    name: "Omega-3",
+    why: "May support cardiometabolic markers while body-composition and diet protocols are running.",
+    href: "https://example.com/omega3-placeholder?ref=shotfreetrt"
   }
 ];
 
 export const metadata: Metadata = {
   title: "Resources",
   description:
-    "Curated longevity supplements and tools with evidence-oriented framing, placeholder affiliate links, and clear medical/FTC disclosure.",
+    "Compare fertility-preserving and needle-free testosterone pathways, telemed options, and practical stack recommendations.",
   alternates: {
     canonical: "/resources"
   }
@@ -156,50 +82,87 @@ export const metadata: Metadata = {
 export default function ResourcesPage() {
   return (
     <>
-      <h1 className="page-title">Longevity Resources</h1>
+      <h1 className="page-title">Resource Stack: Natural First, Then Smart Escalation</h1>
       <p className="page-subtitle">
-        Use this library to find supplements and tools worth considering after
-        your fundamentals are in place. Prioritize sleep, nutrition, strength,
-        and cardiometabolic tracking before adding complexity.
+        Start with behavior + biomarkers. If you still need a bigger hormonal push, use this page to
+        compare fertility-aware options, oral/topical TRT pathways, and practical support tools.
       </p>
 
-      <DisclosureNotice variant="both" title="FTC + Medical Notice" />
+      <DisclosureNotice variant="both" title="Medical + FTC Notice" />
 
-      <div className="resource-groups">
-        {categories.map((category) => (
-          <section key={category.title} className="resource-group">
-            <h2>{category.title}</h2>
-            <p>{category.description}</p>
-            <div className="card-grid">
-              {category.items.map((item) => (
-                <article key={item.name} className="card resource-card">
-                  <h3>{item.name}</h3>
-                  <p>
-                    <strong>Why it is here:</strong> {item.reason}
-                  </p>
-                  <p>
-                    <strong>Caution:</strong> {item.caution}
-                  </p>
-                  <p>
-                    <Link
-                      href={item.href}
-                      rel="sponsored noopener noreferrer"
-                      target="_blank"
-                      className="resource-link"
-                    >
-                      View recommendation
-                    </Link>
-                  </p>
-                </article>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
+      <section className="mt-8">
+        <h2 className="text-2xl font-bold">Telemed and therapy pathways</h2>
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {pathways.map((option) => (
+            <Card key={option.title} className="h-full">
+              <CardHeader>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  {option.category}
+                </p>
+                <CardTitle className="text-lg leading-snug">{option.title}</CardTitle>
+                <CardDescription>{option.summary}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm text-muted-foreground">
+                <p>
+                  <strong className="text-foreground">Fertility:</strong> {option.fertility}
+                </p>
+                <p>
+                  <strong className="text-foreground">Route:</strong> {option.route}
+                </p>
+                <p>
+                  <strong className="text-foreground">Watchout:</strong> {option.caveat}
+                </p>
+                <Button asChild variant="outline" className="mt-2 w-full">
+                  <Link href={option.href} rel="sponsored noopener noreferrer" target="_blank">
+                    View provider
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-2xl font-bold">Core support stack</h2>
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {stack.map((item) => (
+            <Card key={item.name}>
+              <CardHeader>
+                <CardTitle className="text-base">{item.name}</CardTitle>
+                <CardDescription>{item.why}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button asChild variant="ghost" className="px-0">
+                  <Link href={item.href} rel="sponsored noopener noreferrer" target="_blank">
+                    View recommendation →
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-10 rounded-xl border border-border bg-card p-6">
+        <h2 className="text-xl font-semibold">Next step: AI-personalized protocol</h2>
+        <p className="mt-2 text-muted-foreground">
+          Don’t guess. Run the advanced quiz, get your AI action plan, then decide if lifestyle,
+          enclomiphene-style support, or needle-free TRT deserves a clinician conversation.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Button asChild>
+            <Link href="/quiz/healthspan/advanced">Run Advanced Quiz</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/start-here">Start 7-Day Protocol</Link>
+          </Button>
+        </div>
+      </section>
 
       <NewsletterCTA
-        title="Want personalized longevity recommendations each week?"
-        description="Get one evidence-oriented protocol, one metric target, and one implementation checklist every Friday."
+        title="Get weekly Shot-Free TRT updates"
+        description="Every week: one actionable protocol, one lab lens, one smart escalation insight."
         buttonLabel="Join the weekly brief"
         formId="resources-newsletter-email"
       />

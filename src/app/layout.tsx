@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { AnalyticsProvider } from "@/components/analytics-provider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { Button } from "@/components/ui/button";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,48 +20,56 @@ export const metadata: Metadata = {
     description:
       "Natural testosterone optimization with practical protocols, labs, and decision guides.",
     url: "https://shotfreetrt.com",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }]
   },
   twitter: {
     card: "summary_large_image",
     title: "ShotFreeTRT | Natural Testosterone Optimization",
     description:
       "Natural testosterone optimization with practical protocols, labs, and decision guides.",
-    images: ["/og-image.png"],
+    images: ["/og-image.png"]
   },
   alternates: {
     canonical: "/"
   }
 };
 
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/quiz/healthspan/advanced", label: "AI Plan" },
+  { href: "/start-here", label: "Start Here" },
+  { href: "/resources", label: "Resources" },
+  { href: "/blog", label: "Blog" }
+];
+
 export default function RootLayout({
   children
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen bg-background text-foreground antialiased">
         <AnalyticsProvider>
-          <header className="site-header">
-            <div className="container nav-wrap">
-              <Link href="/" className="brand">
+          <header className="sticky top-0 z-20 border-b border-border/70 bg-black/70 backdrop-blur-xl">
+            <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
+              <Link href="/" className="text-sm font-black uppercase tracking-[0.2em] text-zinc-100">
                 ShotFreeTRT
               </Link>
-              <nav className="nav-links" aria-label="Primary">
-                <Link href="/">Home</Link>
-                <Link href="/start-here">Start Here</Link>
-                <Link href="/resources">Resources</Link>
-                <Link href="/about">About</Link>
-                <Link href="/blog">Blog</Link>
+              <nav className="flex flex-wrap items-center gap-2" aria-label="Primary">
+                {navItems.map((item) => (
+                  <Button key={item.href} asChild variant="ghost" size="sm" className="text-zinc-300 hover:bg-zinc-800 hover:text-zinc-100">
+                    <Link href={item.href}>{item.label}</Link>
+                  </Button>
+                ))}
               </nav>
             </div>
           </header>
-          <main>
-            <div className="container">{children}</div>
-          </main>
-          <footer>
-            <div className="container">
-              © {new Date().getFullYear()} ShotFreeTRT. Natural testosterone
-              optimization without injection-first bias.
+
+          <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</main>
+
+          <footer className="border-t border-border/70 bg-black/40">
+            <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-zinc-400 sm:px-6">
+              <p>© {new Date().getFullYear()} ShotFreeTRT — no injection-first bias.</p>
+              <p>Educational content only. Always confirm treatment decisions with a licensed clinician.</p>
             </div>
           </footer>
           <GoogleAnalytics />
