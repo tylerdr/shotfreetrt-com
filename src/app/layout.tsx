@@ -20,14 +20,20 @@ export const metadata: Metadata = {
     description:
       "Natural testosterone optimization with practical protocols, labs, and decision guides.",
     url: "https://shotfreetrt.com",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }]
+    siteName: "ShotFreeTRT",
+    images: [{ url: "/og-shotfreetrt.png", width: 1200, height: 630 }]
   },
   twitter: {
     card: "summary_large_image",
     title: "ShotFreeTRT | Natural Testosterone Optimization",
     description:
       "Natural testosterone optimization with practical protocols, labs, and decision guides.",
-    images: ["/og-image.png"]
+    images: ["/og-shotfreetrt.png"]
+  },
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png"
   },
   alternates: {
     canonical: "/"
