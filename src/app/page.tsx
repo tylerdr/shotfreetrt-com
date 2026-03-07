@@ -142,7 +142,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-10">
+      <section className="mt-12 md:mt-14">
         <h2 className="text-2xl font-bold text-foreground">The 4-block Shot Free TRT system</h2>
         <p className="mt-2 max-w-3xl text-muted-foreground">
           This is the Sprinter-style path: start with root-cause optimization, personalize the
@@ -167,10 +167,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-10">
+      <section className="mt-12 md:mt-14">
         <Card className="border-zinc-800 bg-zinc-950/70 text-zinc-100">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-2xl">
+          <CardHeader className="space-y-3 pb-4">
+            <CardTitle className="flex flex-wrap items-center gap-2 text-2xl leading-tight">
               <Pill className="size-5 text-red-300" />
               Compare your options before committing
             </CardTitle>
@@ -178,7 +178,7 @@ export default function HomePage() {
               Educational overview only. Discuss treatment choices with a licensed clinician.
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4 p-6 sm:p-8">
             <div className="overflow-x-auto">
               <table className="w-full min-w-[720px] border-collapse text-left text-sm">
                 <thead>
@@ -217,19 +217,19 @@ export default function HomePage() {
 
       <GuidePromoBanner />
 
-      <section className="mt-10">
+      <section className="mt-12 md:mt-14">
         <h2 className="text-2xl font-bold">How ShotFreeTRT monetizes (transparent)</h2>
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
-          <Card>
-            <CardHeader>
+        <div className="mt-5 grid gap-5 md:grid-cols-3">
+          <Card className="h-full">
+            <CardHeader className="space-y-3">
               <CardTitle className="text-base">Affiliate partnerships</CardTitle>
               <CardDescription>
                 Maximus-like telemed programs, labs, and supplements with clear disclosures.
               </CardDescription>
             </CardHeader>
           </Card>
-          <Card>
-            <CardHeader>
+          <Card className="h-full">
+            <CardHeader className="space-y-3">
               <CardTitle className="text-base">Educational products</CardTitle>
               <CardDescription>
                 Premium protocol packs, checklists, and follow-up templates for men running
@@ -237,8 +237,8 @@ export default function HomePage() {
               </CardDescription>
             </CardHeader>
           </Card>
-          <Card>
-            <CardHeader>
+          <Card className="h-full">
+            <CardHeader className="space-y-3">
               <CardTitle className="text-base">Selective ad slots</CardTitle>
               <CardDescription>
                 Minimal and relevant sponsor placements so the user journey stays clean.
@@ -248,12 +248,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-10">
+      <section className="mt-12 md:mt-14">
         <h2 className="text-2xl font-bold">Read next</h2>
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
+        <div className="mt-5 grid gap-5 md:grid-cols-3">
           {latest.map((article) => (
             <Card key={article.slug} className="h-full">
-              <CardHeader>
+              <CardHeader className="space-y-3">
                 <CardTitle className="text-base leading-snug">
                   <Link href={`/blog/${article.slug}`} className="hover:text-primary">
                     {article.title}
