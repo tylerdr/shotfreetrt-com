@@ -26,7 +26,7 @@ const pathways: Option[] = [
     route: "Oral capsules",
     caveat:
       "Response variability is real. Requires clinician oversight and follow-up labs.",
-    href: "https://example.com/maximus-placeholder?ref=shotfreetrt"
+    href: "/quiz/healthspan/advanced"
   },
   {
     title: "Needle-free topical testosterone clinics",
@@ -37,7 +37,7 @@ const pathways: Option[] = [
     route: "Topical",
     caveat:
       "Transfer risk and dose consistency require strict protocol compliance.",
-    href: "https://example.com/topical-trt-placeholder?ref=shotfreetrt"
+    href: "/start-here"
   },
   {
     title: "Oral testosterone providers",
@@ -48,7 +48,7 @@ const pathways: Option[] = [
     route: "Oral",
     caveat:
       "Lipid/liver and broader safety monitoring must be part of the plan.",
-    href: "https://example.com/oral-trt-placeholder?ref=shotfreetrt"
+    href: "/about"
   }
 ];
 
@@ -56,17 +56,17 @@ const stack = [
   {
     name: "Creatine monohydrate",
     why: "Supports strength progression and lean mass retention during natural optimization phases.",
-    href: "https://example.com/creatine-placeholder?ref=shotfreetrt"
+    href: "/start-here"
   },
   {
     name: "Magnesium glycinate",
     why: "Useful for sleep quality support when bedtime routine and caffeine timing are dialed.",
-    href: "https://example.com/magnesium-placeholder?ref=shotfreetrt"
+    href: "/start-here"
   },
   {
     name: "Omega-3",
     why: "May support cardiometabolic markers while body-composition and diet protocols are running.",
-    href: "https://example.com/omega3-placeholder?ref=shotfreetrt"
+    href: "/start-here"
   }
 ];
 
@@ -114,7 +114,7 @@ export default function ResourcesPage() {
                 </p>
                 <Button asChild variant="outline" className="mt-2 w-full">
                   <Link href={option.href} rel="sponsored noopener noreferrer" target="_blank">
-                    View provider
+                    Compare pathway
                   </Link>
                 </Button>
               </CardContent>
@@ -135,7 +135,7 @@ export default function ResourcesPage() {
               <CardContent>
                 <Button asChild variant="ghost" className="px-0">
                   <Link href={item.href} rel="sponsored noopener noreferrer" target="_blank">
-                    View recommendation →
+                    Explore guidance →
                   </Link>
                 </Button>
               </CardContent>
