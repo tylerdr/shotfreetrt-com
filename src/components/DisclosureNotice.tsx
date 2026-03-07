@@ -9,9 +9,9 @@ const DISCLOSURE_COPY: Record<DisclosureNoticeVariant, string> = {
   medical:
     "Educational content only. This site does not provide medical diagnosis or treatment. Always discuss supplements, labs, and medication changes with a licensed clinician.",
   affiliate:
-    "Some links on this page are placeholder affiliate links. If this site later earns commissions, that may influence monetization but does not replace evidence review.",
+    "Some links on this page may become affiliate links over time. If the site earns commissions, that will be disclosed and does not replace evidence review.",
   both:
-    "Educational content only. This site does not provide medical diagnosis or treatment. Some links are placeholder affiliate links and may later generate commissions. Always confirm safety and relevance with a licensed clinician."
+    "Educational content only. This site does not provide medical diagnosis or treatment. Some links may eventually generate affiliate commissions, which will be disclosed. Always confirm safety and relevance with a licensed clinician."
 };
 
 export function DisclosureNotice({
