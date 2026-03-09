@@ -767,10 +767,10 @@ export function AdvancedQuizEngine() {
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            The advanced assessment uses your intro answers for branching, so complete the intro quiz first.
+            The advanced TRT assessment uses your intro answers for branching, so complete the intro quiz first.
           </p>
           <Button asChild>
-            <Link href="/quiz/healthspan">Take Intro Quiz</Link>
+            <Link href="/quiz/healthspan">Take Intro TRT Quiz</Link>
           </Button>
         </CardContent>
       </Card>
@@ -802,7 +802,7 @@ export function AdvancedQuizEngine() {
       />
 
       <p className="text-sm text-muted-foreground">
-        Advanced question {currentQuestionIndex + 1} of {questions.length}
+        Advanced TRT question {currentQuestionIndex + 1} of {questions.length}
       </p>
 
       <Card key={currentQuestion.id} className="border-border bg-card">
@@ -873,7 +873,7 @@ export function AdvancedQuizEngine() {
           {isSubmitting
             ? "Analyzing..."
             : currentQuestionIndex === questions.length - 1
-              ? "See Advanced Healthspan Score"
+              ? "See Advanced TRT Plan"
               : "Continue"}
         </Button>
       </div>

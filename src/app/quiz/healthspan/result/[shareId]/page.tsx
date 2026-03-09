@@ -13,11 +13,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { shareId } = await params;
   const decoded = decodeHealthspanSharePayload(shareId);
 
-  const scoreYears = decoded ? Math.round(decoded.result.projectedHealthspan) : "--";
-  const title = `My Healthspan Score: ${scoreYears} years`;
+  const title = decoded
+    ? `My TRT path: ${decoded.result.primaryPathway.title}`
+    : "See my ShotFreeTRT quiz result";
   const description = decoded
-    ? `I scored ${decoded.result.score}/100 with a ${decoded.result.grade} grade on the ShotFreeTRT Healthspan Quiz.`
-    : "See my ShotFreeTRT Healthspan Quiz result and compare your own score.";
+    ? `I scored ${decoded.result.score}/100 and my top path was ${decoded.result.primaryPathway.title} on the ShotFreeTRT quiz.`
+    : "See my ShotFreeTRT quiz result and compare your own TRT-focused recommendation.";
 
   return {
     title,
@@ -52,9 +53,10 @@ export default async function SharedHealthspanResultPage({ params }: PageProps) 
   return (
     <>
       <section className="hero">
-        <h1>Shared Healthspan Result</h1>
+        <h1>Shared TRT Quiz Result</h1>
         <p>
-          This is a shared ShotFreeTRT quiz result. Compare it to your own profile and generate your personalized plan.
+          This is a shared ShotFreeTRT result. Compare it to your own symptoms, lifestyle drag, and
+          treatment-path fit.
         </p>
       </section>
 

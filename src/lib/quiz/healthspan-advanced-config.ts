@@ -1,5 +1,5 @@
 import type { QuizAnswers } from "@/lib/quiz/healthspan-types";
-import type { QuizOption, QuizQuestion } from "@/lib/quiz/healthspan-config";
+import type { QuizQuestion } from "@/lib/quiz/healthspan-config";
 
 type AdvancedQuestion = QuizQuestion & {
   when?: (introAnswers: QuizAnswers, advancedAnswers: QuizAnswers) => boolean;
@@ -7,10 +7,6 @@ type AdvancedQuestion = QuizQuestion & {
 
 function toStringValue(value: unknown): string {
   return typeof value === "string" ? value : "";
-}
-
-function toNumberValue(value: unknown): number | null {
-  return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
 
 function toStringArray(value: unknown): string[] {
@@ -21,335 +17,217 @@ function toStringArray(value: unknown): string[] {
   return value.filter((item): item is string => typeof item === "string" && item.length > 0);
 }
 
-function introExercises(introAnswers: QuizAnswers) {
-  const frequency = toStringValue(introAnswers.exerciseFrequency);
-  return frequency.length > 0 && frequency !== "none";
-}
-
-function introStrengthFocused(introAnswers: QuizAnswers, advancedAnswers: QuizAnswers) {
-  const introTypes = toStringArray(introAnswers.exerciseTypes);
-  const advancedTypes = toStringArray(advancedAnswers.trainingFocus);
-  return introTypes.includes("strength") || advancedTypes.includes("strength");
-}
-
-function introHasChronicConditions(introAnswers: QuizAnswers) {
-  const conditions = toStringArray(introAnswers.chronicConditions);
-  return conditions.length > 0 && !conditions.includes("none");
-}
-
 function introHasPoorSleep(introAnswers: QuizAnswers) {
   const sleepQuality = toStringValue(introAnswers.sleepQuality);
-  const sleepHours = toNumberValue(introAnswers.sleepHours);
+  const apnea = toStringValue(introAnswers.snoringOrApnea);
 
-  if (sleepQuality === "poor" || sleepQuality === "fair") {
-    return true;
-  }
-
-  if (sleepHours !== null && (sleepHours < 7 || sleepHours > 9)) {
-    return true;
-  }
-
-  return false;
+  return (
+    sleepQuality === "poor" ||
+    sleepQuality === "fair" ||
+    apnea === "snore" ||
+    apnea === "suspected-apnea" ||
+    apnea === "untreated-apnea"
+  );
 }
 
-function introSex(introAnswers: QuizAnswers) {
-  const sex = toStringValue(introAnswers.sex);
-  return sex === "female" ? "female" : "male";
+function introWantsFertility(introAnswers: QuizAnswers) {
+  const fertilityGoal = toStringValue(introAnswers.fertilityGoal);
+  return fertilityGoal === "yes" || fertilityGoal === "unsure";
 }
 
-const maleBodyFatVisualOptions: QuizOption[] = [
-  {
-    value: "male-8-10",
-    label: "8-10%",
-    icon: "🏋️",
-    description: "Very lean with clear abdominal definition and vascularity."
-  },
-  {
-    value: "male-12-15",
-    label: "12-15%",
-    icon: "💪",
-    description: "Athletic, visible definition, strong waist-to-shoulder contrast."
-  },
-  {
-    value: "male-18-20",
-    label: "18-20%",
-    icon: "🧍",
-    description: "Average fitness build with softer abdominal definition."
-  },
-  {
-    value: "male-25-plus",
-    label: "25%+",
-    icon: "📈",
-    description: "Higher body fat distribution around abdomen and trunk."
-  }
-];
-
-const femaleBodyFatVisualOptions: QuizOption[] = [
-  {
-    value: "female-15-18",
-    label: "15-18%",
-    icon: "🏋️",
-    description: "Very lean athletic physique with high definition."
-  },
-  {
-    value: "female-20-25",
-    label: "20-25%",
-    icon: "💪",
-    description: "Fit and athletic with moderate definition."
-  },
-  {
-    value: "female-28-32",
-    label: "28-32%",
-    icon: "🧍",
-    description: "Average healthy range with softer contours."
-  },
-  {
-    value: "female-35-plus",
-    label: "35%+",
-    icon: "📈",
-    description: "Higher fat mass distribution across hips, trunk, and limbs."
-  }
-];
+function introHasTherapyHistory(introAnswers: QuizAnswers) {
+  const previous = toStringArray(introAnswers.previousTherapies);
+  return previous.length > 0 && !previous.includes("none");
+}
 
 const advancedQuestionBank: AdvancedQuestion[] = [
   {
-    id: "trainingFocus",
-    type: "icon-select",
-    multiple: true,
-    title: "What does your training currently emphasize?",
-    description: "Only shown because you reported regular exercise.",
-    options: [
-      { value: "strength", label: "Strength", icon: "💪" },
-      { value: "zone2", label: "Zone 2", icon: "🫀" },
-      { value: "hypertrophy", label: "Muscle gain", icon: "🏋️" },
-      { value: "conditioning", label: "Conditioning", icon: "🏃" },
-      { value: "mobility", label: "Mobility", icon: "🧘" }
-    ],
-    when: (introAnswers) => introExercises(introAnswers)
-  },
-  {
-    id: "weeklyTrainingDays",
-    type: "single-select",
-    title: "How many days per week do you train intentionally?",
-    options: [
-      { value: "2-3", label: "2-3 days" },
-      { value: "4-5", label: "4-5 days" },
-      { value: "6+", label: "6+ days" }
-    ],
-    when: (introAnswers) => introExercises(introAnswers)
-  },
-  {
-    id: "strengthTrainingSplit",
-    type: "single-select",
-    title: "What strength training split do you use?",
-    options: [
-      { value: "full-body", label: "Full body" },
-      { value: "upper-lower", label: "Upper/Lower" },
-      { value: "push-pull-legs", label: "Push/Pull/Legs" },
-      { value: "body-part", label: "Body-part split" },
-      { value: "none", label: "No consistent split" }
-    ],
-    when: (introAnswers, advancedAnswers) => introStrengthFocused(introAnswers, advancedAnswers)
-  },
-  {
-    id: "yearsStrengthTraining",
-    type: "single-select",
-    title: "How many years have you trained with weights?",
-    options: [
-      { value: "lt1", label: "<1 year" },
-      { value: "1-3", label: "1-3 years" },
-      { value: "4-7", label: "4-7 years" },
-      { value: "8+", label: "8+ years" }
-    ],
-    when: (introAnswers, advancedAnswers) => introStrengthFocused(introAnswers, advancedAnswers)
-  },
-  {
-    id: "progressiveOverload",
-    type: "single-select",
-    title: "Do you track progressive overload (load, reps, or volume)?",
-    options: [
-      { value: "yes-systematic", label: "Yes, systematically" },
-      { value: "sometimes", label: "Sometimes" },
-      { value: "no", label: "No" }
-    ],
-    when: (introAnswers, advancedAnswers) => introStrengthFocused(introAnswers, advancedAnswers)
-  },
-  {
-    id: "liftsTracked",
+    id: "labMarkersKnown",
     type: "multi-select",
-    title: "Which key lifts can you estimate today?",
-    description: "We use your best set weight and reps to estimate 1RM.",
-    options: [
-      { value: "none", label: "None yet", exclusive: true },
-      { value: "squat", label: "Back squat" },
-      { value: "bench", label: "Bench press" },
-      { value: "deadlift", label: "Deadlift" }
-    ],
-    when: (introAnswers, advancedAnswers) => introStrengthFocused(introAnswers, advancedAnswers)
-  },
-  {
-    id: "squatPerformance",
-    type: "number-input",
-    title: "Back squat best working set",
-    fields: [
-      { key: "weightKg", label: "Weight", min: 20, max: 350, step: 1, unit: "kg" },
-      { key: "reps", label: "Reps", min: 1, max: 20, step: 1 }
-    ],
-    when: (_, advancedAnswers) => toStringArray(advancedAnswers.liftsTracked).includes("squat")
-  },
-  {
-    id: "benchPerformance",
-    type: "number-input",
-    title: "Bench press best working set",
-    fields: [
-      { key: "weightKg", label: "Weight", min: 20, max: 250, step: 1, unit: "kg" },
-      { key: "reps", label: "Reps", min: 1, max: 20, step: 1 }
-    ],
-    when: (_, advancedAnswers) => toStringArray(advancedAnswers.liftsTracked).includes("bench")
-  },
-  {
-    id: "deadliftPerformance",
-    type: "number-input",
-    title: "Deadlift best working set",
-    fields: [
-      { key: "weightKg", label: "Weight", min: 20, max: 400, step: 1, unit: "kg" },
-      { key: "reps", label: "Reps", min: 1, max: 20, step: 1 }
-    ],
-    when: (_, advancedAnswers) => toStringArray(advancedAnswers.liftsTracked).includes("deadlift")
-  },
-  {
-    id: "conditionFollowup",
-    type: "text-input",
-    multiline: true,
-    title: "Condition-specific follow-up",
-    description: "Share key diagnosis dates, medications, and current control status.",
-    placeholder: "Example: Prediabetes diagnosed 2023, HbA1c trend, current meds, home BP averages...",
-    when: (introAnswers) => introHasChronicConditions(introAnswers)
-  },
-  {
-    id: "conditionAdherence",
-    type: "single-select",
-    title: "How consistent are you with your condition management plan?",
-    options: [
-      { value: "high", label: "Highly consistent" },
-      { value: "moderate", label: "Moderately consistent" },
-      { value: "low", label: "Low consistency" }
-    ],
-    when: (introAnswers) => introHasChronicConditions(introAnswers)
-  },
-  {
-    id: "sleepCaffeineTiming",
-    type: "single-select",
-    title: "When is your last caffeine intake?",
-    options: [
-      { value: "before-noon", label: "Before noon" },
-      { value: "early-afternoon", label: "Early afternoon" },
-      { value: "late-afternoon-evening", label: "Late afternoon/evening" }
-    ],
-    when: (introAnswers) => introHasPoorSleep(introAnswers)
-  },
-  {
-    id: "sleepScreenTiming",
-    type: "single-select",
-    title: "How close to bedtime are you on bright screens?",
-    options: [
-      { value: "none", label: "No screens in final hour" },
-      { value: "lt30", label: "Within 30 minutes" },
-      { value: "30-60", label: "30-60 minutes before bed" },
-      { value: "60plus", label: "More than 60 minutes before bed" }
-    ],
-    when: (introAnswers) => introHasPoorSleep(introAnswers)
-  },
-  {
-    id: "sleepRoomTemp",
-    type: "single-select",
-    title: "What is your typical bedroom temperature?",
-    options: [
-      { value: "cool-16-19", label: "16-19C / 61-67F" },
-      { value: "moderate-20-22", label: "20-22C / 68-72F" },
-      { value: "warm-23plus", label: "23C+ / 73F+" },
-      { value: "unknown", label: "Not sure" }
-    ],
-    when: (introAnswers) => introHasPoorSleep(introAnswers)
-  },
-  {
-    id: "dexaScan",
-    type: "single-select",
-    title: "Have you ever had a DEXA scan?",
-    options: [
-      { value: "yes", label: "Yes" },
-      { value: "no", label: "No" }
-    ]
-  },
-  {
-    id: "bodyFatPct",
-    type: "number-input",
-    title: "What is your most recent body fat percentage?",
-    fields: [{ key: "bodyFatPct", label: "Body fat", min: 4, max: 60, step: 0.1, unit: "%" }],
-    when: (_, advancedAnswers) => toStringValue(advancedAnswers.dexaScan) === "yes"
-  },
-  {
-    id: "bodyFatVisual",
-    type: "gallery-select",
-    title: "Pick the body fat visual range closest to your current build",
-    description: "Reference ranges used when DEXA is unavailable.",
-    options: maleBodyFatVisualOptions,
-    when: (_, advancedAnswers) => toStringValue(advancedAnswers.dexaScan) === "no"
-  },
-  {
-    id: "biomarkersTracked",
-    type: "multi-select",
-    title: "Which biomarkers do you actively track?",
+    title: "Which markers do you actually know right now?",
     options: [
       { value: "none", label: "None", exclusive: true },
-      { value: "hba1c", label: "HbA1c" },
-      { value: "lipids", label: "Lipid panel" },
-      { value: "hscrp", label: "hsCRP" },
-      { value: "sex-hormones", label: "Testosterone/Estrogen" },
-      { value: "thyroid", label: "Thyroid" }
+      { value: "total-t", label: "Total testosterone" },
+      { value: "free-t", label: "Free testosterone" },
+      { value: "shbg", label: "SHBG" },
+      { value: "lh", label: "LH" },
+      { value: "fsh", label: "FSH" },
+      { value: "estradiol", label: "Estradiol" },
+      { value: "prolactin", label: "Prolactin" },
+      { value: "tsh", label: "TSH" },
+      { value: "a1c", label: "HbA1c" },
+      { value: "hematocrit", label: "Hematocrit" },
+      { value: "psa", label: "PSA" }
     ]
   },
   {
-    id: "hba1cValue",
+    id: "totalTestosteroneValue",
     type: "number-input",
-    title: "Most recent HbA1c",
-    fields: [{ key: "hba1c", label: "HbA1c", min: 3.5, max: 14, step: 0.1, unit: "%" }],
-    when: (_, advancedAnswers) => toStringArray(advancedAnswers.biomarkersTracked).includes("hba1c")
+    title: "Most recent total testosterone",
+    fields: [{ key: "totalT", label: "Total testosterone", min: 50, max: 1500, step: 1, unit: "ng/dL" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("total-t")
   },
   {
-    id: "lipidValues",
+    id: "freeTestosteroneValue",
     type: "number-input",
-    title: "Most recent lipid values",
-    fields: [
-      { key: "ldl", label: "LDL-C", min: 30, max: 320, step: 1, unit: "mg/dL" },
-      { key: "hdl", label: "HDL-C", min: 15, max: 140, step: 1, unit: "mg/dL" },
-      { key: "triglycerides", label: "Triglycerides", min: 20, max: 600, step: 1, unit: "mg/dL" }
-    ],
-    when: (_, advancedAnswers) => toStringArray(advancedAnswers.biomarkersTracked).includes("lipids")
+    title: "Most recent free testosterone",
+    fields: [{ key: "freeT", label: "Free testosterone", min: 1, max: 300, step: 0.1, unit: "pg/mL" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("free-t")
   },
   {
-    id: "hscrpValue",
+    id: "shbgValue",
     type: "number-input",
-    title: "Most recent hsCRP",
-    fields: [{ key: "hscrp", label: "hsCRP", min: 0.1, max: 20, step: 0.1, unit: "mg/L" }],
-    when: (_, advancedAnswers) => toStringArray(advancedAnswers.biomarkersTracked).includes("hscrp")
+    title: "Most recent SHBG",
+    fields: [{ key: "shbg", label: "SHBG", min: 5, max: 150, step: 0.1, unit: "nmol/L" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("shbg")
   },
   {
-    id: "thyroidValue",
+    id: "lhValue",
+    type: "number-input",
+    title: "Most recent LH",
+    fields: [{ key: "lh", label: "LH", min: 0.1, max: 30, step: 0.1, unit: "IU/L" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("lh")
+  },
+  {
+    id: "fshValue",
+    type: "number-input",
+    title: "Most recent FSH",
+    fields: [{ key: "fsh", label: "FSH", min: 0.1, max: 40, step: 0.1, unit: "IU/L" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("fsh")
+  },
+  {
+    id: "estradiolValue",
+    type: "number-input",
+    title: "Most recent estradiol",
+    fields: [{ key: "estradiol", label: "Estradiol", min: 1, max: 120, step: 1, unit: "pg/mL" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("estradiol")
+  },
+  {
+    id: "prolactinValue",
+    type: "number-input",
+    title: "Most recent prolactin",
+    fields: [{ key: "prolactin", label: "Prolactin", min: 1, max: 80, step: 0.1, unit: "ng/mL" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("prolactin")
+  },
+  {
+    id: "tshValue",
     type: "number-input",
     title: "Most recent TSH",
     fields: [{ key: "tsh", label: "TSH", min: 0.1, max: 15, step: 0.1, unit: "mIU/L" }],
-    when: (_, advancedAnswers) => toStringArray(advancedAnswers.biomarkersTracked).includes("thyroid")
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("tsh")
   },
   {
-    id: "hormoneValues",
+    id: "a1cValue",
+    type: "number-input",
+    title: "Most recent HbA1c",
+    fields: [{ key: "a1c", label: "HbA1c", min: 3.5, max: 14, step: 0.1, unit: "%" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("a1c")
+  },
+  {
+    id: "hematocritValue",
+    type: "number-input",
+    title: "Most recent hematocrit",
+    fields: [{ key: "hematocrit", label: "Hematocrit", min: 20, max: 60, step: 0.1, unit: "%" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("hematocrit")
+  },
+  {
+    id: "psaValue",
+    type: "number-input",
+    title: "Most recent PSA",
+    fields: [{ key: "psa", label: "PSA", min: 0.1, max: 20, step: 0.1, unit: "ng/mL" }],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("psa")
+  },
+  {
+    id: "morningDrawn",
+    type: "single-select",
+    title: "Were your hormone labs drawn early in the morning?",
+    description: "Useful for interpreting borderline or low results.",
+    options: [
+      { value: "yes", label: "Yes" },
+      { value: "no", label: "No" },
+      { value: "unsure", label: "Not sure" }
+    ],
+    when: (_, advancedAnswers) => {
+      const markers = toStringArray(advancedAnswers.labMarkersKnown);
+      return markers.includes("total-t") || markers.includes("free-t") || markers.includes("lh") || markers.includes("fsh");
+    }
+  },
+  {
+    id: "repeatLowStatus",
+    type: "single-select",
+    title: "If you were low, how well confirmed is that result?",
+    options: [
+      { value: "one-low", label: "One low result" },
+      { value: "two-low", label: "Two early-morning lows" },
+      { value: "not-low", label: "Not actually low" },
+      { value: "unsure", label: "Unsure" }
+    ],
+    when: (_, advancedAnswers) => toStringArray(advancedAnswers.labMarkersKnown).includes("total-t")
+  },
+  {
+    id: "sleepFollowup",
+    type: "single-select",
+    title: "What is the current sleep / apnea status?",
+    options: [
+      { value: "working-on-it", label: "I know sleep is an issue and I’m working on it" },
+      { value: "not-addressed", label: "Sleep issue is not really addressed" },
+      { value: "sleep-study-pending", label: "Sleep study pending / being evaluated" },
+      { value: "treated-apnea", label: "Apnea is treated and controlled" }
+    ],
+    when: (introAnswers) => introHasPoorSleep(introAnswers)
+  },
+  {
+    id: "caffeineTiming",
+    type: "single-select",
+    title: "When is your last caffeine on a normal day?",
+    options: [
+      { value: "before-noon", label: "Before noon" },
+      { value: "early-afternoon", label: "Early afternoon" },
+      { value: "late-afternoon", label: "Late afternoon or later" }
+    ],
+    when: (introAnswers) => introHasPoorSleep(introAnswers)
+  },
+  {
+    id: "shiftWork",
+    type: "single-select",
+    title: "How much shift work or circadian disruption is in your life?",
+    options: [
+      { value: "none", label: "None" },
+      { value: "occasional", label: "Occasional" },
+      { value: "regular", label: "Regular night / rotating schedule" }
+    ]
+  },
+  {
+    id: "weightTrend",
+    type: "single-select",
+    title: "What has your weight been doing over the last 6 months?",
+    options: [
+      { value: "down", label: "Trending down" },
+      { value: "stable", label: "Mostly stable" },
+      { value: "up-slight", label: "Up a little" },
+      { value: "up-clear", label: "Clearly up" }
+    ]
+  },
+  {
+    id: "fertilityTimeline",
+    type: "single-select",
+    title: "If fertility matters, what is the likely timeline?",
+    options: [
+      { value: "lt12", label: "Within 12 months" },
+      { value: "12-24", label: "12-24 months" },
+      { value: "24plus", label: "More than 24 months" },
+      { value: "unsure", label: "Still unsure" }
+    ],
+    when: (introAnswers) => introWantsFertility(introAnswers)
+  },
+  {
+    id: "therapyHistoryFollowup",
     type: "text-input",
     optional: true,
     multiline: true,
-    title: "Sex hormone values (if known)",
-    placeholder: "Add testosterone/estradiol values with units and test dates.",
-    when: (_, advancedAnswers) =>
-      toStringArray(advancedAnswers.biomarkersTracked).includes("sex-hormones")
+    title: "If you’ve tried anything before, what happened?",
+    placeholder: "Examples: tried enclomiphene for 8 weeks, libido improved but sleep still bad; topical TRT helped energy but fertility became a concern...",
+    when: (introAnswers) => introHasTherapyHistory(introAnswers)
   },
   {
     id: "advancedNotes",
@@ -357,24 +235,11 @@ const advancedQuestionBank: AdvancedQuestion[] = [
     optional: true,
     multiline: true,
     maxLength: 900,
-    title: "Anything else that should influence your advanced assessment?",
-    placeholder: "Injuries, medications, lab goals, performance goals, sleep disorders, shift work, etc."
+    title: "Anything else a clinician should know before thinking about SERM or TRT?",
+    placeholder: "Fertility context, prolactin or thyroid history, prior fertility testing, sleep study results, medication changes, etc."
   }
 ];
 
 export function getAdvancedQuestions(introAnswers: QuizAnswers, advancedAnswers: QuizAnswers): QuizQuestion[] {
-  const sex = introSex(introAnswers);
-
-  return advancedQuestionBank
-    .filter((question) => (question.when ? question.when(introAnswers, advancedAnswers) : true))
-    .map((question) => {
-      if (question.id !== "bodyFatVisual") {
-        return question;
-      }
-
-      return {
-        ...question,
-        options: sex === "female" ? femaleBodyFatVisualOptions : maleBodyFatVisualOptions
-      };
-    });
+  return advancedQuestionBank.filter((question) => (question.when ? question.when(introAnswers, advancedAnswers) : true));
 }

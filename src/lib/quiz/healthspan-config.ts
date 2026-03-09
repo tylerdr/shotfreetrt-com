@@ -89,33 +89,137 @@ export const healthspanQuizQuestions: QuizQuestion[] = [
     id: "age",
     type: "number-input",
     title: "How old are you?",
-    description: "Age is the strongest baseline predictor for healthspan trajectories.",
+    description: "This quiz is built for adult men evaluating low-T symptoms, lifestyle drag, and treatment fit.",
     fields: [
       {
         key: "age",
         label: "Age",
         min: 18,
-        max: 110,
+        max: 80,
         step: 1,
         unit: "years",
-        placeholder: "e.g. 42"
+        placeholder: "e.g. 38"
       }
     ]
   },
   {
     id: "sex",
     type: "single-select",
-    title: "What is your sex?",
+    title: "What sex were you assigned at birth?",
+    description: "We use this because TRT / SERM decision rules and reference ranges differ by sex.",
     options: [
       { value: "male", label: "Male" },
       { value: "female", label: "Female" }
     ]
   },
   {
+    id: "goals",
+    type: "multi-select",
+    title: "What do you most want to improve?",
+    options: [
+      { value: "energy", label: "Energy and motivation" },
+      { value: "libido", label: "Libido / sexual function" },
+      { value: "muscle", label: "Muscle / gym performance" },
+      { value: "fat-loss", label: "Body composition / fat loss" },
+      { value: "focus", label: "Focus / mental clarity" },
+      { value: "mood", label: "Mood / resilience" },
+      { value: "fertility", label: "Preserve fertility while improving symptoms" }
+    ]
+  },
+  {
+    id: "symptoms",
+    type: "multi-select",
+    title: "Which low-testosterone symptoms actually apply right now?",
+    citations: [
+      {
+        source: "AUA Testosterone Deficiency Guideline (2024)",
+        href: "https://www.auanet.org/guidelines-and-quality/guidelines/testosterone-deficiency-guideline"
+      }
+    ],
+    options: [
+      { value: "none", label: "None of these", exclusive: true },
+      { value: "low-libido", label: "Lower libido" },
+      { value: "erection-quality", label: "Weaker erection quality" },
+      { value: "fatigue", label: "Low energy / fatigue" },
+      { value: "brain-fog", label: "Brain fog / poor focus" },
+      { value: "strength-loss", label: "Harder to gain or keep muscle" },
+      { value: "fat-gain", label: "More belly fat / worse body composition" },
+      { value: "low-mood", label: "Low mood / irritability" },
+      { value: "poor-recovery", label: "Poor workout recovery" }
+    ]
+  },
+  {
+    id: "symptomDuration",
+    type: "single-select",
+    title: "How long have these issues been going on?",
+    options: [
+      { value: "lt3m", label: "Less than 3 months" },
+      { value: "3-6m", label: "3-6 months" },
+      { value: "6-12m", label: "6-12 months" },
+      { value: "12m-plus", label: "More than a year" }
+    ]
+  },
+  {
+    id: "priorLabs",
+    type: "single-select",
+    title: "What do you know about your testosterone labs?",
+    description: "Guidelines support diagnosing testosterone deficiency only when low testosterone is paired with symptoms, ideally confirmed with repeat early-morning testing.",
+    citations: [
+      {
+        source: "AUA Testosterone Deficiency Guideline (2024)",
+        href: "https://www.auanet.org/guidelines-and-quality/guidelines/testosterone-deficiency-guideline"
+      }
+    ],
+    options: [
+      { value: "never-tested", label: "Never tested" },
+      { value: "borderline", label: "Borderline / low-normal" },
+      { value: "low-once", label: "Low once" },
+      { value: "low-twice", label: "Low on 2 early-morning tests" },
+      { value: "normal-not-explained", label: "Normal, but I still feel off" }
+    ]
+  },
+  {
+    id: "fertilityGoal",
+    type: "single-select",
+    title: "Do you want to preserve fertility in the next 12-24 months?",
+    description: "This is one of the biggest branching questions in online TRT funnels.",
+    citations: [
+      {
+        source: "AUA Testosterone Deficiency Guideline (2024) — fertility counseling before treatment",
+        href: "https://www.auanet.org/guidelines-and-quality/guidelines/testosterone-deficiency-guideline"
+      }
+    ],
+    options: [
+      { value: "yes", label: "Yes" },
+      { value: "unsure", label: "Not sure / maybe" },
+      { value: "no", label: "No" }
+    ]
+  },
+  {
+    id: "previousTherapies",
+    type: "multi-select",
+    title: "What have you already tried?",
+    options: [
+      { value: "none", label: "Nothing specific yet", exclusive: true },
+      { value: "supplements", label: "OTC supplements / vitamins" },
+      { value: "lifestyle", label: "Sleep, lifting, diet, stress work" },
+      { value: "serm", label: "Clomid / enclomiphene / other SERM" },
+      { value: "oral-t", label: "Oral testosterone" },
+      { value: "topical-t", label: "Topical gel / cream" },
+      { value: "injectable-t", label: "Injectable TRT" }
+    ]
+  },
+  {
     id: "bodyMetrics",
     type: "number-input",
     title: "What are your height and weight?",
-    description: "We convert to metric internally so scoring stays consistent.",
+    description: "Obesity and waist-driven insulin resistance are strongly linked with lower testosterone in men.",
+    citations: [
+      {
+        source: "Lowered testosterone in male obesity: mechanisms, morbidity and management",
+        href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3955331/"
+      }
+    ],
     fields: [
       {
         key: "heightCm",
@@ -133,171 +237,116 @@ export const healthspanQuizQuestions: QuizQuestion[] = [
         max: 250,
         step: 0.1,
         unit: "kg",
-        placeholder: "e.g. 74"
+        placeholder: "e.g. 84"
       }
+    ]
+  },
+  {
+    id: "waistSize",
+    type: "single-select",
+    title: "How would you describe your waist / belly fat right now?",
+    description: "Waist-driven visceral fat is usually more relevant than scale weight alone when thinking about testosterone drag.",
+    options: [
+      { value: "lean", label: "Lean / flat waist" },
+      { value: "slight", label: "A little extra around the middle" },
+      { value: "noticeable", label: "Noticeable belly fat" },
+      { value: "central-obesity", label: "Most of my weight sits at the waist" }
     ]
   },
   {
     id: "sleepHours",
     type: "slider",
-    title: "How many hours do you sleep per night?",
-    description: "Adults sleeping around 7-8 hours have the lowest all-cause mortality.",
-    citations: [{ source: "Cappuccio et al., Sleep (2010)" }],
+    title: "How many hours do you usually sleep per night?",
     min: 3,
-    max: 12,
+    max: 10,
     step: 0.5,
     unit: "hours",
     minLabel: "3h",
-    maxLabel: "12h"
+    maxLabel: "10h"
   },
   {
     id: "sleepQuality",
     type: "gallery-select",
     title: "How would you rate your sleep quality?",
     options: [
-      { value: "poor", label: "Poor", icon: "😵", description: "Frequent wake-ups, unrested most mornings." },
-      { value: "fair", label: "Fair", icon: "😐", description: "Inconsistent sleep depth and recovery." },
-      { value: "good", label: "Good", icon: "🙂", description: "Mostly restorative sleep with occasional bad nights." },
-      { value: "excellent", label: "Excellent", icon: "😴", description: "Deep, consistent sleep and refreshed mornings." }
+      { value: "poor", label: "Poor", icon: "😵", description: "Wake up tired, broken sleep, not restorative." },
+      { value: "fair", label: "Fair", icon: "😐", description: "Inconsistent. Some good nights, some bad ones." },
+      { value: "good", label: "Good", icon: "🙂", description: "Mostly restorative with occasional bad nights." },
+      { value: "excellent", label: "Excellent", icon: "😴", description: "Consistently deep, restorative sleep." }
     ]
   },
   {
-    id: "exerciseFrequency",
+    id: "snoringOrApnea",
     type: "single-select",
-    title: "How often do you exercise each week?",
-    description: "150+ minutes/week of moderate activity is strongly protective.",
-    citations: [{ source: "Arem et al., JAMA Internal Medicine (2015)" }],
+    title: "How much sleep-apnea risk is in the picture?",
+    description: "Untreated sleep apnea can mimic or worsen low-T symptoms and matters before TRT decisions.",
     options: [
-      { value: "none", label: "None" },
-      { value: "1-2", label: "1-2x per week" },
-      { value: "3-4", label: "3-4x per week" },
-      { value: "5+", label: "5+x per week" }
+      { value: "none", label: "No snoring / no concern" },
+      { value: "snore", label: "I snore a lot" },
+      { value: "suspected-apnea", label: "Possible apnea / wake gasping / daytime sleepiness" },
+      { value: "treated-apnea", label: "Diagnosed but treated" },
+      { value: "untreated-apnea", label: "Diagnosed and not treated" }
     ]
   },
   {
-    id: "exerciseTypes",
-    type: "icon-select",
-    multiple: true,
-    title: "What types of exercise do you do?",
+    id: "stressLevel",
+    type: "gallery-select",
+    title: "What is your baseline stress load?",
     options: [
-      { value: "walking", label: "Walking", icon: "🚶" },
-      { value: "cardio", label: "Cardio", icon: "🏃" },
-      { value: "strength", label: "Strength", icon: "💪" },
-      { value: "hiit", label: "HIIT", icon: "⚡" },
-      { value: "yoga", label: "Yoga", icon: "🧘" },
-      { value: "zone2", label: "Zone 2", icon: "🫀" }
+      { value: "low", label: "Low", icon: "😌", description: "Mostly steady, stress spikes are brief." },
+      { value: "moderate", label: "Moderate", icon: "🙂", description: "Manageable, but not always easy." },
+      { value: "high", label: "High", icon: "😟", description: "Feels elevated most days." },
+      { value: "very-high", label: "Very high", icon: "😰", description: "Hard to recover and always on." }
     ]
   },
   {
-    id: "vo2Proxy",
+    id: "liftingFrequency",
     type: "single-select",
-    title: "Can you hold a conversation while briskly walking uphill for 10 minutes?",
-    description: "A simple proxy for aerobic fitness and VO2 reserve.",
+    title: "How often do you lift or resistance train each week?",
     options: [
-      { value: "yes-easy", label: "Yes, comfortably" },
-      { value: "yes-hard", label: "Yes, but difficult" },
-      { value: "not-sure", label: "Not sure" },
-      { value: "no", label: "No" }
+      { value: "none", label: "0 times" },
+      { value: "1", label: "1 time" },
+      { value: "2-3", label: "2-3 times" },
+      { value: "4-plus", label: "4+ times" }
     ]
   },
   {
-    id: "gripStrengthProxy",
+    id: "stepsActivity",
     type: "single-select",
-    title: "Can you open a tight jar lid without help?",
-    description: "Grip strength is a strong predictor of morbidity and mortality risk.",
-    citations: [{ source: "Leong et al., The Lancet (2015)" }],
+    title: "How active are you outside the gym?",
     options: [
-      { value: "easy", label: "Usually easy" },
-      { value: "sometimes", label: "Sometimes difficult" },
-      { value: "rarely", label: "Usually cannot" }
+      { value: "desk-mostly", label: "Desk-bound / mostly sedentary" },
+      { value: "some-walking", label: "Some walking, but inconsistent" },
+      { value: "8k-plus", label: "Usually 8k+ steps / active daily" },
+      { value: "very-active", label: "Very active job / lifestyle" }
     ]
   },
   {
-    id: "sittingHours",
+    id: "dietQuality",
     type: "single-select",
-    title: "How many hours per day do you spend sitting?",
-    description: "Sedentary time can independently increase risk even in active people.",
-    citations: [{ source: "Ekelund et al., The Lancet (2016)" }],
+    title: "How dialed-in is your diet for testosterone and body composition?",
     options: [
-      { value: "lt4", label: "<4 hours" },
-      { value: "4-6", label: "4-6 hours" },
-      { value: "7-9", label: "7-9 hours" },
-      { value: "10+", label: "10+ hours" }
-    ]
-  },
-  {
-    id: "dietPattern",
-    type: "icon-select",
-    title: "Which diet pattern best matches your current eating style?",
-    options: [
-      { value: "standard-american", label: "Standard American", icon: "🍔" },
-      { value: "mediterranean", label: "Mediterranean", icon: "🫒" },
-      { value: "keto", label: "Keto", icon: "🥑" },
-      { value: "plant-based", label: "Plant-based", icon: "🥗" },
-      { value: "whole-food", label: "Whole food", icon: "🥩" },
-      { value: "other", label: "Other", icon: "🍽️" }
-    ]
-  },
-  {
-    id: "proteinMeals",
-    type: "single-select",
-    title: "How many protein-rich meals do you eat daily?",
-    description: "Adequate protein supports muscle protein synthesis and healthy aging.",
-    citations: [{ source: "Phillips et al., Applied Physiology, Nutrition, and Metabolism (2016)" }],
-    options: [
-      { value: "0-1", label: "0-1 meals" },
-      { value: "2", label: "2 meals" },
-      { value: "3", label: "3 meals" },
-      { value: "4+", label: "4+ meals" }
-    ]
-  },
-  {
-    id: "processedFoodPct",
-    type: "slider",
-    title: "About what percentage of your diet is processed food?",
-    min: 0,
-    max: 100,
-    step: 5,
-    unit: "%",
-    minLabel: "0%",
-    maxLabel: "100%"
-  },
-  {
-    id: "hydration",
-    type: "single-select",
-    title: "How much water do you drink daily?",
-    options: [
-      { value: "lt1l", label: "<1 L" },
-      { value: "1-2l", label: "1-2 L" },
-      { value: "2-3l", label: "2-3 L" },
-      { value: "3l+", label: "3+ L" }
-    ]
-  },
-  {
-    id: "fastingGlucoseAwareness",
-    type: "single-select",
-    title: "Do you know your most recent fasting blood glucose?",
-    options: [
-      { value: "yes-normal", label: "Yes, in normal range" },
-      { value: "yes-elevated", label: "Yes, elevated" },
-      { value: "no", label: "No" }
+      { value: "poor", label: "Not dialed in" },
+      { value: "mixed", label: "Mixed / inconsistent" },
+      { value: "good", label: "Pretty solid most days" },
+      { value: "excellent", label: "High-protein, mostly whole-food, consistent" }
     ]
   },
   {
     id: "alcoholUse",
     type: "single-select",
-    title: "How would you describe your alcohol consumption?",
+    title: "What does alcohol look like in a normal week?",
     options: [
       { value: "none", label: "None" },
-      { value: "occasional", label: "Occasional" },
-      { value: "moderate", label: "Moderate" },
-      { value: "heavy", label: "Heavy" }
+      { value: "light", label: "1-3 drinks/week" },
+      { value: "moderate", label: "4-7 drinks/week" },
+      { value: "heavy", label: "8+ drinks/week or binges" }
     ]
   },
   {
-    id: "smokingStatus",
+    id: "nicotineStatus",
     type: "single-select",
-    title: "What is your smoking status?",
+    title: "Nicotine status?",
     options: [
       { value: "never", label: "Never" },
       { value: "former", label: "Former" },
@@ -305,138 +354,54 @@ export const healthspanQuizQuestions: QuizQuestion[] = [
     ]
   },
   {
-    id: "stressLevel",
-    type: "gallery-select",
-    title: "What is your average stress level?",
-    options: [
-      { value: "low", label: "Low", icon: "😌", description: "Calm baseline, stress spikes are brief." },
-      { value: "moderate", label: "Moderate", icon: "🙂", description: "Manageable stress with occasional overload." },
-      { value: "high", label: "High", icon: "😟", description: "Persistent stress most days." },
-      { value: "very-high", label: "Very high", icon: "😰", description: "Overwhelmed often, hard to recover." }
-    ]
-  },
-  {
-    id: "mentalHealth",
-    type: "single-select",
-    title: "How often do you feel anxious or depressed?",
-    options: [
-      { value: "rarely", label: "Rarely" },
-      { value: "sometimes", label: "Sometimes" },
-      { value: "often", label: "Often" },
-      { value: "most-days", label: "Most days" }
-    ]
-  },
-  {
-    id: "socialConnections",
-    type: "gallery-select",
-    title: "How strong are your social connections?",
-    description: "Social isolation can raise mortality risk similar to major lifestyle risks.",
-    citations: [{ source: "Holt-Lunstad et al. (2015)" }],
-    options: [
-      { value: "isolated", label: "Isolated", icon: "🧍", description: "Limited regular contact or support." },
-      { value: "few-close", label: "Few close ties", icon: "👥", description: "A small but meaningful support circle." },
-      { value: "strong-network", label: "Strong network", icon: "🤝", description: "Regular social contact and support." },
-      { value: "very-connected", label: "Deeply connected", icon: "🌐", description: "Consistent family/community integration." }
-    ]
-  },
-  {
-    id: "purpose",
-    type: "single-select",
-    title: "How strong is your day-to-day sense of purpose?",
-    options: [
-      { value: "none", label: "None" },
-      { value: "searching", label: "Searching" },
-      { value: "moderate", label: "Moderate" },
-      { value: "strong", label: "Strong" }
-    ]
-  },
-  {
-    id: "temperatureExposure",
-    type: "single-select",
-    title: "Do you practice sauna, cold plunges, or deliberate temperature exposure?",
-    options: [
-      { value: "none", label: "No" },
-      { value: "occasional", label: "Occasionally" },
-      { value: "weekly", label: "Weekly" },
-      { value: "frequent", label: "Multiple times/week" }
-    ]
-  },
-  {
-    id: "familyLongevity",
-    type: "single-select",
-    title: "How long have close family members typically lived?",
-    options: [
-      { value: "under-70", label: "<70" },
-      { value: "70-80", label: "70-80" },
-      { value: "80-90", label: "80-90" },
-      { value: "90-plus", label: "90+" }
-    ]
-  },
-  {
-    id: "chronicConditions",
+    id: "medications",
     type: "multi-select",
-    title: "Do any chronic conditions currently apply to you?",
+    title: "Any medication or exposure buckets worth flagging?",
     options: [
       { value: "none", label: "None", exclusive: true },
-      { value: "diabetes", label: "Diabetes" },
-      { value: "heart-disease", label: "Heart disease" },
-      { value: "cancer-history", label: "Cancer history" },
-      { value: "autoimmune", label: "Autoimmune" },
+      { value: "opioids", label: "Chronic opioids" },
+      { value: "finasteride", label: "Finasteride / dutasteride" },
+      { value: "ssri", label: "SSRI / antidepressant" },
+      { value: "steroids", label: "Recent anabolic steroid use" },
+      { value: "corticosteroids", label: "Chronic corticosteroids" },
+      { value: "other", label: "Other / unsure" }
+    ]
+  },
+  {
+    id: "conditions",
+    type: "multi-select",
+    title: "Which health issues are part of the picture?",
+    options: [
+      { value: "none", label: "None", exclusive: true },
+      { value: "prediabetes", label: "Prediabetes / insulin resistance" },
+      { value: "diabetes", label: "Type 2 diabetes" },
+      { value: "hypertension", label: "High blood pressure" },
+      { value: "thyroid", label: "Known thyroid issue" },
+      { value: "infertility-history", label: "History of infertility" },
+      { value: "pituitary", label: "Pituitary / endocrine issue" },
       { value: "other", label: "Other" }
     ]
   },
   {
-    id: "chronicConditionNotes",
+    id: "routePreference",
+    type: "icon-select",
+    title: "If medication becomes part of the plan, what route feels closest to your preference?",
+    options: [
+      { value: "lifestyle-first", label: "Lifestyle first", icon: "🛠️" },
+      { value: "fertility-oral", label: "Fertility-preserving oral route", icon: "🌱" },
+      { value: "oral-t", label: "Oral testosterone", icon: "💊" },
+      { value: "topical-t", label: "Topical cream / gel", icon: "🧴" },
+      { value: "unsure", label: "Not sure yet", icon: "🤔" }
+    ]
+  },
+  {
+    id: "additionalNotes",
     type: "text-input",
     optional: true,
     multiline: true,
-    maxLength: 600,
-    title: "Tell us more about your chronic conditions (optional)",
-    placeholder: "Diagnosis details, symptom patterns, current treatment, or anything else you want considered."
-  },
-  {
-    id: "supplements",
-    type: "multi-select",
-    title: "Which supplements do you currently use?",
-    options: [
-      { value: "none", label: "None", exclusive: true },
-      { value: "vitamin-d", label: "Vitamin D" },
-      { value: "omega-3", label: "Omega-3" },
-      { value: "magnesium", label: "Magnesium" },
-      { value: "creatine", label: "Creatine" },
-      { value: "nmn", label: "NMN" },
-      { value: "other", label: "Other" }
-    ]
-  },
-  {
-    id: "sunExposure",
-    type: "single-select",
-    title: "How much regular sun exposure do you get?",
-    options: [
-      { value: "minimal", label: "Minimal" },
-      { value: "moderate", label: "Moderate" },
-      { value: "regular", label: "Regular" }
-    ]
-  },
-  {
-    id: "preventiveCare",
-    type: "single-select",
-    title: "How consistent are you with preventive care?",
-    options: [
-      { value: "never", label: "Never" },
-      { value: "occasionally", label: "Occasionally" },
-      { value: "regular", label: "Regular checkups" },
-      { value: "proactive", label: "Proactive" }
-    ]
-  },
-  {
-    id: "additionalHealthNotes",
-    type: "text-input",
-    optional: true,
-    multiline: true,
-    maxLength: 800,
-    title: "Anything else about your health you would like to share?",
-    placeholder: "Optional context for a richer analysis: injuries, medications, shift work, major stressors, goals, etc."
+    maxLength: 900,
+    title: "Anything else we should factor in? (optional)",
+    placeholder: "Examples: fertility timeline, exact symptoms, recent labs, previous response to enclomiphene/TRT, shift work, apnea history, etc."
   }
 ];
 

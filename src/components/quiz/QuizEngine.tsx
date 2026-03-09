@@ -1184,7 +1184,7 @@ export function QuizEngine() {
       />
 
       <p className="text-sm text-muted-foreground">
-        Question {currentQuestionIndex + 1} of {healthspanQuizQuestions.length}
+        TRT question {currentQuestionIndex + 1} of {healthspanQuizQuestions.length}
       </p>
 
       <Card key={currentQuestion.id} className="border-border bg-card">
@@ -1241,7 +1241,7 @@ export function QuizEngine() {
           {isSubmitting
             ? "Analyzing..."
             : currentQuestionIndex === healthspanQuizQuestions.length - 1
-              ? "See My Healthspan Score"
+              ? "See My TRT Plan"
               : "Continue"}
         </Button>
       </div>

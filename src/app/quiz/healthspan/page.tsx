@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { QuizEngine } from "@/components/quiz/QuizEngine";
 
 export const metadata: Metadata = {
-  title: "What's Your Healthspan Score?",
+  title: "TRT Quiz: Lifestyle, SERM, or Needle-Free TRT?",
   description:
-    "Take the ShotFreeTRT healthspan quiz to estimate your projected healthspan and lifespan, identify your top risk factors, and get personalized longevity recommendations.",
+    "Take the ShotFreeTRT quiz to see whether you should focus on lifestyle optimization first, explore a fertility-aware SERM path, or discuss oral/topical TRT with a clinician.",
   alternates: {
     canonical: "/quiz/healthspan"
   }
@@ -15,10 +15,11 @@ export default function HealthspanQuizPage() {
   return (
     <>
       <section className="hero">
-        <h1>What&apos;s Your Healthspan Score?</h1>
+        <h1>Should You Fix Lifestyle First, Consider a SERM, or Discuss TRT?</h1>
         <p>
-          Answer evidence-based questions on sleep, training, nutrition, stress, biomarkers, and preventive care.
-          Get your projected healthspan, grade, and a prioritized action plan, then unlock the Advanced Assessment.
+          This TRT-focused quiz looks at symptoms, fertility goals, sleep, waist-driven metabolic drag,
+          training, stress, and lab context. The result is built to recommend lifestyle optimization first
+          where it matters — then rank SERM vs oral/topical TRT fit.
         </p>
       </section>
 
