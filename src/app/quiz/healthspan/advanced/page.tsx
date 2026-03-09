@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { AdvancedQuizEngine } from "@/components/quiz/AdvancedQuizEngine";
 
 export const metadata: Metadata = {
-  title: "Advanced Healthspan Assessment",
+  title: "Advanced TRT Assessment",
   description:
-    "Take the advanced ShotFreeTRT assessment with dynamic branching, body composition refinement, biomarker tracking, and training-specific analysis.",
+    "Go deeper with lab-aware TRT assessment logic: total/free T, LH/FSH, prolactin, TSH, HbA1c, hematocrit, PSA, fertility context, and sleep-apnea follow-up.",
   alternates: {
     canonical: "/quiz/healthspan/advanced"
   }
@@ -15,10 +15,11 @@ export default function AdvancedHealthspanQuizPage() {
   return (
     <>
       <section className="hero">
-        <h1>Advanced Healthspan Assessment</h1>
+        <h1>Advanced TRT Assessment</h1>
         <p>
-          This deeper assessment uses your intro answers, then branches into training detail, body composition,
-          biomarkers, and condition-specific follow-up for a higher-resolution plan.
+          This version uses your intro answers, then layers in labs, fertility context, and root-cause
+          workup signals so the result can better separate lifestyle-first, SERM, oral/topical TRT, and
+          “you need a better workup first.”
         </p>
       </section>
 

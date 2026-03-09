@@ -1,6 +1,12 @@
 export type QuizMode = "serious" | "roast";
 
-export type QuizGrade = "A+" | "A" | "B" | "C" | "D" | "F";
+export type QuizPriority = "Low" | "Moderate" | "High";
+
+export type QuizPathwayKey =
+  | "lifestyle-first"
+  | "serm-discussion"
+  | "oral-topical-trt-discussion"
+  | "needs-labs-workup";
 
 export type QuizObjectValue = Record<string, number | string | "">;
 
@@ -13,18 +19,29 @@ export type HealthspanAssessmentType = "intro" | "advanced";
 export type HealthspanRecommendation = {
   title: string;
   action: string;
-  yearsGained: number;
+  impact: string;
+};
+
+export type HealthspanPathway = {
+  key: QuizPathwayKey;
+  title: string;
+  fitScore: number;
+  summary: string;
+  why: string[];
+  cautions: string[];
 };
 
 export type HealthspanResult = {
   score: number;
-  projectedHealthspan: number;
-  projectedLifespan: number;
-  grade: QuizGrade;
+  priority: QuizPriority;
   summary: string;
+  primaryPathway: HealthspanPathway;
+  secondaryPathways: HealthspanPathway[];
   helpingFactors: string[];
   hurtingFactors: string[];
   recommendations: HealthspanRecommendation[];
+  labsToRequest: string[];
+  redFlags: string[];
   mode: QuizMode;
 };
 

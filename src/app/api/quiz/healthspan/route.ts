@@ -1,15 +1,14 @@
-import { anthropic } from "@ai-sdk/anthropic";
-import { xai } from "@ai-sdk/xai";
-import { generateText, Output } from "ai";
 import { NextResponse } from "next/server";
 
 import type {
   HealthspanAssessmentType,
+  HealthspanPathway,
   HealthspanRecommendation,
   HealthspanResult,
   QuizAnswers,
-  QuizGrade,
-  QuizMode
+  QuizMode,
+  QuizPathwayKey,
+  QuizPriority
 } from "@/lib/quiz/healthspan-types";
 
 export const runtime = "nodejs";
@@ -21,14 +20,17 @@ type QuizRequestBody = {
   assessmentType?: HealthspanAssessmentType;
 };
 
-const gradeThresholds: Array<{ min: number; grade: QuizGrade }> = [
-  { min: 92, grade: "A+" },
-  { min: 85, grade: "A" },
-  { min: 75, grade: "B" },
-  { min: 63, grade: "C" },
-  { min: 50, grade: "D" },
-  { min: 0, grade: "F" }
-];
+type AssessmentState = {
+  candidateScore: number;
+  symptomLoad: number;
+  lifestyleDrag: number;
+  helpingFactors: string[];
+  hurtingFactors: string[];
+  recommendations: HealthspanRecommendation[];
+  labsToRequest: string[];
+  redFlags: string[];
+  pathways: Record<QuizPathwayKey, HealthspanPathway>;
+};
 
 function clampNumber(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
@@ -53,6 +55,7 @@ function toStringValue(value: unknown): string | null {
   if (typeof value === "string" && value.trim().length > 0) {
     return value;
   }
+
   return null;
 }
 
@@ -72,27 +75,22 @@ function toObject(value: unknown): Record<string, unknown> | null {
   return value as Record<string, unknown>;
 }
 
-function getGrade(score: number): QuizGrade {
-  const found = gradeThresholds.find((threshold) => score >= threshold.min);
-  return found ? found.grade : "F";
-}
-
 function getAge(answers: QuizAnswers): number {
   const raw = answers.age;
 
   if (typeof raw === "number") {
-    return clampNumber(raw, 18, 110);
+    return clampNumber(raw, 18, 80);
   }
 
   const rawObject = toObject(raw);
   if (rawObject) {
     const ageValue = toNumber(rawObject.age);
     if (ageValue !== null) {
-      return clampNumber(ageValue, 18, 110);
+      return clampNumber(ageValue, 18, 80);
     }
   }
 
-  return 45;
+  return 35;
 }
 
 function getBodyMetrics(answers: QuizAnswers) {
@@ -118,26 +116,6 @@ function calculateBmi(answers: QuizAnswers): number | null {
   return weightKg / (heightMeters * heightMeters);
 }
 
-function estimateOneRepMax(weightKg: number, reps: number) {
-  return weightKg * (1 + reps / 30);
-}
-
-function getOneRepMaxFromAnswer(value: unknown): number | null {
-  const raw = toObject(value);
-  if (!raw) {
-    return null;
-  }
-
-  const weight = toNumber(raw.weightKg);
-  const reps = toNumber(raw.reps);
-
-  if (weight === null || reps === null || weight <= 0 || reps <= 0) {
-    return null;
-  }
-
-  return estimateOneRepMax(weight, reps);
-}
-
 function pushUnique(items: string[], value: string) {
   if (!items.includes(value)) {
     items.push(value);
@@ -155,1121 +133,810 @@ function addRecommendation(
   recommendations.push(next);
 }
 
-function finalizeResult(
-  score: number,
-  age: number,
-  mode: QuizMode,
-  assessmentType: HealthspanAssessmentType,
-  helpingFactors: string[],
-  hurtingFactors: string[],
-  recommendations: HealthspanRecommendation[]
-): HealthspanResult {
-  const normalizedScore = clampNumber(Math.round(score), 18, 98);
-  const grade = getGrade(normalizedScore);
+function addLab(labs: string[], value: string) {
+  pushUnique(labs, value);
+}
 
-  const projectedHealthspan =
-    assessmentType === "advanced"
-      ? clampNumber(
-          Math.round(age + 16 + (normalizedScore - 50) * 0.62),
-          Math.round(age + 3),
-          103
-        )
-      : clampNumber(
-          Math.round(age + 14 + (normalizedScore - 50) * 0.55),
-          Math.round(age + 2),
-          100
-        );
+function addRedFlag(redFlags: string[], value: string) {
+  pushUnique(redFlags, value);
+}
 
-  const projectedLifespan =
-    assessmentType === "advanced"
-      ? clampNumber(
-          Math.round(age + 34 + (normalizedScore - 50) * 0.68),
-          Math.round(projectedHealthspan + 2),
-          114
-        )
-      : clampNumber(
-          Math.round(age + 31 + (normalizedScore - 50) * 0.62),
-          Math.round(projectedHealthspan + 2),
-          110
-        );
-
-  const defaultHelping =
-    assessmentType === "advanced"
-      ? [
-          "You provided high-resolution training and biomarker data for deeper analysis.",
-          "Your advanced profile identifies leverage points beyond the intro estimate.",
-          "Detailed inputs improve recommendation precision and execution planning."
-        ]
-      : [
-          "You already have multiple habits that support healthier aging.",
-          "Your current routine includes at least one strong protective behavior.",
-          "You have enough consistency to improve quickly with targeted tweaks."
-        ];
-
-  const defaultHurting =
-    assessmentType === "advanced"
-      ? [
-          "A few high-impact habits still reduce your upside despite better data.",
-          "Consistency gaps remain in recovery, monitoring, or progressive training.",
-          "Advanced metrics indicate opportunities for tighter execution."
-        ]
-      : [
-          "A few high-impact habits are reducing your projected trajectory.",
-          "Execution consistency is lower than what your goals require.",
-          "Preventive and recovery habits are not yet fully optimized."
-        ];
-
-  const defaultRecommendations: HealthspanRecommendation[] =
-    assessmentType === "advanced"
-      ? [
-          {
-            title: "Run a 12-week progression block",
-            action: "Track key lifts and aerobic sessions weekly with objective progression targets.",
-            yearsGained: 2.0
-          },
-          {
-            title: "Tighten sleep hygiene levers",
-            action: "Set caffeine cutoff, screen curfew, and cool sleep environment for 30 days.",
-            yearsGained: 1.8
-          },
-          {
-            title: "Monitor body composition quarterly",
-            action: "Use DEXA or consistent waist/body fat checks with resistance training and protein targets.",
-            yearsGained: 1.7
-          },
-          {
-            title: "Track biomarker trends",
-            action: "Review HbA1c, lipids, hsCRP, and thyroid trends with your clinician.",
-            yearsGained: 1.6
-          },
-          {
-            title: "Strengthen social and mental recovery",
-            action: "Schedule recurring social support and structured stress regulation sessions weekly.",
-            yearsGained: 1.3
-          }
-        ]
-      : [
-          {
-            title: "Lock in sleep regularity",
-            action: "Use a fixed wake time and pre-bed routine for 14 straight days.",
-            yearsGained: 1.6
-          },
-          {
-            title: "Hit 150+ minutes Zone 2",
-            action: "Spread cardio across 3-4 sessions at conversational pace.",
-            yearsGained: 1.5
-          },
-          {
-            title: "Strength train twice weekly",
-            action: "Use full-body sessions with progressive overload and recovery days.",
-            yearsGained: 2.1
-          },
-          {
-            title: "Reduce processed foods",
-            action: "Replace one processed meal per day with a protein + fiber based meal.",
-            yearsGained: 1.4
-          },
-          {
-            title: "Track key biomarkers",
-            action: "Review blood pressure, fasting glucose, and lipids quarterly.",
-            yearsGained: 1.2
-          }
-        ];
-
-  const summary =
-    mode === "roast"
-      ? assessmentType === "advanced"
-        ? `Advanced score: ${normalizedScore}/100. You gave us better data, so now there is nowhere to hide. Tighten the highest-leverage gaps and you can shift this fast.`
-        : `Your score is ${normalizedScore}/100. Not catastrophic, but your habits are leaving healthy years on the table. Tighten execution and this changes fast.`
-      : assessmentType === "advanced"
-        ? `Your advanced score is ${normalizedScore}/100. Detailed training, body composition, and biomarker inputs improved estimate precision and highlighted your highest-value next interventions.`
-        : `Your score is ${normalizedScore}/100. You have a solid baseline with clear opportunities to increase both projected healthspan and lifespan through targeted habit upgrades.`;
-
+function createPathway(key: QuizPathwayKey, title: string, summary: string): HealthspanPathway {
   return {
-    score: normalizedScore,
-    projectedHealthspan,
-    projectedLifespan,
-    grade,
+    key,
+    title,
+    fitScore: 20,
     summary,
-    helpingFactors: [...helpingFactors, ...defaultHelping].slice(0, 3),
-    hurtingFactors: [...hurtingFactors, ...defaultHurting].slice(0, 3),
-    recommendations: [...recommendations, ...defaultRecommendations].slice(0, 5),
-    mode
+    why: [],
+    cautions: []
   };
 }
 
-function buildIntroFallbackResult(answers: QuizAnswers, mode: QuizMode): HealthspanResult {
+function createState(): AssessmentState {
+  return {
+    candidateScore: 18,
+    symptomLoad: 0,
+    lifestyleDrag: 0,
+    helpingFactors: [],
+    hurtingFactors: [],
+    recommendations: [],
+    labsToRequest: [],
+    redFlags: [],
+    pathways: {
+      "lifestyle-first": createPathway(
+        "lifestyle-first",
+        "Lifestyle-first reset",
+        "Your quiz points toward fixing reversible sleep, body-composition, stress, and recovery issues before making medication the center of the plan."
+      ),
+      "serm-discussion": createPathway(
+        "serm-discussion",
+        "SERM / enclomiphene discussion",
+        "Your answers look closer to a fertility-aware, endogenous-support conversation than straight exogenous testosterone."
+      ),
+      "oral-topical-trt-discussion": createPathway(
+        "oral-topical-trt-discussion",
+        "Needle-free TRT discussion (oral / topical)",
+        "If low testosterone is confirmed on proper testing, your profile could justify a clinician conversation about non-injectable TRT routes."
+      ),
+      "needs-labs-workup": createPathway(
+        "needs-labs-workup",
+        "Labs + root-cause workup first",
+        "There is too much unresolved signal here to jump straight to treatment selection without cleaning up the workup first."
+      )
+    }
+  };
+}
+
+function addPathwayReason(state: AssessmentState, key: QuizPathwayKey, reason: string) {
+  pushUnique(state.pathways[key].why, reason);
+}
+
+function addPathwayCaution(state: AssessmentState, key: QuizPathwayKey, caution: string) {
+  pushUnique(state.pathways[key].cautions, caution);
+}
+
+function adjustPathway(state: AssessmentState, key: QuizPathwayKey, delta: number) {
+  state.pathways[key].fitScore += delta;
+}
+
+function addDefaultLabs(state: AssessmentState, age: number, fertilityGoal: string | null) {
+  addLab(state.labsToRequest, "Total testosterone (2 early-morning tests)");
+  addLab(state.labsToRequest, "Free testosterone or SHBG");
+  addLab(state.labsToRequest, "LH");
+  addLab(state.labsToRequest, "FSH");
+  addLab(state.labsToRequest, "Prolactin");
+  addLab(state.labsToRequest, "TSH");
+  addLab(state.labsToRequest, "HbA1c or fasting glucose");
+  addLab(state.labsToRequest, "CBC / hematocrit");
+
+  if (age >= 40) {
+    addLab(state.labsToRequest, "PSA");
+  }
+
+  if (fertilityGoal === "yes" || fertilityGoal === "unsure") {
+    addLab(state.labsToRequest, "Fertility-focused reproductive evaluation");
+  }
+}
+
+function scoreIntroAnswers(answers: QuizAnswers, mode: QuizMode): AssessmentState {
+  const state = createState();
   const age = getAge(answers);
+  const sex = toStringValue(answers.sex);
   const bmi = calculateBmi(answers);
-
-  let score = 56;
-
-  const helpingFactors: string[] = [];
-  const hurtingFactors: string[] = [];
-  const recommendations: HealthspanRecommendation[] = [];
-
+  const goals = toStringArray(answers.goals);
+  const symptoms = toStringArray(answers.symptoms);
+  const priorLabs = toStringValue(answers.priorLabs);
+  const fertilityGoal = toStringValue(answers.fertilityGoal);
+  const priorTherapies = toStringArray(answers.previousTherapies);
+  const waistSize = toStringValue(answers.waistSize);
   const sleepHours = toNumber(answers.sleepHours);
-  if (sleepHours !== null) {
-    const distanceFromIdeal = Math.abs(sleepHours - 7.5);
-    const delta = clampNumber(8 - distanceFromIdeal * 4.2, -10, 8);
-    score += delta;
-
-    if (delta >= 3) {
-      pushUnique(helpingFactors, "Sleep duration is close to the 7-8 hour target range.");
-    } else if (delta <= -3) {
-      pushUnique(hurtingFactors, "Sleep duration is outside the lowest-risk 7-8 hour window.");
-      addRecommendation(recommendations, {
-        title: "Stabilize sleep duration",
-        action: "Anchor wake time and target 7-8 hours nightly with a consistent wind-down.",
-        yearsGained: 2.1
-      });
-    }
-  }
-
   const sleepQuality = toStringValue(answers.sleepQuality);
-  const sleepQualityScore: Record<string, number> = {
-    poor: -8,
-    fair: -2,
-    good: 4,
-    excellent: 7
-  };
-  if (sleepQuality) {
-    score += sleepQualityScore[sleepQuality] ?? 0;
+  const apnea = toStringValue(answers.snoringOrApnea);
+  const stress = toStringValue(answers.stressLevel);
+  const lifting = toStringValue(answers.liftingFrequency);
+  const activity = toStringValue(answers.stepsActivity);
+  const diet = toStringValue(answers.dietQuality);
+  const alcohol = toStringValue(answers.alcoholUse);
+  const nicotine = toStringValue(answers.nicotineStatus);
+  const medications = toStringArray(answers.medications);
+  const conditions = toStringArray(answers.conditions);
+  const routePreference = toStringValue(answers.routePreference);
+  const symptomDuration = toStringValue(answers.symptomDuration);
 
-    if (sleepQuality === "good" || sleepQuality === "excellent") {
-      pushUnique(helpingFactors, "Sleep quality supports recovery and metabolic resilience.");
-    }
+  addDefaultLabs(state, age, fertilityGoal);
 
-    if (sleepQuality === "poor") {
-      pushUnique(hurtingFactors, "Low sleep quality is a major drag on recovery and long-term risk.");
-      addRecommendation(recommendations, {
-        title: "Upgrade sleep quality",
-        action: "Cut late caffeine/alcohol and use a dark, cool sleep environment for 14 days.",
-        yearsGained: 1.9
-      });
-    }
+  if (sex !== "male") {
+    adjustPathway(state, "needs-labs-workup", 80);
+    addRedFlag(state.redFlags, "This TRT-focused quiz is intended for adult men; do not use this result as treatment guidance for women.");
+    addPathwayCaution(state, "needs-labs-workup", "Reference ranges and treatment logic differ outside adult male TRT workflows.");
+    state.candidateScore = 12;
   }
 
-  const exerciseFrequency = toStringValue(answers.exerciseFrequency);
-  const exerciseFrequencyScore: Record<string, number> = {
-    none: -12,
-    "1-2": -1,
-    "3-4": 7,
-    "5+": 10
-  };
-  if (exerciseFrequency) {
-    score += exerciseFrequencyScore[exerciseFrequency] ?? 0;
-
-    if (exerciseFrequency === "3-4" || exerciseFrequency === "5+") {
-      pushUnique(helpingFactors, "Weekly exercise frequency is strongly protective.");
-    }
-
-    if (exerciseFrequency === "none") {
-      pushUnique(hurtingFactors, "No regular exercise creates one of the largest preventable risks.");
-      addRecommendation(recommendations, {
-        title: "Start a minimum viable training plan",
-        action: "Do 3 weekly sessions: 2 strength sessions and 1 Zone 2 session.",
-        yearsGained: 3.0
-      });
-    }
+  if (goals.includes("fertility")) {
+    adjustPathway(state, "serm-discussion", 8);
+    addPathwayReason(state, "serm-discussion", "Preserving fertility is one of your stated goals.");
   }
 
-  const exerciseTypes = toStringArray(answers.exerciseTypes);
-  if (exerciseTypes.includes("strength")) {
-    score += 4;
-    pushUnique(helpingFactors, "Strength training supports muscle and metabolic health.");
+  const symptomWeights: Record<string, number> = {
+    "low-libido": 8,
+    "erection-quality": 7,
+    fatigue: 6,
+    "brain-fog": 5,
+    "strength-loss": 5,
+    "fat-gain": 5,
+    "low-mood": 4,
+    "poor-recovery": 4
+  };
+
+  if (!symptoms.includes("none")) {
+    symptoms.forEach((symptom) => {
+      state.symptomLoad += symptomWeights[symptom] ?? 0;
+    });
+  }
+
+  state.candidateScore += clampNumber(state.symptomLoad * 1.2, 0, 36);
+
+  if (symptoms.includes("low-libido") || symptoms.includes("erection-quality")) {
+    addPathwayReason(state, "oral-topical-trt-discussion", "Sexual symptoms are part of the picture.");
+    addPathwayReason(state, "serm-discussion", "Sexual symptoms increase the value of a real hormone workup.");
+  }
+
+  if (symptoms.length <= 2 && !symptoms.includes("none")) {
+    pushUnique(state.helpingFactors, "Symptom burden is present but not overwhelming, which leaves room for lifestyle cleanup to move the needle.");
+  }
+
+  if (symptoms.length >= 5) {
+    pushUnique(state.hurtingFactors, "You reported a broad cluster of classic low-T symptoms, not just one isolated complaint.");
+  }
+
+  if (symptomDuration === "12m-plus") {
+    state.candidateScore += 7;
+    addPathwayReason(state, "oral-topical-trt-discussion", "Symptoms have been persistent for a long time.");
+    addPathwayReason(state, "serm-discussion", "Symptoms have persisted long enough to justify deeper evaluation.");
+  } else if (symptomDuration === "6-12m") {
+    state.candidateScore += 4;
+  }
+
+  switch (priorLabs) {
+    case "borderline":
+      state.candidateScore += 8;
+      adjustPathway(state, "serm-discussion", 10);
+      adjustPathway(state, "oral-topical-trt-discussion", 6);
+      addPathwayReason(state, "serm-discussion", "You already have borderline / low-normal labs.");
+      addPathwayReason(state, "oral-topical-trt-discussion", "Lab signal is at least directionally supportive.");
+      break;
+    case "low-once":
+      state.candidateScore += 14;
+      adjustPathway(state, "serm-discussion", 14);
+      adjustPathway(state, "oral-topical-trt-discussion", 14);
+      adjustPathway(state, "needs-labs-workup", 10);
+      addPathwayReason(state, "needs-labs-workup", "A single low result still needs proper confirmation.");
+      addPathwayReason(state, "serm-discussion", "There is already one low-lab datapoint on the board.");
+      addPathwayReason(state, "oral-topical-trt-discussion", "There is already one low-lab datapoint on the board.");
+      break;
+    case "low-twice":
+      state.candidateScore += 24;
+      adjustPathway(state, "serm-discussion", 18);
+      adjustPathway(state, "oral-topical-trt-discussion", 24);
+      adjustPathway(state, "lifestyle-first", -8);
+      addPathwayReason(state, "oral-topical-trt-discussion", "You already report two low early-morning results.");
+      addPathwayReason(state, "serm-discussion", "Confirmed low testosterone makes fertility-preserving options more relevant if fertility matters.");
+      break;
+    case "normal-not-explained":
+      adjustPathway(state, "needs-labs-workup", 12);
+      addPathwayReason(state, "needs-labs-workup", "Symptoms with normal prior labs increase the odds that a root-cause workup matters.");
+      addPathwayCaution(state, "oral-topical-trt-discussion", "Normal prior labs reduce the case for reflexively blaming testosterone.");
+      break;
+    case "never-tested":
+    default:
+      adjustPathway(state, "needs-labs-workup", 12);
+      addPathwayReason(state, "needs-labs-workup", "You do not have baseline hormone labs yet.");
+      break;
+  }
+
+  switch (fertilityGoal) {
+    case "yes":
+      adjustPathway(state, "serm-discussion", 28);
+      adjustPathway(state, "oral-topical-trt-discussion", -20);
+      adjustPathway(state, "needs-labs-workup", 8);
+      addRedFlag(state.redFlags, "Future fertility matters, so exogenous testosterone should not be treated like a casual first step.");
+      addPathwayReason(state, "serm-discussion", "You want fertility preserved in the next 12-24 months.");
+      addPathwayCaution(state, "oral-topical-trt-discussion", "Exogenous testosterone can suppress spermatogenesis.");
+      break;
+    case "unsure":
+      adjustPathway(state, "serm-discussion", 18);
+      adjustPathway(state, "oral-topical-trt-discussion", -10);
+      addPathwayReason(state, "serm-discussion", "Uncertainty about fertility still argues for a fertility-aware path.");
+      addPathwayCaution(state, "oral-topical-trt-discussion", "Sort fertility plans before committing to exogenous testosterone.");
+      break;
+    case "no":
+      adjustPathway(state, "oral-topical-trt-discussion", 10);
+      addPathwayReason(state, "oral-topical-trt-discussion", "Fertility preservation is not a major constraint for you.");
+      break;
+  }
+
+  if (priorTherapies.includes("lifestyle")) {
+    adjustPathway(state, "lifestyle-first", -6);
+    addPathwayCaution(state, "lifestyle-first", "You’ve already done at least some basics, so the plan needs to be more targeted than generic advice.");
   } else {
-    addRecommendation(recommendations, {
-      title: "Add strength training",
-      action: "Schedule two full-body strength sessions weekly and progress loads gradually.",
-      yearsGained: 2.4
-    });
+    adjustPathway(state, "lifestyle-first", 8);
+    addPathwayReason(state, "lifestyle-first", "You have not fully exhausted a targeted lifestyle pass yet.");
   }
 
-  if (exerciseTypes.includes("zone2")) {
-    score += 3;
-    pushUnique(helpingFactors, "Zone 2 work improves cardiorespiratory reserve.");
+  if (priorTherapies.includes("serm")) {
+    addPathwayReason(state, "serm-discussion", "You already have SERM history, so response / side effects matter in the next decision.");
   }
 
-  const vo2Proxy = toStringValue(answers.vo2Proxy);
-  const vo2Scores: Record<string, number> = {
-    "yes-easy": 5,
-    "yes-hard": 2,
-    "not-sure": 0,
-    no: -4
-  };
-  if (vo2Proxy) {
-    score += vo2Scores[vo2Proxy] ?? 0;
-    if (vo2Proxy === "no") {
-      pushUnique(hurtingFactors, "Cardiorespiratory fitness proxy suggests low aerobic reserve.");
-      addRecommendation(recommendations, {
-        title: "Build aerobic capacity",
-        action: "Add 2-3 weekly conversational-pace sessions and progress volume gradually.",
-        yearsGained: 2.0
-      });
-    }
-  }
-
-  const gripProxy = toStringValue(answers.gripStrengthProxy);
-  const gripScores: Record<string, number> = {
-    easy: 3,
-    sometimes: 0,
-    rarely: -4
-  };
-  if (gripProxy) {
-    score += gripScores[gripProxy] ?? 0;
-  }
-
-  const sittingHours = toStringValue(answers.sittingHours);
-  const sittingScores: Record<string, number> = {
-    lt4: 3,
-    "4-6": 1,
-    "7-9": -3,
-    "10+": -7
-  };
-  if (sittingHours) {
-    score += sittingScores[sittingHours] ?? 0;
-
-    if (sittingHours === "10+" || sittingHours === "7-9") {
-      pushUnique(hurtingFactors, "Sedentary time is likely offsetting some training benefit.");
-      addRecommendation(recommendations, {
-        title: "Break up sitting time",
-        action: "Stand or walk for 2-3 minutes at least once each hour.",
-        yearsGained: 1.3
-      });
-    }
-  }
-
-  const dietPattern = toStringValue(answers.dietPattern);
-  const dietPatternScore: Record<string, number> = {
-    "standard-american": -8,
-    mediterranean: 7,
-    keto: 2,
-    "plant-based": 5,
-    "whole-food": 8,
-    other: 0
-  };
-  if (dietPattern) {
-    score += dietPatternScore[dietPattern] ?? 0;
-
-    if (dietPattern === "standard-american") {
-      pushUnique(hurtingFactors, "Diet pattern raises long-term cardiometabolic risk.");
-      addRecommendation(recommendations, {
-        title: "Shift toward whole foods",
-        action: "Build meals around protein, fiber, and minimally processed ingredients.",
-        yearsGained: 2.3
-      });
-    }
-
-    if (dietPattern === "mediterranean" || dietPattern === "whole-food" || dietPattern === "plant-based") {
-      pushUnique(helpingFactors, "Diet quality pattern aligns with healthier aging data.");
-    }
-  }
-
-  const proteinMeals = toStringValue(answers.proteinMeals);
-  const proteinScores: Record<string, number> = {
-    "0-1": -4,
-    "2": 0,
-    "3": 3,
-    "4+": 2
-  };
-  if (proteinMeals) {
-    score += proteinScores[proteinMeals] ?? 0;
-
-    if (proteinMeals === "0-1") {
-      addRecommendation(recommendations, {
-        title: "Increase protein distribution",
-        action: "Target 2-3 protein-rich meals daily to support lean mass.",
-        yearsGained: 1.4
-      });
-    }
-  }
-
-  const processedFoodPct = toNumber(answers.processedFoodPct);
-  if (processedFoodPct !== null) {
-    const processedPenalty = clampNumber(processedFoodPct / 7.5, 0, 13);
-    score -= processedPenalty;
-
-    if (processedFoodPct >= 50) {
-      pushUnique(hurtingFactors, "High processed food intake likely increases inflammation and metabolic strain.");
-      addRecommendation(recommendations, {
-        title: "Reduce processed intake",
-        action: "Reduce processed foods by 20% and replace with repeatable whole-food meals.",
-        yearsGained: 1.8
-      });
-    }
-  }
-
-  const hydration = toStringValue(answers.hydration);
-  const hydrationScores: Record<string, number> = {
-    lt1l: -3,
-    "1-2l": 0,
-    "2-3l": 2,
-    "3l+": 2
-  };
-  if (hydration) {
-    score += hydrationScores[hydration] ?? 0;
-  }
-
-  const fastingAwareness = toStringValue(answers.fastingGlucoseAwareness);
-  const fastingScores: Record<string, number> = {
-    "yes-normal": 3,
-    "yes-elevated": -2,
-    no: -1
-  };
-  if (fastingAwareness) {
-    score += fastingScores[fastingAwareness] ?? 0;
-    if (fastingAwareness === "yes-elevated" || fastingAwareness === "no") {
-      addRecommendation(recommendations, {
-        title: "Track metabolic markers",
-        action: "Check fasting glucose and HbA1c trends and review with your clinician.",
-        yearsGained: 1.6
-      });
-    }
-  }
-
-  const alcoholUse = toStringValue(answers.alcoholUse);
-  const alcoholScores: Record<string, number> = {
-    none: 4,
-    occasional: 1,
-    moderate: -3,
-    heavy: -10
-  };
-  if (alcoholUse) {
-    score += alcoholScores[alcoholUse] ?? 0;
-
-    if (alcoholUse === "heavy") {
-      pushUnique(hurtingFactors, "Heavy alcohol intake materially worsens healthspan trajectory.");
-      addRecommendation(recommendations, {
-        title: "Lower alcohol dose",
-        action: "Cap intake and avoid alcohol close to bedtime for 30 days.",
-        yearsGained: 1.7
-      });
-    }
-  }
-
-  const smokingStatus = toStringValue(answers.smokingStatus);
-  const smokingScores: Record<string, number> = {
-    never: 10,
-    former: 2,
-    current: -18
-  };
-  if (smokingStatus) {
-    score += smokingScores[smokingStatus] ?? 0;
-
-    if (smokingStatus === "current") {
-      pushUnique(hurtingFactors, "Current smoking is the single largest modifiable longevity risk here.");
-      addRecommendation(recommendations, {
-        title: "Start smoking cessation support",
-        action: "Use medical cessation support and a weekly trigger-management plan.",
-        yearsGained: 4.0
-      });
-    }
-  }
-
-  const stressLevel = toStringValue(answers.stressLevel);
-  const stressScores: Record<string, number> = {
-    low: 4,
-    moderate: 1,
-    high: -4,
-    "very-high": -8
-  };
-  if (stressLevel) {
-    score += stressScores[stressLevel] ?? 0;
-
-    if (stressLevel === "high" || stressLevel === "very-high") {
-      pushUnique(hurtingFactors, "Chronic high stress can meaningfully reduce recovery capacity.");
-      addRecommendation(recommendations, {
-        title: "Install daily stress regulation",
-        action: "Use a 10-minute daily breathing or mindfulness block and protect recovery windows.",
-        yearsGained: 1.4
-      });
-    }
-  }
-
-  const mentalHealth = toStringValue(answers.mentalHealth);
-  const mentalHealthScores: Record<string, number> = {
-    rarely: 3,
-    sometimes: 0,
-    often: -4,
-    "most-days": -8
-  };
-  if (mentalHealth) {
-    score += mentalHealthScores[mentalHealth] ?? 0;
-
-    if (mentalHealth === "often" || mentalHealth === "most-days") {
-      addRecommendation(recommendations, {
-        title: "Address mental health load",
-        action: "Discuss persistent anxiety/depressive symptoms with a licensed professional.",
-        yearsGained: 1.6
-      });
-    }
-  }
-
-  const socialConnections = toStringValue(answers.socialConnections);
-  const socialScores: Record<string, number> = {
-    isolated: -8,
-    "few-close": -2,
-    "strong-network": 4,
-    "very-connected": 6
-  };
-  if (socialConnections) {
-    score += socialScores[socialConnections] ?? 0;
-
-    if (socialConnections === "isolated") {
-      pushUnique(hurtingFactors, "Social isolation is linked to higher morbidity and mortality risk.");
-      addRecommendation(recommendations, {
-        title: "Increase social connection",
-        action: "Add two recurring social touchpoints weekly with friends, family, or community groups.",
-        yearsGained: 1.6
-      });
-    }
-  }
-
-  const purpose = toStringValue(answers.purpose);
-  const purposeScores: Record<string, number> = {
-    none: -6,
-    searching: -1,
-    moderate: 3,
-    strong: 6
-  };
-  if (purpose) {
-    score += purposeScores[purpose] ?? 0;
-
-    if (purpose === "strong") {
-      pushUnique(helpingFactors, "Strong sense of purpose supports behavior consistency and resilience.");
-    }
-
-    if (purpose === "none") {
-      addRecommendation(recommendations, {
-        title: "Define a purpose anchor",
-        action: "Set one meaningful long-term goal and align weekly habits to it.",
-        yearsGained: 1.2
-      });
-    }
-  }
-
-  const temperatureExposure = toStringValue(answers.temperatureExposure);
-  const tempScores: Record<string, number> = {
-    none: 0,
-    occasional: 1,
-    weekly: 2,
-    frequent: 3
-  };
-  if (temperatureExposure) {
-    score += tempScores[temperatureExposure] ?? 0;
-  }
-
-  const familyLongevity = toStringValue(answers.familyLongevity);
-  const familyScores: Record<string, number> = {
-    "under-70": -4,
-    "70-80": -1,
-    "80-90": 2,
-    "90-plus": 5
-  };
-  if (familyLongevity) {
-    score += familyScores[familyLongevity] ?? 0;
-  }
-
-  const chronicConditions = toStringArray(answers.chronicConditions);
-  if (!chronicConditions.includes("none") && chronicConditions.length > 0) {
-    score -= clampNumber(chronicConditions.length * 6, 0, 20);
-    pushUnique(hurtingFactors, "Existing chronic conditions increase baseline risk load.");
-    addRecommendation(recommendations, {
-      title: "Tighten condition-specific monitoring",
-      action: "Track condition markers with your clinician and review intervention adherence monthly.",
-      yearsGained: 1.8
-    });
-  }
-
-  const chronicNotes = toStringValue(answers.chronicConditionNotes);
-  if (chronicNotes && chronicNotes.length >= 30) {
-    score += 0.5;
-  }
-
-  const supplements = toStringArray(answers.supplements);
-  if (supplements.includes("vitamin-d")) {
-    score += 1;
-  }
-  if (supplements.includes("omega-3")) {
-    score += 1;
-  }
-  if (supplements.includes("magnesium")) {
-    score += 1;
-  }
-  if (supplements.includes("creatine")) {
-    score += 1;
-  }
-  if (supplements.includes("nmn")) {
-    score += 0.5;
-  }
-
-  const sunExposure = toStringValue(answers.sunExposure);
-  const sunScores: Record<string, number> = {
-    minimal: -2,
-    moderate: 2,
-    regular: 3
-  };
-  if (sunExposure) {
-    score += sunScores[sunExposure] ?? 0;
-  }
-
-  const preventiveCare = toStringValue(answers.preventiveCare);
-  const preventiveScores: Record<string, number> = {
-    never: -8,
-    occasionally: -2,
-    regular: 4,
-    proactive: 7
-  };
-  if (preventiveCare) {
-    score += preventiveScores[preventiveCare] ?? 0;
-
-    if (preventiveCare === "proactive" || preventiveCare === "regular") {
-      pushUnique(helpingFactors, "Preventive care adherence improves early detection and intervention speed.");
-    }
-
-    if (preventiveCare === "never") {
-      addRecommendation(recommendations, {
-        title: "Schedule preventive checkups",
-        action: "Book annual labs and checkups, then track trends quarterly.",
-        yearsGained: 1.5
-      });
-    }
+  if (priorTherapies.includes("oral-t") || priorTherapies.includes("topical-t") || priorTherapies.includes("injectable-t")) {
+    adjustPathway(state, "oral-topical-trt-discussion", 4);
+    addPathwayReason(state, "oral-topical-trt-discussion", "You already have testosterone-treatment history to discuss with a clinician.");
   }
 
   if (bmi !== null) {
-    if (bmi < 18.5) {
-      score -= 3;
-    } else if (bmi >= 18.5 && bmi <= 24.9) {
-      score += 4;
-      pushUnique(helpingFactors, "Body composition markers are currently in a lower-risk range.");
-    } else if (bmi >= 30) {
-      score -= 8;
-      pushUnique(hurtingFactors, "Current BMI range may elevate cardiometabolic risk.");
-      addRecommendation(recommendations, {
-        title: "Improve body composition",
-        action: "Use a mild calorie deficit with high protein and resistance training consistency.",
-        yearsGained: 2.0
+    if (bmi >= 30) {
+      state.lifestyleDrag += 12;
+      adjustPathway(state, "lifestyle-first", 18);
+      pushUnique(state.hurtingFactors, "Body composition likely adds real testosterone drag, especially around insulin resistance and SHBG changes.");
+      addPathwayReason(state, "lifestyle-first", "BMI suggests a meaningful body-composition lever.");
+      addRecommendation(state.recommendations, {
+        title: "Run a 12-week body-composition cut",
+        action: "Pair high-protein eating with lifting and daily walking before assuming the answer is medication alone.",
+        impact: "Often changes SHBG, energy, waist size, and symptom noise fast."
       });
-    } else {
-      score -= 2;
+    } else if (bmi >= 25) {
+      state.lifestyleDrag += 6;
+      adjustPathway(state, "lifestyle-first", 10);
+      addPathwayReason(state, "lifestyle-first", "There is some body-composition cleanup available.");
+    } else if (bmi >= 20 && bmi < 25) {
+      pushUnique(state.helpingFactors, "Body composition is not obviously the main thing working against you.");
     }
   }
 
-  const extraNotes = toStringValue(answers.additionalHealthNotes);
-  if (extraNotes && extraNotes.length >= 40) {
-    score += 0.5;
+  switch (waistSize) {
+    case "central-obesity":
+      state.lifestyleDrag += 10;
+      adjustPathway(state, "lifestyle-first", 14);
+      pushUnique(state.hurtingFactors, "Waist-centered fat gain is one of the clearest modifiable signals in this quiz.");
+      break;
+    case "noticeable":
+      state.lifestyleDrag += 6;
+      adjustPathway(state, "lifestyle-first", 8);
+      break;
+    case "lean":
+      pushUnique(state.helpingFactors, "Waist size suggests you are not carrying a huge visceral-fat burden.");
+      break;
   }
 
-  const agePenalty = clampNumber((age - 40) * 0.18, 0, 8);
-  score -= agePenalty;
-
-  return finalizeResult(score, age, mode, "intro", helpingFactors, hurtingFactors, recommendations);
-}
-
-function deriveVisualBodyFatPercent(value: string | null): number | null {
-  if (!value) {
-    return null;
-  }
-
-  const map: Record<string, number> = {
-    "male-8-10": 9,
-    "male-12-15": 13.5,
-    "male-18-20": 19,
-    "male-25-plus": 27,
-    "female-15-18": 16.5,
-    "female-20-25": 22.5,
-    "female-28-32": 30,
-    "female-35-plus": 37
-  };
-
-  return map[value] ?? null;
-}
-
-function scoreBodyFatPercent(percent: number, sex: string | null) {
-  const isFemale = sex === "female";
-
-  const idealMin = isFemale ? 18 : 10;
-  const idealMax = isFemale ? 30 : 20;
-
-  if (percent >= idealMin && percent <= idealMax) {
-    return { delta: 6, label: "Body fat estimate is currently in a lower-risk range." };
-  }
-
-  if (percent > idealMax + 8) {
-    return { delta: -8, label: "Body fat estimate suggests elevated cardiometabolic load." };
-  }
-
-  if (percent > idealMax) {
-    return { delta: -4, label: "Body fat estimate is moderately above optimal range." };
-  }
-
-  if (percent < idealMin - 3) {
-    return { delta: -3, label: "Very low body fat can reduce resilience and hormonal stability." };
-  }
-
-  return { delta: 0, label: "Body fat estimate is near a neutral range." };
-}
-
-function buildAdvancedFallbackResult(
-  introAnswers: QuizAnswers,
-  advancedAnswers: QuizAnswers,
-  mode: QuizMode
-): HealthspanResult {
-  const introBaseline = buildIntroFallbackResult(introAnswers, mode);
-  const age = getAge(introAnswers);
-  const sex = toStringValue(introAnswers.sex);
-
-  let score = introBaseline.score;
-
-  const helpingFactors = [...introBaseline.helpingFactors];
-  const hurtingFactors = [...introBaseline.hurtingFactors];
-  const recommendations = [...introBaseline.recommendations];
-
-  const weeklyTrainingDays = toStringValue(advancedAnswers.weeklyTrainingDays);
-  const trainingDaysScores: Record<string, number> = {
-    "2-3": 1,
-    "4-5": 3,
-    "6+": 2
-  };
-  if (weeklyTrainingDays) {
-    score += trainingDaysScores[weeklyTrainingDays] ?? 0;
-  }
-
-  const progressiveOverload = toStringValue(advancedAnswers.progressiveOverload);
-  const overloadScores: Record<string, number> = {
-    "yes-systematic": 5,
-    sometimes: 1,
-    no: -4
-  };
-  if (progressiveOverload) {
-    score += overloadScores[progressiveOverload] ?? 0;
-
-    if (progressiveOverload === "yes-systematic") {
-      pushUnique(helpingFactors, "Progressive overload tracking supports long-term strength and function.");
-    }
-
-    if (progressiveOverload === "no") {
-      addRecommendation(recommendations, {
-        title: "Track progressive overload",
-        action: "Log load, reps, or volume each week and progress at least one variable.",
-        yearsGained: 1.8
+  if (sleepHours !== null) {
+    if (sleepHours < 6) {
+      state.lifestyleDrag += 12;
+      adjustPathway(state, "lifestyle-first", 18);
+      adjustPathway(state, "needs-labs-workup", 6);
+      pushUnique(state.hurtingFactors, "Sleep duration is poor enough to mimic or worsen low-T symptoms by itself.");
+      addRecommendation(state.recommendations, {
+        title: "Fix sleep before blaming hormones",
+        action: "Build a hard 7-8 hour sleep window, protect wake time, and stop testing testosterone against chronic sleep debt.",
+        impact: "Improves libido, recovery, mood, and morning energy without prescription risk."
       });
+    } else if (sleepHours >= 7 && sleepHours <= 8.5) {
+      pushUnique(state.helpingFactors, "Sleep duration is at least in a range where testosterone interpretation gets cleaner.");
     }
   }
 
-  const strengthSplit = toStringValue(advancedAnswers.strengthTrainingSplit);
-  const splitScores: Record<string, number> = {
-    "full-body": 2,
-    "upper-lower": 2,
-    "push-pull-legs": 2,
-    "body-part": 1,
-    none: -2
-  };
-  if (strengthSplit) {
-    score += splitScores[strengthSplit] ?? 0;
+  switch (sleepQuality) {
+    case "poor":
+      state.lifestyleDrag += 10;
+      adjustPathway(state, "lifestyle-first", 14);
+      break;
+    case "fair":
+      state.lifestyleDrag += 5;
+      adjustPathway(state, "lifestyle-first", 7);
+      break;
+    case "good":
+    case "excellent":
+      pushUnique(state.helpingFactors, "Sleep quality is not obviously sabotaging the rest of the plan.");
+      break;
   }
 
-  const yearsTraining = toStringValue(advancedAnswers.yearsStrengthTraining);
-  const yearsScores: Record<string, number> = {
-    lt1: -1,
-    "1-3": 1,
-    "4-7": 2,
-    "8+": 3
-  };
-  if (yearsTraining) {
-    score += yearsScores[yearsTraining] ?? 0;
+  switch (apnea) {
+    case "snore":
+    case "suspected-apnea":
+      state.lifestyleDrag += 8;
+      adjustPathway(state, "needs-labs-workup", 12);
+      adjustPathway(state, "lifestyle-first", 10);
+      addRedFlag(state.redFlags, "Possible sleep apnea should be addressed before overcommitting to a testosterone story.");
+      addPathwayReason(state, "needs-labs-workup", "Sleep-apnea risk can distort both symptoms and treatment safety.");
+      break;
+    case "untreated-apnea":
+      state.lifestyleDrag += 12;
+      adjustPathway(state, "needs-labs-workup", 18);
+      adjustPathway(state, "oral-topical-trt-discussion", -12);
+      addRedFlag(state.redFlags, "Untreated sleep apnea is a major caution flag before TRT escalation.");
+      addPathwayCaution(state, "oral-topical-trt-discussion", "Untreated apnea raises the stakes of jumping straight to TRT.");
+      break;
+    case "treated-apnea":
+      pushUnique(state.helpingFactors, "Sleep apnea is already identified and treated, which makes the hormone picture cleaner.");
+      break;
   }
 
-  const { weightKg: bodyWeightKg } = getBodyMetrics(introAnswers);
-
-  const squat1Rm = getOneRepMaxFromAnswer(advancedAnswers.squatPerformance);
-  if (squat1Rm !== null && bodyWeightKg) {
-    const ratio = squat1Rm / bodyWeightKg;
-    if (ratio >= 1.25) {
-      score += 6;
-      pushUnique(helpingFactors, "Squat strength-to-bodyweight ratio supports functional reserve.");
-    } else if (ratio >= 1) {
-      score += 3;
-    } else if (ratio < 0.7) {
-      score -= 3;
-      addRecommendation(recommendations, {
-        title: "Build lower-body strength",
-        action: "Run a structured squat progression with progressive overload and recovery.",
-        yearsGained: 1.7
+  switch (stress) {
+    case "high":
+      state.lifestyleDrag += 5;
+      adjustPathway(state, "lifestyle-first", 6);
+      break;
+    case "very-high":
+      state.lifestyleDrag += 10;
+      adjustPathway(state, "lifestyle-first", 12);
+      pushUnique(state.hurtingFactors, "Stress load is high enough to blur what is hormones versus what is lifestyle debt.");
+      addRecommendation(state.recommendations, {
+        title: "Lower the cortisol chaos",
+        action: "Protect sleep, lift with intent instead of redlining everything, and install one daily downshift habit you can actually keep.",
+        impact: "Makes libido, mood, and energy data less noisy."
       });
-    }
+      break;
   }
 
-  const bench1Rm = getOneRepMaxFromAnswer(advancedAnswers.benchPerformance);
-  if (bench1Rm !== null && bodyWeightKg) {
-    const ratio = bench1Rm / bodyWeightKg;
-    if (ratio >= 1) {
-      score += 5;
-    } else if (ratio >= 0.8) {
-      score += 2;
-    } else if (ratio < 0.6) {
-      score -= 2;
-    }
-  }
-
-  const deadlift1Rm = getOneRepMaxFromAnswer(advancedAnswers.deadliftPerformance);
-  if (deadlift1Rm !== null && bodyWeightKg) {
-    const ratio = deadlift1Rm / bodyWeightKg;
-    if (ratio >= 1.6) {
-      score += 6;
-      pushUnique(helpingFactors, "Deadlift strength indicates strong posterior-chain capacity.");
-    } else if (ratio >= 1.2) {
-      score += 3;
-    } else if (ratio < 1) {
-      score -= 2;
-    }
-  }
-
-  const conditionAdherence = toStringValue(advancedAnswers.conditionAdherence);
-  const adherenceScores: Record<string, number> = {
-    high: 4,
-    moderate: 1,
-    low: -5
-  };
-  if (conditionAdherence) {
-    score += adherenceScores[conditionAdherence] ?? 0;
-
-    if (conditionAdherence === "low") {
-      addRecommendation(recommendations, {
-        title: "Increase condition-plan adherence",
-        action: "Use weekly tracking and clinician check-ins to improve plan consistency.",
-        yearsGained: 1.8
+  switch (lifting) {
+    case "none":
+      state.lifestyleDrag += 8;
+      adjustPathway(state, "lifestyle-first", 14);
+      addRecommendation(state.recommendations, {
+        title: "Start lifting twice a week",
+        action: "Use a simple full-body plan with progressive overload before assuming you need a prescription to feel strong again.",
+        impact: "Often improves body composition, recovery confidence, and symptom interpretation."
       });
-    }
+      break;
+    case "1":
+      state.lifestyleDrag += 4;
+      adjustPathway(state, "lifestyle-first", 6);
+      break;
+    case "2-3":
+    case "4-plus":
+      pushUnique(state.helpingFactors, "You already have at least some resistance training in place.");
+      break;
   }
 
-  const caffeineTiming = toStringValue(advancedAnswers.sleepCaffeineTiming);
-  const caffeineScores: Record<string, number> = {
-    "before-noon": 2,
-    "early-afternoon": 1,
-    "late-afternoon-evening": -3
-  };
-  if (caffeineTiming) {
-    score += caffeineScores[caffeineTiming] ?? 0;
+  switch (activity) {
+    case "desk-mostly":
+      state.lifestyleDrag += 6;
+      adjustPathway(state, "lifestyle-first", 8);
+      break;
+    case "8k-plus":
+    case "very-active":
+      pushUnique(state.helpingFactors, "Daily activity outside the gym is a real asset here.");
+      break;
   }
 
-  const screenTiming = toStringValue(advancedAnswers.sleepScreenTiming);
-  const screenScores: Record<string, number> = {
-    none: 2,
-    "60plus": 1,
-    "30-60": -1,
-    lt30: -3
-  };
-  if (screenTiming) {
-    score += screenScores[screenTiming] ?? 0;
-  }
-
-  const roomTemp = toStringValue(advancedAnswers.sleepRoomTemp);
-  const roomTempScores: Record<string, number> = {
-    "cool-16-19": 2,
-    "moderate-20-22": 0,
-    "warm-23plus": -2,
-    unknown: -1
-  };
-  if (roomTemp) {
-    score += roomTempScores[roomTemp] ?? 0;
-  }
-
-  const dexaScan = toStringValue(advancedAnswers.dexaScan);
-  const directBodyFat = toObject(advancedAnswers.bodyFatPct);
-  const dexaBodyFatPct = directBodyFat ? toNumber(directBodyFat.bodyFatPct) : null;
-
-  let resolvedBodyFat = dexaBodyFatPct;
-  if (resolvedBodyFat === null && dexaScan === "no") {
-    resolvedBodyFat = deriveVisualBodyFatPercent(toStringValue(advancedAnswers.bodyFatVisual));
-  }
-
-  if (resolvedBodyFat !== null) {
-    const bodyFatEffect = scoreBodyFatPercent(resolvedBodyFat, sex);
-    score += bodyFatEffect.delta;
-
-    if (bodyFatEffect.delta >= 4) {
-      pushUnique(helpingFactors, bodyFatEffect.label);
-    } else if (bodyFatEffect.delta <= -4) {
-      pushUnique(hurtingFactors, bodyFatEffect.label);
-      addRecommendation(recommendations, {
-        title: "Improve body composition precision",
-        action: "Pair resistance training with protein targets and quarterly body-fat trend checks.",
-        yearsGained: 2.1
+  switch (diet) {
+    case "poor":
+      state.lifestyleDrag += 8;
+      adjustPathway(state, "lifestyle-first", 12);
+      pushUnique(state.hurtingFactors, "Diet quality is leaving easy wins on the table.");
+      addRecommendation(state.recommendations, {
+        title: "Tighten protein and food quality",
+        action: "Center meals on protein, mostly whole foods, and a calorie target that matches your waist-size goal.",
+        impact: "Supports body composition, energy stability, and better hormone interpretation."
       });
-    }
+      break;
+    case "mixed":
+      state.lifestyleDrag += 4;
+      adjustPathway(state, "lifestyle-first", 6);
+      break;
+    case "excellent":
+      pushUnique(state.helpingFactors, "Diet quality is already doing some of the heavy lifting.");
+      break;
   }
 
-  const biomarkersTracked = toStringArray(advancedAnswers.biomarkersTracked);
-  if (biomarkersTracked.length > 0 && !biomarkersTracked.includes("none")) {
-    score += clampNumber(biomarkersTracked.length * 1.5, 0, 6);
-    pushUnique(helpingFactors, "You track biomarkers that improve decision quality and intervention timing.");
-  } else {
-    score -= 4;
-    addRecommendation(recommendations, {
-      title: "Start biomarker tracking",
-      action: "Track at least HbA1c, lipids, and hsCRP every 3-6 months.",
-      yearsGained: 1.7
+  switch (alcohol) {
+    case "moderate":
+      state.lifestyleDrag += 4;
+      adjustPathway(state, "lifestyle-first", 5);
+      break;
+    case "heavy":
+      state.lifestyleDrag += 10;
+      adjustPathway(state, "lifestyle-first", 12);
+      pushUnique(state.hurtingFactors, "Alcohol intake is high enough to directly muddy sleep, recovery, libido, and labs.");
+      addRecommendation(state.recommendations, {
+        title: "Cut alcohol for 30 days",
+        action: "Run a clean month and compare sleep, libido, and training recovery before making medication decisions from noisy data.",
+        impact: "Quickest way to learn whether alcohol is a hidden testosterone drag."
+      });
+      break;
+    case "none":
+      pushUnique(state.helpingFactors, "Alcohol is not a major confounder here.");
+      break;
+  }
+
+  switch (nicotine) {
+    case "current":
+      state.lifestyleDrag += 8;
+      adjustPathway(state, "lifestyle-first", 6);
+      addRedFlag(state.redFlags, "Current nicotine use can worsen the symptom picture and long-term risk profile.");
+      break;
+    case "former":
+      pushUnique(state.helpingFactors, "You are no longer carrying a current nicotine habit.");
+      break;
+  }
+
+  if (medications.includes("opioids")) {
+    state.lifestyleDrag += 8;
+    adjustPathway(state, "needs-labs-workup", 14);
+    addRedFlag(state.redFlags, "Chronic opioids are a major root-cause flag for low testosterone.");
+  }
+
+  if (medications.includes("finasteride")) {
+    state.lifestyleDrag += 3;
+    adjustPathway(state, "needs-labs-workup", 6);
+  }
+
+  if (medications.includes("ssri")) {
+    state.lifestyleDrag += 3;
+    adjustPathway(state, "needs-labs-workup", 4);
+  }
+
+  if (medications.includes("steroids")) {
+    adjustPathway(state, "needs-labs-workup", 18);
+    addRedFlag(state.redFlags, "Recent anabolic steroid exposure changes the entire evaluation path.");
+    addPathwayReason(state, "needs-labs-workup", "Past or recent steroid use can suppress the axis and confuse candidacy logic.");
+  }
+
+  if (conditions.includes("prediabetes") || conditions.includes("diabetes")) {
+    state.lifestyleDrag += 8;
+    adjustPathway(state, "lifestyle-first", 10);
+    adjustPathway(state, "needs-labs-workup", 6);
+    addLab(state.labsToRequest, "Metabolic panel / insulin resistance follow-up");
+  }
+
+  if (conditions.includes("thyroid")) {
+    adjustPathway(state, "needs-labs-workup", 12);
+    addRedFlag(state.redFlags, "Known thyroid issues can mimic a lot of " + "low-T symptoms.");
+  }
+
+  if (conditions.includes("pituitary")) {
+    adjustPathway(state, "needs-labs-workup", 18);
+    addRedFlag(state.redFlags, "Pituitary history pushes this out of simple online-quiz territory.");
+  }
+
+  if (conditions.includes("infertility-history")) {
+    adjustPathway(state, "serm-discussion", 8);
+    adjustPathway(state, "needs-labs-workup", 10);
+    addRedFlag(state.redFlags, "History of infertility means fertility counseling should happen before treatment selection.");
+  }
+
+  switch (routePreference) {
+    case "lifestyle-first":
+      adjustPathway(state, "lifestyle-first", 10);
+      addPathwayReason(state, "lifestyle-first", "You already prefer a non-prescription-first route.");
+      break;
+    case "fertility-oral":
+      adjustPathway(state, "serm-discussion", 12);
+      addPathwayReason(state, "serm-discussion", "You prefer a fertility-aware oral path if medication becomes relevant.");
+      break;
+    case "oral-t":
+    case "topical-t":
+      adjustPathway(state, "oral-topical-trt-discussion", 12);
+      addPathwayReason(state, "oral-topical-trt-discussion", "You prefer a non-injectable testosterone route.");
+      break;
+  }
+
+  if (age <= 45) {
+    adjustPathway(state, "serm-discussion", 6);
+  }
+
+  if (age >= 35) {
+    adjustPathway(state, "oral-topical-trt-discussion", 4);
+  }
+
+  if (state.lifestyleDrag >= 25) {
+    addPathwayReason(state, "lifestyle-first", "You have multiple modifiable drivers that can lower testosterone or imitate low-T.");
+  }
+
+  state.candidateScore += clampNumber(state.lifestyleDrag * 0.35, 0, 20);
+  state.candidateScore = clampNumber(Math.round(state.candidateScore), 12, 95);
+
+  if (state.helpingFactors.length === 0) {
+    pushUnique(state.helpingFactors, "There are still some reversible levers here — which is good news because they are cheaper and safer to address first.");
+  }
+
+  if (state.hurtingFactors.length === 0) {
+    pushUnique(state.hurtingFactors, "The biggest gap is not one catastrophic issue — it is the combined effect of several smaller drags.");
+  }
+
+  if (mode === "roast") {
+    addRecommendation(state.recommendations, {
+      title: "Stop outsourcing your testosterone to chaos",
+      action: "If sleep is trash, stress is high, and waist size is drifting up, don’t act shocked when you feel flat.",
+      impact: "Clean up the obvious variables so the hormone story stops lying to you."
     });
   }
 
-  const hba1cRaw = toObject(advancedAnswers.hba1cValue);
-  const hba1c = hba1cRaw ? toNumber(hba1cRaw.hba1c) : null;
-  if (hba1c !== null) {
-    if (hba1c < 5.7) {
-      score += 4;
-    } else if (hba1c < 6.5) {
-      score -= 2;
-    } else {
-      score -= 8;
-      pushUnique(hurtingFactors, "HbA1c range indicates elevated glycemic risk.");
-      addRecommendation(recommendations, {
-        title: "Prioritize glucose control",
-        action: "Review nutrition, activity timing, and medication strategy with your clinician.",
-        yearsGained: 2.4
-      });
-    }
-  }
-
-  const lipidRaw = toObject(advancedAnswers.lipidValues);
-  if (lipidRaw) {
-    const ldl = toNumber(lipidRaw.ldl);
-    const hdl = toNumber(lipidRaw.hdl);
-    const triglycerides = toNumber(lipidRaw.triglycerides);
-
-    if (ldl !== null) {
-      if (ldl < 100) {
-        score += 3;
-      } else if (ldl > 130) {
-        score -= 4;
-      }
-    }
-
-    if (hdl !== null) {
-      if (hdl >= 50) {
-        score += 2;
-      } else if (hdl < 40) {
-        score -= 1;
-      }
-    }
-
-    if (triglycerides !== null) {
-      if (triglycerides < 150) {
-        score += 2;
-      } else {
-        score -= 3;
-      }
-    }
-  }
-
-  const hscrpRaw = toObject(advancedAnswers.hscrpValue);
-  const hscrp = hscrpRaw ? toNumber(hscrpRaw.hscrp) : null;
-  if (hscrp !== null) {
-    if (hscrp <= 1) {
-      score += 3;
-    } else if (hscrp <= 3) {
-      score += 0;
-    } else {
-      score -= 4;
-    }
-  }
-
-  const tshRaw = toObject(advancedAnswers.thyroidValue);
-  const tsh = tshRaw ? toNumber(tshRaw.tsh) : null;
-  if (tsh !== null) {
-    if (tsh >= 0.5 && tsh <= 2.5) {
-      score += 2;
-    } else {
-      score -= 1;
-    }
-  }
-
-  const advancedNotes = toStringValue(advancedAnswers.advancedNotes);
-  if (advancedNotes && advancedNotes.length >= 40) {
-    score += 0.5;
-  }
-
-  return finalizeResult(score, age, mode, "advanced", helpingFactors, hurtingFactors, recommendations);
+  return state;
 }
 
-function summarizeAnswersForPrompt(
-  answers: QuizAnswers,
-  assessmentType: HealthspanAssessmentType,
-  introAnswers?: QuizAnswers
+function scoreAdvancedAnswers(
+  introAnswers: QuizAnswers,
+  advancedAnswers: QuizAnswers,
+  mode: QuizMode
 ) {
-  const sourceAnswers = assessmentType === "advanced" ? introAnswers ?? {} : answers;
-  const age = getAge(sourceAnswers);
-  const bmi = calculateBmi(sourceAnswers);
+  const state = scoreIntroAnswers(introAnswers, mode);
+  const age = getAge(introAnswers);
+  const fertilityGoal = toStringValue(introAnswers.fertilityGoal);
+  const labMarkers = toStringArray(advancedAnswers.labMarkersKnown);
+  const totalTRaw = toObject(advancedAnswers.totalTestosteroneValue);
+  const totalT = totalTRaw ? toNumber(totalTRaw.totalT) : null;
+  const freeTRaw = toObject(advancedAnswers.freeTestosteroneValue);
+  const freeT = freeTRaw ? toNumber(freeTRaw.freeT) : null;
+  const lhRaw = toObject(advancedAnswers.lhValue);
+  const lh = lhRaw ? toNumber(lhRaw.lh) : null;
+  const fshRaw = toObject(advancedAnswers.fshValue);
+  const fsh = fshRaw ? toNumber(fshRaw.fsh) : null;
+  const prolactinRaw = toObject(advancedAnswers.prolactinValue);
+  const prolactin = prolactinRaw ? toNumber(prolactinRaw.prolactin) : null;
+  const tshRaw = toObject(advancedAnswers.tshValue);
+  const tsh = tshRaw ? toNumber(tshRaw.tsh) : null;
+  const a1cRaw = toObject(advancedAnswers.a1cValue);
+  const a1c = a1cRaw ? toNumber(a1cRaw.a1c) : null;
+  const hematocritRaw = toObject(advancedAnswers.hematocritValue);
+  const hematocrit = hematocritRaw ? toNumber(hematocritRaw.hematocrit) : null;
+  const psaRaw = toObject(advancedAnswers.psaValue);
+  const psa = psaRaw ? toNumber(psaRaw.psa) : null;
+  const morningDrawn = toStringValue(advancedAnswers.morningDrawn);
+  const repeatLowStatus = toStringValue(advancedAnswers.repeatLowStatus);
+  const sleepFollowup = toStringValue(advancedAnswers.sleepFollowup);
+  const caffeineTiming = toStringValue(advancedAnswers.caffeineTiming);
+  const shiftWork = toStringValue(advancedAnswers.shiftWork);
+  const weightTrend = toStringValue(advancedAnswers.weightTrend);
 
-  const detailLines: string[] = [];
+  if (labMarkers.includes("none")) {
+    adjustPathway(state, "needs-labs-workup", 10);
+  }
 
-  if (assessmentType === "advanced") {
-    const squat1Rm = getOneRepMaxFromAnswer(answers.squatPerformance);
-    const bench1Rm = getOneRepMaxFromAnswer(answers.benchPerformance);
-    const deadlift1Rm = getOneRepMaxFromAnswer(answers.deadliftPerformance);
-
-    if (squat1Rm !== null) {
-      detailLines.push(`Estimated squat 1RM: ${squat1Rm.toFixed(1)} kg`);
-    }
-    if (bench1Rm !== null) {
-      detailLines.push(`Estimated bench 1RM: ${bench1Rm.toFixed(1)} kg`);
-    }
-    if (deadlift1Rm !== null) {
-      detailLines.push(`Estimated deadlift 1RM: ${deadlift1Rm.toFixed(1)} kg`);
+  if (totalT !== null) {
+    if (totalT < 300) {
+      state.candidateScore += 16;
+      adjustPathway(state, "oral-topical-trt-discussion", 18);
+      adjustPathway(state, "serm-discussion", 14);
+      addPathwayReason(state, "oral-topical-trt-discussion", `Your reported total testosterone (${Math.round(totalT)} ng/dL) is clearly low.`);
+      addPathwayReason(state, "serm-discussion", `Your reported total testosterone (${Math.round(totalT)} ng/dL) is clearly low.`);
+    } else if (totalT < 400) {
+      state.candidateScore += 8;
+      adjustPathway(state, "serm-discussion", 8);
+      adjustPathway(state, "oral-topical-trt-discussion", 6);
+      addPathwayReason(state, "serm-discussion", `Your reported total testosterone (${Math.round(totalT)} ng/dL) is borderline.`);
+    } else {
+      adjustPathway(state, "needs-labs-workup", 8);
+      addPathwayReason(state, "needs-labs-workup", "Reported total testosterone is not obviously low, so context matters more.");
     }
   }
 
-  return [
-    `Assessment type: ${assessmentType}`,
-    `Age: ${age}`,
-    bmi ? `Estimated BMI: ${bmi.toFixed(1)}` : "Estimated BMI: unavailable",
-    ...detailLines,
-    assessmentType === "advanced" && introAnswers
-      ? `Intro answers JSON: ${JSON.stringify(introAnswers)}`
-      : null,
-    `Submitted answers JSON: ${JSON.stringify(answers)}`
-  ]
-    .filter(Boolean)
-    .join("\n");
+  if (freeT !== null && freeT < 9) {
+    state.candidateScore += 6;
+    adjustPathway(state, "serm-discussion", 4);
+    adjustPathway(state, "oral-topical-trt-discussion", 4);
+  }
+
+  if (repeatLowStatus === "two-low") {
+    adjustPathway(state, "oral-topical-trt-discussion", 10);
+    adjustPathway(state, "serm-discussion", 8);
+  } else if (repeatLowStatus === "one-low") {
+    adjustPathway(state, "needs-labs-workup", 8);
+  }
+
+  if (morningDrawn === "no" || morningDrawn === "unsure") {
+    adjustPathway(state, "needs-labs-workup", 8);
+    addPathwayReason(state, "needs-labs-workup", "Hormone timing is unclear, which makes interpretation softer.");
+  }
+
+  if (lh !== null) {
+    if (lh <= 3 && fertilityGoal !== "no") {
+      adjustPathway(state, "serm-discussion", 10);
+      addPathwayReason(state, "serm-discussion", "LH is not elevated, which can fit a more secondary / signaling-side discussion.");
+    }
+
+    if (lh >= 9) {
+      adjustPathway(state, "oral-topical-trt-discussion", 8);
+      adjustPathway(state, "serm-discussion", -6);
+      addPathwayCaution(state, "serm-discussion", "High LH can make the case for a pure signaling approach weaker.");
+    }
+  }
+
+  if (fsh !== null && fsh >= 10) {
+    adjustPathway(state, "oral-topical-trt-discussion", 6);
+    adjustPathway(state, "serm-discussion", -4);
+  }
+
+  if (prolactin !== null && prolactin > 20) {
+    adjustPathway(state, "needs-labs-workup", 18);
+    adjustPathway(state, "oral-topical-trt-discussion", -8);
+    addRedFlag(state.redFlags, "Elevated prolactin needs clinician review before treatment-path decisions.");
+    addPathwayReason(state, "needs-labs-workup", "Prolactin is high enough to change the workup." );
+  }
+
+  if (tsh !== null && (tsh > 4.5 || tsh < 0.4)) {
+    adjustPathway(state, "needs-labs-workup", 14);
+    addRedFlag(state.redFlags, "Thyroid signal is off-range, which can imitate low-T symptoms.");
+  }
+
+  if (a1c !== null) {
+    if (a1c >= 5.7) {
+      state.lifestyleDrag += 6;
+      adjustPathway(state, "lifestyle-first", 8);
+      adjustPathway(state, "needs-labs-workup", 4);
+    }
+
+    if (a1c >= 6.5) {
+      addRedFlag(state.redFlags, "HbA1c is diabetic-range or close enough that metabolic cleanup belongs in the core plan.");
+    }
+  }
+
+  if (hematocrit !== null && hematocrit >= 50) {
+    adjustPathway(state, "oral-topical-trt-discussion", -12);
+    adjustPathway(state, "needs-labs-workup", 12);
+    addRedFlag(state.redFlags, "Higher hematocrit needs attention before TRT escalation.");
+    addPathwayCaution(state, "oral-topical-trt-discussion", "Higher hematocrit makes exogenous TRT discussions more cautious.");
+  }
+
+  if (psa !== null && age >= 40 && psa >= 4) {
+    adjustPathway(state, "needs-labs-workup", 16);
+    adjustPathway(state, "oral-topical-trt-discussion", -10);
+    addRedFlag(state.redFlags, "PSA needs clinician review before TRT escalation.");
+  }
+
+  if (sleepFollowup === "not-addressed") {
+    adjustPathway(state, "lifestyle-first", 8);
+    adjustPathway(state, "needs-labs-workup", 6);
+  }
+
+  if (caffeineTiming === "late-afternoon") {
+    state.lifestyleDrag += 3;
+    adjustPathway(state, "lifestyle-first", 4);
+  }
+
+  if (shiftWork === "regular") {
+    state.lifestyleDrag += 6;
+    adjustPathway(state, "lifestyle-first", 6);
+    adjustPathway(state, "needs-labs-workup", 4);
+  }
+
+  if (weightTrend === "up-clear") {
+    state.lifestyleDrag += 6;
+    adjustPathway(state, "lifestyle-first", 6);
+  }
+
+  state.candidateScore = clampNumber(Math.round(state.candidateScore), 12, 98);
+
+  addLab(state.labsToRequest, "Repeat any abnormal hormone value on proper timing before locking a treatment plan");
+
+  return state;
 }
 
-function normalizeRecommendation(value: unknown, fallback: HealthspanRecommendation): HealthspanRecommendation {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return fallback;
+function getPriority(score: number, redFlags: string[]): QuizPriority {
+  if (redFlags.length > 0 || score >= 75) {
+    return "High";
   }
 
-  const record = value as Record<string, unknown>;
+  if (score >= 50) {
+    return "Moderate";
+  }
 
-  const title = toStringValue(record.title) ?? fallback.title;
-  const action = toStringValue(record.action) ?? fallback.action;
-  const years = toNumber(record.yearsGained);
+  return "Low";
+}
 
-  return {
-    title,
-    action,
-    yearsGained: years !== null ? clampNumber(years, 0.5, 5) : fallback.yearsGained
+function getDefaultPathwayWhy(pathway: HealthspanPathway) {
+  switch (pathway.key) {
+    case "lifestyle-first":
+      return ["You have modifiable drivers that can lower testosterone or imitate low-T symptoms."];
+    case "serm-discussion":
+      return ["A fertility-aware route makes more sense than defaulting straight to exogenous TRT."];
+    case "oral-topical-trt-discussion":
+      return ["Your symptom + lab pattern is strong enough to justify a non-injectable TRT conversation."];
+    case "needs-labs-workup":
+    default:
+      return ["There are unresolved variables that matter before treatment selection."];
+  }
+}
+
+function getDefaultPathwayCautions(pathway: HealthspanPathway) {
+  switch (pathway.key) {
+    case "lifestyle-first":
+      return ["Do not let generic wellness advice replace real lab work if symptoms are significant."];
+    case "serm-discussion":
+      return ["This still needs clinician supervision, proper labs, and fertility-aware counseling."];
+    case "oral-topical-trt-discussion":
+      return ["Needle-free does not mean consequence-free — fertility, hematocrit, and monitoring still matter."];
+    case "needs-labs-workup":
+    default:
+      return ["Root-cause clarification matters more than rushing into a protocol."];
+  }
+}
+
+function buildSummary(
+  mode: QuizMode,
+  primaryPathway: HealthspanPathway,
+  priority: QuizPriority,
+  score: number
+) {
+  const seriousMap: Record<QuizPathwayKey, string> = {
+    "lifestyle-first": `Your TRT-candidacy signal is ${score}/100 (${priority.toLowerCase()} priority), but the bigger story is reversible lifestyle drag. Sleep, waist size, stress, and training consistency deserve a real pass before medication becomes the hero.` ,
+    "serm-discussion": `Your TRT-candidacy signal is ${score}/100 (${priority.toLowerCase()} priority). Based on fertility intent, symptoms, and lab context, a SERM / enclomiphene-style discussion looks more aligned than jumping straight to exogenous TRT.`,
+    "oral-topical-trt-discussion": `Your TRT-candidacy signal is ${score}/100 (${priority.toLowerCase()} priority). If proper testing confirms the picture, you look like a plausible candidate for a clinician discussion about oral or topical TRT rather than an injection-first path.`,
+    "needs-labs-workup": `Your TRT-candidacy signal is ${score}/100 (${priority.toLowerCase()} priority), but the cleanest next move is not treatment selection — it is better workup. Labs, apnea risk, thyroid / prolactin context, or fertility planning need to be clarified first.`
   };
+
+  const roastMap: Record<QuizPathwayKey, string> = {
+    "lifestyle-first": `Score: ${score}/100. You might not need a prescription nearly as much as you need better sleep, less waist gain, and a plan that survives Tuesday night. Don’t medicate around obvious chaos.`,
+    "serm-discussion": `Score: ${score}/100. You want the hormonal upside without lighting fertility on fire, so a SERM-style conversation makes more sense than speed-running to exogenous TRT.`,
+    "oral-topical-trt-discussion": `Score: ${score}/100. This is not “bro science says hop on.” It is “you have enough real signal that a clinician discussion about oral/topical TRT is no longer crazy.”`,
+    "needs-labs-workup": `Score: ${score}/100. Right now the main thing you qualify for is more clarity. Get the workup tighter before you cosplay certainty.`
+  };
+
+  return mode === "roast" ? roastMap[primaryPathway.key] : seriousMap[primaryPathway.key];
 }
 
-function normalizeResult(raw: unknown, fallback: HealthspanResult, mode: QuizMode): HealthspanResult {
-  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
-    return fallback;
+function finalizeResult(
+  state: AssessmentState,
+  mode: QuizMode,
+  assessmentType: HealthspanAssessmentType
+): HealthspanResult {
+  const pathways = Object.values(state.pathways)
+    .map((pathway) => ({
+      ...pathway,
+      fitScore: clampNumber(Math.round(pathway.fitScore), 0, 100),
+      why: (pathway.why.length > 0 ? pathway.why : getDefaultPathwayWhy(pathway)).slice(0, 3),
+      cautions: (pathway.cautions.length > 0 ? pathway.cautions : getDefaultPathwayCautions(pathway)).slice(0, 3)
+    }))
+    .sort((left, right) => right.fitScore - left.fitScore);
+
+  const primaryPathway = pathways[0];
+  const secondaryPathways = pathways.slice(1, 3);
+  const priority = getPriority(state.candidateScore, state.redFlags);
+
+  const recommendations = state.recommendations.slice(0, 5);
+  if (recommendations.length < 5) {
+    const fallback: HealthspanRecommendation[] = [
+      {
+        title: "Get the right lab panel",
+        action: "Do not choose a TRT path from vibes alone — get proper morning labs with LH / FSH context.",
+        impact: "Makes every later decision smarter."
+      },
+      {
+        title: "Protect sleep and treat apnea if present",
+        action: "If sleep is broken, fix that variable first so you are not reading hormone symptoms through recovery debt.",
+        impact: "Reduces false positives and improves actual symptoms."
+      },
+      {
+        title: "Lift consistently",
+        action: "Use 2-4 weekly resistance sessions with progression instead of random exercise.",
+        impact: "Improves body composition and symptom confidence."
+      },
+      {
+        title: "Make the fertility call early",
+        action: "If kids matter, treat that as a first-order constraint before choosing between SERM and TRT paths.",
+        impact: "Prevents avoidable regret."
+      },
+      {
+        title: "Review meds and root causes",
+        action: "Check for opioid, thyroid, prolactin, steroid, and metabolic issues that can fake or worsen a low-T picture.",
+        impact: "Keeps you from treating the wrong problem."
+      }
+    ];
+
+    fallback.forEach((item) => addRecommendation(recommendations, item));
   }
 
-  const record = raw as Record<string, unknown>;
-
-  const score = toNumber(record.score);
-  const projectedHealthspan = toNumber(record.projectedHealthspan);
-  const projectedLifespan = toNumber(record.projectedLifespan);
-  const gradeRaw = toStringValue(record.grade);
-  const summary = toStringValue(record.summary);
-
-  const grade = ["A+", "A", "B", "C", "D", "F"].includes(gradeRaw ?? "")
-    ? (gradeRaw as QuizGrade)
-    : getGrade(score !== null ? score : fallback.score);
-
-  const helpingFactors = toStringArray(record.helpingFactors);
-  const hurtingFactors = toStringArray(record.hurtingFactors);
-  const recommendations = Array.isArray(record.recommendations)
-    ? record.recommendations
-        .slice(0, 5)
-        .map((item: unknown, index: number) =>
-          normalizeRecommendation(item, fallback.recommendations[index])
-        )
-    : fallback.recommendations;
-
   return {
-    score: score !== null ? clampNumber(Math.round(score), 0, 100) : fallback.score,
-    projectedHealthspan:
-      projectedHealthspan !== null
-        ? clampNumber(Math.round(projectedHealthspan), 20, 115)
-        : fallback.projectedHealthspan,
-    projectedLifespan:
-      projectedLifespan !== null
-        ? clampNumber(Math.round(projectedLifespan), 30, 125)
-        : fallback.projectedLifespan,
-    grade,
-    summary: summary ?? fallback.summary,
-    helpingFactors: (helpingFactors.length > 0 ? helpingFactors : fallback.helpingFactors).slice(0, 3),
-    hurtingFactors: (hurtingFactors.length > 0 ? hurtingFactors : fallback.hurtingFactors).slice(0, 3),
-    recommendations,
+    score: clampNumber(Math.round(state.candidateScore), 0, 100),
+    priority,
+    summary: buildSummary(mode, primaryPathway, priority, clampNumber(Math.round(state.candidateScore), 0, 100)),
+    primaryPathway,
+    secondaryPathways,
+    helpingFactors: state.helpingFactors.slice(0, 3),
+    hurtingFactors: state.hurtingFactors.slice(0, 3),
+    recommendations: recommendations.slice(0, 5),
+    labsToRequest: state.labsToRequest.slice(0, assessmentType === "advanced" ? 10 : 8),
+    redFlags: state.redFlags.slice(0, 5),
     mode
   };
-}
-
-function getSystemPrompt(mode: QuizMode, assessmentType: HealthspanAssessmentType) {
-  const toneInstruction =
-    mode === "roast"
-      ? "Tone: witty, blunt, and playful (light roast), but never insulting or shaming."
-      : "Tone: clinical, clear, and supportive.";
-
-  const scopeInstruction =
-    assessmentType === "advanced"
-      ? "Weight advanced markers (1RM estimates, body fat estimate/DEXA, biomarker values, adherence details) more heavily than intro-level proxies."
-      : "Use intro-level proxies and behavior data to generate realistic estimates and recommendations.";
-
-  return `You are a longevity clinician and healthspan analyst.
-Use evidence-aligned reasoning based on sleep, exercise, nutrition, smoking, stress, social connection, mental health, and preventive care.
-For exercise and social claims, align with these references when giving rationale: Arem et al. JAMA Intern Med 2015; Cappuccio et al. Sleep 2010; Holt-Lunstad et al. 2015; Leong et al. Lancet 2015; Ekelund et al. Lancet 2016.
-Inputs may include single-select, multi-select, icon-select, gallery-select, slider, number-input, and free-form text notes.
-${scopeInstruction}
-${toneInstruction}
-Return only structured JSON matching this shape:
-{
-  "score": number (0-100),
-  "projectedHealthspan": number,
-  "projectedLifespan": number,
-  "grade": "A+" | "A" | "B" | "C" | "D" | "F",
-  "summary": string,
-  "helpingFactors": string[3],
-  "hurtingFactors": string[3],
-  "recommendations": [
-    {
-      "title": string,
-      "action": string,
-      "yearsGained": number (0.5 to 5)
-    }
-  ]
-}
-Requirements:
-- Exactly 3 helping factors.
-- Exactly 3 hurting factors.
-- Exactly 5 recommendations.
-- Be realistic: do not claim impossible year gains.
-- Use submitted free-form notes when relevant.`;
-}
-
-async function generateAiResult(
-  answers: QuizAnswers,
-  mode: QuizMode,
-  fallback: HealthspanResult,
-  assessmentType: HealthspanAssessmentType,
-  introAnswers?: QuizAnswers
-): Promise<HealthspanResult> {
-  const missingProviderKey =
-    (mode === "serious" && !process.env.ANTHROPIC_API_KEY) ||
-    (mode === "roast" && !process.env.XAI_API_KEY);
-
-  if (missingProviderKey) {
-    return fallback;
-  }
-
-  const model = mode === "serious" ? anthropic("claude-sonnet-4-5") : xai("grok-3-latest");
-
-  const aiResult = await generateText({
-    model,
-    system: getSystemPrompt(mode, assessmentType),
-    prompt: `Analyze this healthspan quiz submission and return structured JSON.\n${summarizeAnswersForPrompt(answers, assessmentType, introAnswers)}`,
-    output: Output.json({
-      name: "healthspan_assessment",
-      description: "Structured healthspan quiz assessment"
-    }),
-    maxOutputTokens: 1400,
-    temperature: mode === "serious" ? 0.35 : 0.75
-  });
-
-  return normalizeResult(aiResult.output, fallback, mode);
 }
 
 export async function POST(request: Request) {
@@ -1292,25 +959,13 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
-    }
 
-    const fallback =
-      assessmentType === "advanced" && introAnswers
-        ? buildAdvancedFallbackResult(introAnswers, answers, mode)
-        : buildIntroFallbackResult(answers, mode);
-
-    try {
-      const result = await generateAiResult(
-        answers,
-        mode,
-        fallback,
-        assessmentType,
-        assessmentType === "advanced" ? introAnswers : undefined
-      );
+      const result = finalizeResult(scoreAdvancedAnswers(introAnswers, answers, mode), mode, "advanced");
       return NextResponse.json({ result }, { status: 200 });
-    } catch {
-      return NextResponse.json({ result: fallback }, { status: 200 });
     }
+
+    const result = finalizeResult(scoreIntroAnswers(answers, mode), mode, "intro");
+    return NextResponse.json({ result }, { status: 200 });
   } catch {
     return NextResponse.json(
       { error: "Unable to process quiz request at the moment." },
