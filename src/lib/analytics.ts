@@ -72,6 +72,14 @@ export function trackClick(tenantId: string, target: string, metadata?: Record<s
   return trackEvent(tenantId, { event_type: "click", metadata: { target, ...metadata } });
 }
 
+export function trackCtaClick(
+  tenantId: string,
+  eventType: string,
+  metadata?: Record<string, unknown>
+) {
+  return trackEvent(tenantId, { event_type: eventType, metadata });
+}
+
 export function trackImpression(tenantId: string, itemType: string, itemId: string, metadata?: Record<string, unknown>) {
   return trackEvent(tenantId, { event_type: "impression", metadata: { item_type: itemType, item_id: itemId, ...metadata } });
 }

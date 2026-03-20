@@ -54,15 +54,17 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   const articleUrl = `${siteUrl}/blog/${article.slug}`;
-  const wordCount = article.sections.reduce(
-    (sum, section) =>
-      sum +
-      section.paragraphs.reduce(
-        (innerSum, paragraph) => innerSum + paragraph.trim().split(/\s+/).length,
+  const wordCount = article.content
+    ? Math.ceil(article.content.length / 5)
+    : article.sections.reduce(
+        (sum, section) =>
+          sum +
+          section.paragraphs.reduce(
+            (innerSum, paragraph) => innerSum + paragraph.trim().split(/\s+/).length,
+            0
+          ),
         0
-      ),
-    0
-  );
+      );
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -84,6 +86,17 @@ export default async function BlogPostPage({ params }: PageProps) {
     keywords: article.keywords.join(", "),
     wordCount
   };
+  const faqJsonLd = article.faqItems
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: article.faqItems.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a }
+        }))
+      }
+    : null;
 
   function renderParagraphWithLinks(paragraph: string, keyPrefix: string) {
     const parts = paragraph.split(/(\/blog\/[a-z0-9-]+)/g);
@@ -110,6 +123,12 @@ export default async function BlogPostPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faqJsonLd ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      ) : null}
 
       <h1 className="page-title" style={{ marginBottom: 8 }}>
         {article.title}
@@ -131,21 +150,28 @@ export default async function BlogPostPage({ params }: PageProps) {
         ))}
       </div>
 
-      <section className="article-content">
-        {article.sections.map((section) => (
-          <section key={section.heading}>
-            <h2>{section.heading}</h2>
-            {section.paragraphs.map((paragraph, index) => (
-              <div key={`${section.heading}-${index}`}>
-                {renderParagraphWithLinks(
-                  paragraph,
-                  `${section.heading}-${index}`
-                )}
-              </div>
-            ))}
-          </section>
-        ))}
-      </section>
+      {article.content ? (
+        <section
+          className="article-content"
+          dangerouslySetInnerHTML={{ __html: article.content }}
+        />
+      ) : (
+        <section className="article-content">
+          {article.sections.map((section) => (
+            <section key={section.heading}>
+              <h2>{section.heading}</h2>
+              {section.paragraphs.map((paragraph, index) => (
+                <div key={`${section.heading}-${index}`}>
+                  {renderParagraphWithLinks(
+                    paragraph,
+                    `${section.heading}-${index}`
+                  )}
+                </div>
+              ))}
+            </section>
+          ))}
+        </section>
+      )}
 
       <GuidePromoBanner compact />
 
