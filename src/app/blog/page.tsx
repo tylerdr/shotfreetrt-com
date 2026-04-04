@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import BlogContent from "@/components/BlogContent";
 import { DisclosureNotice } from "@/components/DisclosureNotice";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import { getAllArticles } from "@/data/articles";
@@ -8,7 +9,7 @@ import { getAllArticles } from "@/data/articles";
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Read evidence-based longevity articles covering nutrition, training, recovery, biomarkers, and healthy aging.",
+    "Read evidence-based articles covering TRT protocols, testosterone optimization, bloodwork, side effects, and healthy aging.",
   alternates: {
     canonical: "/blog"
   }
@@ -19,31 +20,28 @@ export default function BlogIndexPage() {
 
   return (
     <>
-      <h1 className="page-title">Longevity Blog</h1>
-      <p className="page-subtitle">
-        Explore high-intent guides for supplements, exercise, sleep, glucose
-        control, and other healthspan priorities.
-      </p>
-      <p className="meta" style={{ marginTop: -10, marginBottom: 20 }}>
-        New reader? Start with our <Link href="/start-here">7-day quickstart</Link>{" "}
-        and browse vetted tools on <Link href="/resources">Resources</Link>.
-      </p>
+      <div className="mb-8">
+        <h1 className="font-[family-name:var(--font-barlow-condensed)] text-3xl font-bold text-white md:text-4xl">
+          TRT &amp; Testosterone Blog
+        </h1>
+        <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-400">
+          {posts.length} evidence-based articles covering TRT protocols, testosterone optimization,
+          bloodwork interpretation, and hormone health.
+        </p>
+        <p className="mt-2 text-sm text-zinc-500">
+          New reader? Start with our{" "}
+          <Link href="/start-here" className="text-blue-400 underline hover:text-blue-300">
+            quickstart guide
+          </Link>{" "}
+          or browse{" "}
+          <Link href="/resources" className="text-blue-400 underline hover:text-blue-300">
+            vetted tools
+          </Link>
+          .
+        </p>
+      </div>
 
-      <section className="article-list" aria-label="All longevity posts">
-        {posts.map((post) => (
-          <article key={post.slug} className="article-item">
-            <h2 style={{ margin: "0 0 8px" }}>
-              <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-            </h2>
-            <p style={{ margin: "0 0 8px", color: "#335645" }}>
-              {post.description}
-            </p>
-            <p className="meta" style={{ margin: 0 }}>
-              {post.publishedAt} · {post.readTime} · {post.category}
-            </p>
-          </article>
-        ))}
-      </section>
+      <BlogContent posts={posts} />
 
       <DisclosureNotice variant="medical" />
       <NewsletterSignup

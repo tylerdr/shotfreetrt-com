@@ -59,12 +59,12 @@ export function QuizResult({
   const priorityClass = useMemo(() => {
     switch (result.priority) {
       case "High":
-        return "bg-amber-100 text-amber-950";
+        return "bg-amber-500/15 text-amber-300";
       case "Moderate":
-        return "bg-sky-100 text-sky-950";
+        return "bg-sky-500/15 text-sky-300";
       case "Low":
       default:
-        return "bg-emerald-100 text-emerald-950";
+        return "bg-blue-500/15 text-blue-300";
     }
   }, [result.priority]);
 
@@ -137,40 +137,40 @@ export function QuizResult({
 
   return (
     <section className="mt-6 grid gap-4" aria-live="polite">
-      <Card className="border-emerald-200 bg-gradient-to-br from-emerald-50 to-white">
+      <Card className="border-[#1E3A5F] bg-gradient-to-br from-[#0F1530] to-[#0F1F45]">
         <CardContent className="space-y-5 p-6">
-          <p className="text-xs font-semibold tracking-[0.2em] text-emerald-800 uppercase">
+          <p className="text-xs font-semibold tracking-[0.2em] text-blue-400 uppercase">
             Your TRT-focused result
           </p>
 
           <div className="grid gap-4 md:grid-cols-[auto,1fr] md:items-center">
-            <div className="grid h-24 w-24 place-items-center rounded-full border-4 border-emerald-700 bg-white text-center text-emerald-950">
+            <div className="grid h-24 w-24 place-items-center rounded-full border-4 border-blue-500 bg-[#0A0F1E] text-center text-blue-200">
               <strong className="text-3xl leading-none">{displayScore}</strong>
               <span className="text-xs">/100</span>
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-2xl font-semibold tracking-tight">
+              <h2 className="text-2xl font-semibold tracking-tight text-white">
                 {result.primaryPathway.title}
               </h2>
-              <p className="text-sm text-muted-foreground">TRT candidacy signal score</p>
+              <p className="text-sm text-zinc-400">TRT candidacy signal score</p>
               <p className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${priorityClass}`}>
                 {result.priority} priority
               </p>
             </div>
           </div>
 
-          <p className="text-sm leading-relaxed text-emerald-950/90">{result.summary}</p>
+          <p className="text-sm leading-relaxed text-zinc-300">{result.summary}</p>
 
-          <div className="rounded-xl border border-emerald-200 bg-white/80 p-4">
-            <p className="text-sm font-semibold text-foreground">Primary path</p>
-            <p className="mt-1 text-sm text-muted-foreground">{result.primaryPathway.summary}</p>
-            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-foreground">
+          <div className="rounded-xl border border-[#1E2A4A] bg-[#0F1530] p-4">
+            <p className="text-sm font-semibold text-white">Primary path</p>
+            <p className="mt-1 text-sm text-zinc-400">{result.primaryPathway.summary}</p>
+            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-zinc-300">
               {result.primaryPathway.why.map((reason) => (
                 <li key={reason}>{reason}</li>
               ))}
             </ul>
-            <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
+            <div className="mt-3 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-300">
               <p className="font-semibold">Watchouts</p>
               <ul className="mt-1 list-disc space-y-1 pl-5">
                 {result.primaryPathway.cautions.map((item) => (
@@ -187,6 +187,7 @@ export function QuizResult({
                 variant="outline"
                 onClick={() => onModeChange(nextMode)}
                 disabled={isModeSwitching}
+                className="border-zinc-700 text-zinc-300 hover:border-zinc-500"
               >
                 {isModeSwitching
                   ? "Updating..."
@@ -196,64 +197,64 @@ export function QuizResult({
               </Button>
             ) : null}
 
-            <Button type="button" variant="outline" onClick={handleShare}>
+            <Button type="button" variant="outline" onClick={handleShare} className="border-zinc-700 text-zinc-300 hover:border-zinc-500">
               Copy Share Link
             </Button>
 
             {onRetake ? (
-              <Button type="button" variant="outline" onClick={onRetake}>
+              <Button type="button" variant="outline" onClick={onRetake} className="border-zinc-700 text-zinc-300 hover:border-zinc-500">
                 Edit Answers
               </Button>
             ) : null}
 
             {showAdvancedCta ? (
-              <Button asChild>
+              <Button asChild className="bg-blue-600 text-white hover:bg-blue-500">
                 <Link href="/quiz/healthspan/advanced">Unlock Advanced Lab Review</Link>
               </Button>
             ) : null}
 
             {showTakeQuizCta ? (
-              <Button asChild>
+              <Button asChild className="bg-blue-600 text-white hover:bg-blue-500">
                 <Link href="/quiz/healthspan">Take the TRT Quiz</Link>
               </Button>
             ) : null}
           </div>
 
-          {shareMessage ? <p className="text-sm font-medium text-emerald-800">{shareMessage}</p> : null}
+          {shareMessage ? <p className="text-sm font-medium text-blue-400">{shareMessage}</p> : null}
         </CardContent>
       </Card>
 
       <div className="grid gap-3 md:grid-cols-2">
-        <Card className="border-zinc-200 bg-zinc-50/70">
+        <Card className="border-[#222230] bg-[#12121A]">
           <CardHeader>
-            <CardTitle className="text-lg">Also worth considering</CardTitle>
+            <CardTitle className="text-lg text-white">Also worth considering</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {result.secondaryPathways.map((pathway) => (
-              <div key={pathway.key} className="rounded-lg border border-border bg-white p-3">
+              <div key={pathway.key} className="rounded-lg border border-[#1E2A4A] bg-[#0F1530] p-3">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="font-semibold">{pathway.title}</p>
-                  <span className="text-xs font-semibold text-muted-foreground">Fit {pathway.fitScore}/100</span>
+                  <p className="font-semibold text-zinc-200">{pathway.title}</p>
+                  <span className="text-xs font-semibold text-zinc-500">Fit {pathway.fitScore}/100</span>
                 </div>
-                <p className="mt-1 text-sm text-muted-foreground">{pathway.summary}</p>
+                <p className="mt-1 text-sm text-zinc-400">{pathway.summary}</p>
               </div>
             ))}
           </CardContent>
         </Card>
 
-        <Card className="border-zinc-200 bg-zinc-50/70">
+        <Card className="border-[#222230] bg-[#12121A]">
           <CardHeader>
-            <CardTitle className="text-lg">Red flags to handle first</CardTitle>
+            <CardTitle className="text-lg text-white">Red flags to handle first</CardTitle>
           </CardHeader>
           <CardContent>
             {result.redFlags.length > 0 ? (
-              <ul className="list-disc space-y-1 pl-5 text-sm">
+              <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-300">
                 {result.redFlags.map((flag) => (
                   <li key={flag}>{flag}</li>
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-zinc-400">
                 No giant stop-signs from the quiz, but you still need proper labs and clinician oversight.
               </p>
             )}
@@ -262,12 +263,12 @@ export function QuizResult({
       </div>
 
       <div className="grid gap-3 md:grid-cols-2">
-        <Card className="border-emerald-200 bg-emerald-50/60">
+        <Card className="border-[#1E2A4A] bg-[#0F1530]">
           <CardHeader>
-            <CardTitle className="text-lg">What is helping</CardTitle>
+            <CardTitle className="text-lg text-blue-300">What is helping</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc space-y-1 pl-5 text-sm">
+            <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-300">
               {result.helpingFactors.map((factor) => (
                 <li key={factor}>{factor}</li>
               ))}
@@ -275,12 +276,12 @@ export function QuizResult({
           </CardContent>
         </Card>
 
-        <Card className="border-rose-200 bg-rose-50/60">
+        <Card className="border-rose-500/30 bg-rose-500/5">
           <CardHeader>
-            <CardTitle className="text-lg">What is hurting</CardTitle>
+            <CardTitle className="text-lg text-rose-300">What is hurting</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc space-y-1 pl-5 text-sm">
+            <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-300">
               {result.hurtingFactors.map((factor) => (
                 <li key={factor}>{factor}</li>
               ))}
@@ -289,29 +290,29 @@ export function QuizResult({
         </Card>
       </div>
 
-      <Card>
+      <Card className="border-[#222230] bg-[#12121A]">
         <CardHeader>
-          <CardTitle>Recommended next moves</CardTitle>
+          <CardTitle className="text-white">Recommended next moves</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           {result.recommendations.map((recommendation) => (
-            <Card key={recommendation.title} className="border-muted bg-muted/20">
+            <Card key={recommendation.title} className="border-[#1E2A4A] bg-[#0F1530]">
               <CardContent className="space-y-2 p-4">
-                <h4 className="font-semibold">{recommendation.title}</h4>
-                <p className="text-sm text-muted-foreground">{recommendation.action}</p>
-                <p className="text-sm font-semibold text-emerald-700">{recommendation.impact}</p>
+                <h4 className="font-semibold text-zinc-200">{recommendation.title}</h4>
+                <p className="text-sm text-zinc-400">{recommendation.action}</p>
+                <p className="text-sm font-semibold text-blue-400">{recommendation.impact}</p>
               </CardContent>
             </Card>
           ))}
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-[#222230] bg-[#12121A]">
         <CardHeader>
-          <CardTitle>Labs to request before locking a plan</CardTitle>
+          <CardTitle className="text-white">Labs to request before locking a plan</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="list-disc space-y-1 pl-5 text-sm">
+          <ul className="list-disc space-y-1 pl-5 text-sm text-zinc-300">
             {result.labsToRequest.map((lab) => (
               <li key={lab}>{lab}</li>
             ))}
@@ -319,10 +320,10 @@ export function QuizResult({
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-[#1E2A4A] bg-[#0F1530]">
         <CardHeader>
-          <CardTitle>Get your full TRT decision report</CardTitle>
-          <p className="text-sm text-muted-foreground">
+          <CardTitle className="text-white">Get your full TRT decision report</CardTitle>
+          <p className="text-sm text-zinc-400">
             Enter your email and we will send the longer version with labs, pathway tradeoffs, and a tighter first-step plan.
           </p>
         </CardHeader>
@@ -341,24 +342,24 @@ export function QuizResult({
               onChange={(event) => setEmail(event.target.value)}
               disabled={isSubmittingEmail}
               required
-              className="sm:flex-1"
+              className="border-[#1E2A4A] bg-[#0A0F1E] text-[#E0E7FF] sm:flex-1"
             />
-            <Button type="submit" disabled={isSubmittingEmail}>
+            <Button type="submit" disabled={isSubmittingEmail} className="bg-blue-600 text-white hover:bg-blue-500">
               {isSubmittingEmail ? "Submitting..." : "Send My Report"}
             </Button>
           </form>
           {emailMessage ? (
-            <p className={`mt-2 text-sm font-medium ${emailError ? "text-red-700" : "text-emerald-700"}`}>
+            <p className={`mt-2 text-sm font-medium ${emailError ? "text-red-400" : "text-blue-400"}`}>
               {emailMessage}
             </p>
           ) : null}
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-[#222230] bg-[#12121A]">
         <CardHeader>
-          <CardTitle>Want the implementation playbook?</CardTitle>
-          <p className="text-sm text-muted-foreground">
+          <CardTitle className="text-white">Want the implementation playbook?</CardTitle>
+          <p className="text-sm text-zinc-400">
             Get the shot-free protocol pack with habit checklists, lab prep notes, and smart-escalation sequencing.
           </p>
         </CardHeader>

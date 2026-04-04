@@ -574,7 +574,7 @@ export function QuizEngine() {
     }
 
     return (
-      <div className="mt-3 rounded-md border border-emerald-200 bg-emerald-50/70 p-3 text-xs text-emerald-900">
+      <div className="mt-3 rounded-md border border-[#1E2A4A] bg-[#0F1530] p-3 text-xs text-zinc-300">
         <p className="font-semibold">Evidence references</p>
         <ul className="mt-1 space-y-1">
           {question.citations.map((citation) => (

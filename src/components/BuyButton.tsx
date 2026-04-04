@@ -46,7 +46,7 @@ export function BuyButton({ label = "Buy The Longevity Blueprint — $19" }: Buy
         {isLoading ? "Redirecting to Checkout..." : label}
       </Button>
       {error ? (
-        <p className="m-0 text-sm font-semibold text-red-800">{error}</p>
+        <p className="m-0 text-sm font-semibold text-red-400">{error}</p>
       ) : null}
     </div>
   );

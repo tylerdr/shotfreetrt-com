@@ -110,35 +110,25 @@ const comparisonRows = [
   { label: "HCG / fertility support", defy: "✓", fountain: "Limited", maximus: "✓ (enclomiphene)", hone: "✓" },
   { label: "Lab monitoring included", defy: "✓", fountain: "✓ (basic)", maximus: "✓", hone: "✓" },
   { label: "Telemedicine", defy: "✓", fountain: "✓", maximus: "✓", hone: "✓" },
-  { label: "In-person option", defy: "✓", fountain: "✗", maximus: "✗", hone: "✗" },
+  { label: "In-person option", defy: "✓", fountain: "—", maximus: "—", hone: "—" },
   { label: "Compounding pharmacy", defy: "✓", fountain: "Limited", maximus: "✓", hone: "✓" }
 ];
 
 export default function PricingPage() {
   return (
-    <div className="container" style={{ padding: "60px 20px 80px" }}>
+    <div className="mx-auto max-w-4xl py-8 sm:py-12">
       {/* Header */}
-      <div style={{ textAlign: "center", marginBottom: "60px" }}>
-        <h1 style={{ fontSize: "2.25rem", fontWeight: 700, marginBottom: "16px", lineHeight: 1.2 }}>
-          TRT Resources & Clinic Pricing
+      <div className="mb-12 text-center">
+        <h1 className="font-[family-name:var(--font-barlow-condensed)] text-3xl font-bold text-white md:text-4xl">
+          TRT Resources &amp; Clinic Pricing
         </h1>
-        <p style={{ color: "var(--site-muted)", fontSize: "1.1rem", maxWidth: "580px", margin: "0 auto 24px" }}>
+        <p className="mx-auto mt-4 max-w-xl text-base text-zinc-400">
           Free tools to help you decide, plus an honest look at what online TRT clinics
           actually cost — and who each one is best for.
         </p>
         <Link
           href="/quiz"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            background: "var(--accent-2)",
-            color: "#000",
-            padding: "14px 28px",
-            borderRadius: "8px",
-            fontWeight: 600,
-            fontSize: "1rem"
-          }}
+          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-500"
         >
           Not sure where to start? Take the free quiz
           <ArrowRight size={18} />
@@ -146,49 +136,31 @@ export default function PricingPage() {
       </div>
 
       {/* Free Resources */}
-      <section style={{ marginBottom: "72px" }}>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "8px" }}>Free Resources</h2>
-        <p style={{ color: "var(--site-muted)", marginBottom: "32px" }}>
+      <section className="mb-16">
+        <h2 className="font-[family-name:var(--font-barlow-condensed)] text-2xl font-bold text-white">Free Resources</h2>
+        <p className="mt-2 mb-8 text-zinc-400">
           Start here before spending a dollar. These tools are free and will save you months of confusion.
         </p>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-            gap: "20px"
-          }}
-        >
+        <div className="grid gap-5 sm:grid-cols-2">
           {freeResources.map((item) => {
             const Icon = item.icon;
             return (
               <div
                 key={item.title}
-                style={{
-                  background: item.highlight ? "rgba(16,185,129,0.08)" : "var(--surface)",
-                  border: `1px solid ${item.highlight ? "rgba(16,185,129,0.4)" : "var(--border)"}`,
-                  borderRadius: "12px",
-                  padding: "24px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px"
-                }}
+                className={`flex flex-col gap-3 rounded-xl border p-6 ${
+                  item.highlight
+                    ? "border-blue-500/40 bg-blue-500/5"
+                    : "border-[#222230] bg-[#12121A]"
+                }`}
               >
-                <Icon size={24} color="var(--accent-2)" />
+                <Icon size={24} className="text-blue-400" />
                 <div>
-                  <h3 style={{ fontWeight: 600, fontSize: "1.05rem", marginBottom: "6px" }}>{item.title}</h3>
-                  <p style={{ color: "var(--site-muted)", fontSize: "0.9rem", margin: 0 }}>{item.description}</p>
+                  <h3 className="mb-1 font-semibold text-white">{item.title}</h3>
+                  <p className="text-sm text-zinc-400">{item.description}</p>
                 </div>
                 <Link
                   href={item.href}
-                  style={{
-                    color: "var(--accent-2)",
-                    fontWeight: 600,
-                    fontSize: "0.9rem",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
-                    marginTop: "auto"
-                  }}
+                  className="mt-auto inline-flex items-center gap-1 text-sm font-semibold text-blue-400 hover:text-blue-300"
                 >
                   {item.cta} <ArrowRight size={14} />
                 </Link>
@@ -199,67 +171,39 @@ export default function PricingPage() {
       </section>
 
       {/* Clinic Comparison */}
-      <section style={{ marginBottom: "72px" }}>
-        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, marginBottom: "8px" }}>
+      <section className="mb-16">
+        <h2 className="font-[family-name:var(--font-barlow-condensed)] text-2xl font-bold text-white">
           Online TRT Clinic Pricing (2026)
         </h2>
-        <p style={{ color: "var(--site-muted)", marginBottom: "32px" }}>
+        <p className="mt-2 mb-8 text-zinc-400">
           These are the four most commonly recommended online TRT clinics. Prices are monthly estimates
           including medication and provider fees. Exact costs vary by protocol and state.
         </p>
 
         {/* Cards */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))",
-            gap: "20px",
-            marginBottom: "40px"
-          }}
-        >
+        <div className="mb-10 grid gap-5 sm:grid-cols-2">
           {clinicOptions.map((clinic) => (
             <div
               key={clinic.name}
-              style={{
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-                borderRadius: "12px",
-                padding: "24px"
-              }}
+              className="rounded-xl border border-[#222230] bg-[#12121A] p-6"
             >
-              <div style={{ marginBottom: "12px" }}>
-                <h3 style={{ fontWeight: 700, fontSize: "1.1rem", marginBottom: "4px" }}>{clinic.name}</h3>
-                <span style={{ color: "var(--site-muted)", fontSize: "0.85rem" }}>{clinic.tagline}</span>
+              <div className="mb-3">
+                <h3 className="font-bold text-white">{clinic.name}</h3>
+                <span className="text-sm text-zinc-500">{clinic.tagline}</span>
               </div>
-              <div
-                style={{
-                  background: "rgba(16,185,129,0.1)",
-                  borderRadius: "6px",
-                  padding: "8px 12px",
-                  marginBottom: "16px",
-                  display: "inline-block"
-                }}
-              >
-                <span style={{ color: "var(--accent-2)", fontWeight: 700 }}>{clinic.price}</span>
-                <span style={{ color: "var(--site-muted)", fontSize: "0.8rem" }}> / month</span>
-              </div>
-              <p style={{ color: "var(--site-muted)", fontSize: "0.85rem", marginBottom: "12px" }}>
-                <strong style={{ color: "var(--text)" }}>Best for:</strong> {clinic.best}
+              <p className="mb-4 mt-2 text-2xl font-bold text-blue-400">
+                {clinic.price}<span className="text-sm font-normal text-zinc-500"> / month</span>
               </p>
-              <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+              <p className="mb-3 text-sm text-zinc-400">
+                <strong className="text-zinc-200">Best for:</strong> {clinic.best}
+              </p>
+              <ul className="m-0 list-none p-0">
                 {clinic.details.map((d) => (
                   <li
                     key={d}
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: "8px",
-                      fontSize: "0.85rem",
-                      color: "var(--site-muted)",
-                      marginBottom: "6px"
-                    }}
+                    className="mb-1.5 flex items-start gap-2 text-sm text-zinc-400"
                   >
-                    <BadgeCheck size={14} color="var(--accent-2)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                    <BadgeCheck size={14} className="mt-0.5 shrink-0 text-blue-400" />
                     {d}
                   </li>
                 ))}
@@ -269,27 +213,14 @@ export default function PricingPage() {
         </div>
 
         {/* Comparison Table */}
-        <div style={{ overflowX: "auto" }}>
-          <h3 style={{ fontWeight: 600, fontSize: "1.1rem", marginBottom: "16px" }}>Side-by-Side Comparison</h3>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              fontSize: "0.875rem"
-            }}
-          >
+        <div className="overflow-x-auto">
+          <h3 className="mb-4 font-semibold text-white">Side-by-Side Comparison</h3>
+          <table className="w-full border-collapse text-sm">
             <thead>
-              <tr style={{ borderBottom: "1px solid var(--border)" }}>
-                <th style={{ textAlign: "left", padding: "10px 14px", color: "var(--site-muted)", fontWeight: 500 }}>
-                  Feature
-                </th>
+              <tr className="border-b border-[#1E2A4A] bg-[#0F1530]">
+                <th className="py-3 pr-4 text-left font-semibold text-blue-300">Feature</th>
                 {["Defy", "Fountain", "Maximus", "Hone"].map((h) => (
-                  <th
-                    key={h}
-                    style={{ textAlign: "center", padding: "10px 14px", color: "var(--text)", fontWeight: 600 }}
-                  >
-                    {h}
-                  </th>
+                  <th key={h} className="py-3 px-4 text-center font-semibold text-blue-300">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -297,73 +228,52 @@ export default function PricingPage() {
               {comparisonRows.map((row, i) => (
                 <tr
                   key={row.label}
-                  style={{ borderBottom: "1px solid var(--border)", background: i % 2 === 0 ? "transparent" : "rgba(255,255,255,0.02)" }}
+                  className={`border-b border-[#222230] ${i % 2 === 1 ? "bg-[#0F0F1A]" : ""}`}
                 >
-                  <td style={{ padding: "10px 14px", color: "var(--site-muted)" }}>{row.label}</td>
-                  <td style={{ padding: "10px 14px", textAlign: "center", color: "var(--text)" }}>{row.defy}</td>
-                  <td style={{ padding: "10px 14px", textAlign: "center", color: "var(--text)" }}>{row.fountain}</td>
-                  <td style={{ padding: "10px 14px", textAlign: "center", color: "var(--text)" }}>{row.maximus}</td>
-                  <td style={{ padding: "10px 14px", textAlign: "center", color: "var(--text)" }}>{row.hone}</td>
+                  <td className="py-3 pr-4 text-zinc-400">{row.label}</td>
+                  {[row.defy, row.fountain, row.maximus, row.hone].map((val, ci) => (
+                    <td
+                      key={ci}
+                      className={`py-3 px-4 text-center ${
+                        val === "—" ? "text-zinc-600" : val.startsWith("✓") ? "text-blue-400" : "text-zinc-300"
+                      }`}
+                    >
+                      {val}
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <p style={{ marginTop: "20px", fontSize: "0.85rem", color: "var(--site-muted)" }}>
+        <p className="mt-4 text-sm text-zinc-500">
           For a deeper breakdown:{" "}
-          <Link href="/blog/best-online-trt-clinic">Best Online TRT Clinics Compared (2026) →</Link>
+          <Link href="/blog/best-online-trt-clinic" className="text-blue-400 underline hover:text-blue-300">
+            Best Online TRT Clinics Compared (2026) &rarr;
+          </Link>
         </p>
       </section>
 
       {/* Cost breakdown CTA */}
-      <section
-        style={{
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          borderRadius: "16px",
-          padding: "40px",
-          marginBottom: "72px",
-          textAlign: "center"
-        }}
-      >
-        <h2 style={{ fontSize: "1.4rem", fontWeight: 700, marginBottom: "12px" }}>
+      <section className="mb-16 rounded-xl border border-[#222230] bg-[#12121A] p-8 text-center sm:p-10">
+        <h2 className="font-[family-name:var(--font-barlow-condensed)] text-2xl font-bold text-white">
           What Does TRT Actually Cost Out-of-Pocket?
         </h2>
-        <p style={{ color: "var(--site-muted)", marginBottom: "24px", maxWidth: "520px", margin: "0 auto 24px" }}>
+        <p className="mx-auto mt-3 mb-6 max-w-lg text-zinc-400">
           Monthly estimates vary $60–$500+ depending on delivery method, clinic model, and whether
           insurance covers any of it. See the full breakdown.
         </p>
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+        <div className="flex flex-wrap justify-center gap-3">
           <Link
             href="/blog/trt-cost-2026"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              background: "var(--accent-2)",
-              color: "#000",
-              padding: "12px 24px",
-              borderRadius: "8px",
-              fontWeight: 600,
-              fontSize: "0.95rem"
-            }}
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-500"
           >
             Full TRT Cost Breakdown <ArrowRight size={16} />
           </Link>
           <Link
             href="/blog/trt-insurance-coverage"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              border: "1px solid var(--border)",
-              color: "var(--text)",
-              padding: "12px 24px",
-              borderRadius: "8px",
-              fontWeight: 500,
-              fontSize: "0.95rem"
-            }}
+            className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 px-5 py-3 font-medium text-zinc-300 hover:border-zinc-500"
           >
             Is TRT Covered by Insurance?
           </Link>
@@ -371,44 +281,24 @@ export default function PricingPage() {
       </section>
 
       {/* Quiz CTA */}
-      <section
-        style={{
-          background: "rgba(16,185,129,0.07)",
-          border: "1px solid rgba(16,185,129,0.3)",
-          borderRadius: "16px",
-          padding: "40px",
-          textAlign: "center"
-        }}
-      >
-        <h2 style={{ fontSize: "1.4rem", fontWeight: 700, marginBottom: "12px" }}>
+      <section className="rounded-2xl border border-[#222230] bg-[#12121A] p-8 text-center sm:p-10">
+        <h2 className="font-[family-name:var(--font-barlow-condensed)] text-2xl font-bold text-white">
           Not sure which path is right for you?
         </h2>
-        <p style={{ color: "var(--site-muted)", marginBottom: "28px", maxWidth: "480px", margin: "0 auto 28px" }}>
+        <p className="mx-auto mt-3 mb-6 max-w-md text-zinc-400">
           Take our free 6-question quiz. It evaluates your symptoms, fertility goals, and risk profile
           to recommend the best starting point — lifestyle, SERM, or TRT.
         </p>
         <Link
           href="/quiz"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "8px",
-            background: "var(--accent-2)",
-            color: "#000",
-            padding: "14px 32px",
-            borderRadius: "8px",
-            fontWeight: 700,
-            fontSize: "1rem"
-          }}
+          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-7 py-3 font-bold text-white hover:bg-blue-500"
         >
           Take the Free TRT Quiz <ArrowRight size={18} />
         </Link>
-        <p style={{ color: "var(--site-muted)", fontSize: "0.8rem", marginTop: "12px" }}>
-          Free. No email required.
-        </p>
+        <p className="mt-3 text-xs text-zinc-500">Free. No email required.</p>
       </section>
 
-      <div style={{ marginTop: "60px" }}>
+      <div className="mt-12">
         <DisclosureNotice />
       </div>
     </div>

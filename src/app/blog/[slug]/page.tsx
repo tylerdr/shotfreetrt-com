@@ -8,6 +8,21 @@ import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { RelatedLinks } from "@/components/RelatedLinks";
 import { getAllArticles, getArticleBySlug, siteUrl } from "@/data/articles";
 
+const CATEGORY_COLORS: Record<string, string> = {
+  TRT: "bg-blue-500/10 text-blue-300 border-blue-500/30",
+  Supplements: "bg-amber-500/10 text-amber-300 border-amber-500/30",
+  Recovery: "bg-sky-500/10 text-sky-300 border-sky-500/30",
+  Lifestyle: "bg-emerald-500/10 text-emerald-300 border-emerald-500/30",
+  Science: "bg-purple-500/10 text-purple-300 border-purple-500/30",
+  Nutrition: "bg-orange-500/10 text-orange-300 border-orange-500/30",
+  "Metabolic Health": "bg-rose-500/10 text-rose-300 border-rose-500/30",
+  Biomarkers: "bg-indigo-500/10 text-indigo-300 border-indigo-500/30",
+};
+
+function getCategoryColor(category: string): string {
+  return CATEGORY_COLORS[category] ?? "bg-zinc-500/10 text-zinc-400 border-zinc-500/30";
+}
+
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
@@ -118,7 +133,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   return (
-    <article>
+    <article className="mx-auto max-w-3xl">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -130,26 +145,41 @@ export default async function BlogPostPage({ params }: PageProps) {
         />
       ) : null}
 
-      <h1 className="page-title" style={{ marginBottom: 8 }}>
-        {article.title}
-      </h1>
-      <p className="meta" style={{ marginTop: 0 }}>
-        {article.publishedAt} · {article.readTime} · {article.author}
-      </p>
-      <p className="page-subtitle">{article.description}</p>
-      <p className="meta" style={{ marginTop: -8, marginBottom: 16 }}>
-        Estimate your baseline first with the{" "}
-        <Link href="/quiz/healthspan">Healthspan Quiz</Link>.
-      </p>
+      {/* Article header */}
+      <div className="mb-6">
+        <div className="mb-3 flex flex-wrap items-center gap-3">
+          <span className={`inline-block rounded-full border px-2.5 py-0.5 text-xs font-medium ${getCategoryColor(article.category)}`}>
+            {article.category}
+          </span>
+          <span className="text-sm text-zinc-500">{article.readTime}</span>
+          <span className="text-sm text-zinc-500">{article.publishedAt}</span>
+        </div>
+        <h1 className="font-[family-name:var(--font-barlow-condensed)] text-3xl font-bold leading-tight text-white md:text-4xl">
+          {article.title}
+        </h1>
+        <p className="mt-3 text-base leading-7 text-zinc-400">{article.description}</p>
+        <p className="mt-2 text-sm text-zinc-500">
+          Estimate your baseline first with the{" "}
+          <Link href="/quiz/healthspan" className="text-blue-400 underline hover:text-blue-300">
+            Healthspan Quiz
+          </Link>
+          .
+        </p>
+      </div>
 
-      <div className="badge-row" aria-label="Article topics">
+      {/* Keyword badges */}
+      <div className="mb-8 flex flex-wrap gap-2" aria-label="Article topics">
         {article.keywords.map((keyword) => (
-          <span key={keyword} className="badge">
+          <span
+            key={keyword}
+            className="inline-block rounded-full border border-[#1E2A4A] bg-[#0F1530] px-2.5 py-0.5 text-xs text-zinc-400"
+          >
             {keyword}
           </span>
         ))}
       </div>
 
+      {/* Article body */}
       {article.content ? (
         <section
           className="article-content"
@@ -160,14 +190,16 @@ export default async function BlogPostPage({ params }: PageProps) {
           {article.sections.map((section) => (
             <section key={section.heading}>
               <h2>{section.heading}</h2>
-              {section.paragraphs.map((paragraph, index) => (
-                <div key={`${section.heading}-${index}`}>
-                  {renderParagraphWithLinks(
-                    paragraph,
-                    `${section.heading}-${index}`
-                  )}
-                </div>
-              ))}
+              {section.paragraphs.map((paragraph, index) => {
+                const hasHtml = /<[a-z][\s\S]*>/i.test(paragraph);
+                if (hasHtml) {
+                  return (
+                    <div key={`${section.heading}-${index}`}
+                      dangerouslySetInnerHTML={{ __html: paragraph }} />
+                  );
+                }
+                return renderParagraphWithLinks(paragraph, `${section.heading}-${index}`);
+              })}
             </section>
           ))}
         </section>
@@ -179,7 +211,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       <RelatedLinks slug={article.slug} />
       <NewsletterCTA
         title="Want this level of detail every week?"
-        description="Subscribe for actionable longevity briefs with safety notes and implementation checkpoints."
+        description="Subscribe for actionable TRT and testosterone optimization briefs with safety notes and implementation checkpoints."
         buttonLabel="Send weekly brief"
         formId={`article-${article.slug}-email`}
       />

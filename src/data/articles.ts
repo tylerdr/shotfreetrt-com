@@ -1,4 +1,27 @@
 import { newLongevityArticles } from "./newLongevityArticles";
+import { trtBloodDonationArticle } from "./trtBloodDonation";
+import { trtAndSsriArticle } from "./trtAndSsri";
+import { trtAndOpioidsArticle } from "./trtAndOpioids";
+import { trtAndStatinsArticle } from "./trtAndStatins";
+import { trtAndGlp1Article } from "./trtAndGlp1";
+import { trtBloodTestCostArticle } from "./trtBloodTestCost";
+import { testosteroneAndMetforminArticle } from "./testosteroneAndMetformin";
+import { trtAndFinasterideArticle } from "./trtAndFinasteride";
+import { testosteroneAndAnemiaArticle } from "./testosteroneAndAnemia";
+import { trtClinicsByStateArticle } from "./trtClinicsByState";
+import { testosteroneAndDopamineArticle } from "./testosteroneAndDopamine";
+import { trtForBodybuildersArticle } from "./trtForBodybuilders";
+import { trtAndBuprenorphineArticle } from "./trtAndBuprenorphine";
+import { testosteroneBoostingFoodsArticle } from "./testosteroneBoostingFoods";
+import { testosteroneAndCaffeineArticle } from "./testosteroneAndCaffeine";
+import { testosteroneAndKetoArticle } from "./testosteroneAndKeto";
+import { testosteroneAndSoyArticle } from "./testosteroneAndSoy";
+import { testosteroneAndVitaminB12Article } from "./testosteroneAndVitaminB12";
+import { doesTrtCauseInfertilityArticle } from "./doesTrtCauseInfertility";
+import { trtAndAcneArticle } from "./trtAndAcne";
+import { testosteroneAndPornArticle } from "./testosteroneAndPorn";
+import { trtAndVaricoceleArticle } from "./trtAndVaricocele";
+import { trtAndWaterRetentionArticle } from "./trtAndWaterRetention";
 
 export type BlogArticle = {
   slug: string;
@@ -21924,19 +21947,368 @@ Zinc appears to support normal GnRH pulsatility and LH receptor signaling. Zinc-
 <p>Protocol selection matters for athletes. Twice-weekly or daily SubQ injections give finer dose control than weekly injections. If TUE-approved, your anti-doping organization may require dose reduction if levels exceed the approved range. <a href="/blog/trt-dosage">TRT Dosage Guide →</a></p>
 
 <p>Related: <a href="/blog/trt-bloodwork-panel">TRT Bloodwork Panel →</a> | <a href="/blog/trt-for-men-over-50">TRT for Men Over 50 →</a> | <a href="/blog/testosterone-and-cortisol">Testosterone and Cortisol →</a> | <a href="/blog/trt-dosage">TRT Dosage →</a> | <a href="/blog/stopping-trt">Stopping TRT →</a> | <a href="/blog/enclomiphene-vs-trt">Enclomiphene vs. TRT →</a>`
+  },
+  {
+    slug: "testosterone-and-creatine",
+    title: "Testosterone and Creatine: Does Creatine Actually Raise Testosterone?",
+    description: "Creatine is the most studied supplement in sports science. But does it raise testosterone? What happens when you combine creatine with TRT? Here's what the research actually shows.",
+    author: "ShotFreeTRT Editorial Team",
+    publishedAt: "2026-03-28",
+    readTime: "11 min read",
+    category: "Protocol & Management",
+    sections: [],
+    keywords: [
+      "testosterone and creatine",
+      "does creatine increase testosterone",
+      "creatine and TRT",
+      "creatine testosterone levels",
+      "creatine DHT testosterone",
+      "best supplements for testosterone",
+      "creatine monohydrate testosterone"
+    ],
+    faqItems: [
+      {
+        q: "Does creatine increase testosterone?",
+        a: "The honest answer is: not meaningfully. Creatine does not have a direct androgenic mechanism. Some studies show modest increases in total or free testosterone, but these findings are inconsistent and the effect sizes are small compared to the impact of resistance training or clinical TRT. Creatine's real value is in ATP resynthesis, training volume capacity, and lean mass accretion through training — not hormonal manipulation."
+      },
+      {
+        q: "Does creatine raise DHT?",
+        a: "One frequently cited study (van der Merwe 2009, in rugby players) found creatine supplementation increased DHT by approximately 56% and the DHT:testosterone ratio by 36% after 7 days of loading. However, this study has not been replicated consistently, and the DHT levels remained within normal physiological range. If hair loss is a concern, the evidence does not clearly support creatine as a meaningful DHT driver at standard doses."
+      },
+      {
+        q: "Can I take creatine while on TRT?",
+        a: "Yes. Creatine and testosterone work through different mechanisms and there are no known negative interactions. Combining TRT with creatine and resistance training is a well-supported approach for maximizing lean mass and strength outcomes."
+      },
+      {
+        q: "What dose of creatine should I take?",
+        a: "3–5 g of creatine monohydrate daily is the evidence-supported maintenance dose. Loading phases (20 g/day for 5–7 days) accelerate muscle creatine saturation but produce the same long-term result as the slower loading protocol. Most men do not need to load."
+      },
+      {
+        q: "Is creatine safe for men on testosterone therapy?",
+        a: "Yes. Creatine is one of the most extensively studied supplements in sports nutrition. It does not affect hematocrit, PSA, estradiol, or other TRT monitoring parameters. The primary safety consideration is staying well hydrated, as creatine draws water into muscle cells."
+      },
+      {
+        q: "Will creatine help if my testosterone is low?",
+        a: "Creatine improves performance capacity in the gym — more reps, better recovery between sets. If your testosterone is clinically low, creatine won't compensate for the anabolic deficit, but it's still beneficial for maintaining training stimulus until you address the underlying hormonal issue."
+      },
+      {
+        q: "What supplements actually support testosterone production?",
+        a: "Deficiency correction (Vitamin D, Zinc, Magnesium) has the strongest evidence for increasing testosterone in men who are actually deficient in those micronutrients. Ashwagandha has modest cortisol-lowering effects that may support T levels in chronically stressed men. No supplement comes close to the effect of addressing clinical hypogonadism with TRT when that's the actual problem."
+      },
+      {
+        q: "Does creatine affect TRT lab results?",
+        a: "Creatine supplementation raises serum creatinine slightly — this is normal and not a sign of kidney stress. It's worth noting on labs so your provider doesn't flag elevated creatinine as a TRT side effect. It does not meaningfully affect testosterone, free testosterone, estradiol, hematocrit, or PSA."
+      }
+    ],
+    content: `<h2>The Short Answer First</h2>
+
+<p>Creatine does not meaningfully raise testosterone. That's the honest read of the research.</p>
+
+<p>But creatine is still one of the best supplements you can take as a man managing low testosterone or optimizing results on TRT — not because of any hormonal mechanism, but because it directly amplifies the one thing that drives lean mass: training performance.</p>
+
+<p>This article covers:</p>
+<ul>
+  <li>What creatine actually does (mechanism)</li>
+  <li>The testosterone and DHT evidence — including the most-cited study and its limitations</li>
+  <li>Whether creatine interacts with TRT protocols</li>
+  <li>The practical case for creatine regardless of hormonal status</li>
+  <li>How it fits in the broader supplement stack for men managing testosterone</li>
+</ul>
+
+<div style="border: 1px solid #2a2a3a; border-radius: 8px; padding: 16px; margin: 24px 0; background: #12121a;">
+  <p style="font-weight: 600; margin-bottom: 8px;">Not sure if your training plateau is a hormone issue or a recovery issue?</p>
+  <p style="margin-bottom: 12px;">The quiz takes 3 minutes and helps you figure out the right next step.</p>
+  <a href="/quiz" style="display: inline-block; background: #6366f1; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600;">Take the Free TRT Decision Quiz →</a>
+</div>
+
+<h2>How Creatine Actually Works</h2>
+
+<p>Creatine is stored in muscle as phosphocreatine (PCr). During high-intensity exercise — think heavy compound lifts, sprints, explosive movements — your muscles rely on PCr to rapidly regenerate ATP (adenosine triphosphate), the immediate energy currency of muscle contraction.</p>
+
+<p>When PCr stores run low (typically after 8–12 seconds of maximum effort), performance drops. Creatine supplementation raises total muscle PCr by roughly 20–40%, which means:</p>
+<ul>
+  <li>More reps before failure on heavy sets</li>
+  <li>Faster recovery between sets</li>
+  <li>Greater total training volume over a session</li>
+  <li>More mechanical stimulus for hypertrophy</li>
+</ul>
+
+<p>This is not a hormonal effect. Creatine is not androgenic. It does not bind androgen receptors. The lean mass gains from creatine come from increased training output — not from raising testosterone.</p>
+
+<h2>Does Creatine Raise Testosterone? What the Research Shows</h2>
+
+<h3>The Honest Evidence Summary</h3>
+
+<table style="width:100%; border-collapse:collapse; margin: 16px 0;">
+  <thead><tr style="background:#1a1a2e"><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">Study</th><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">Finding</th><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">Quality</th></tr></thead>
+  <tbody>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Multiple RCTs (meta-analysis)</td><td style="padding:10px; border:1px solid #2a2a3a">No consistent effect on total testosterone</td><td style="padding:10px; border:1px solid #2a2a3a">Strong</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Some individual trials</td><td style="padding:10px; border:1px solid #2a2a3a">Small, transient increases in free testosterone — not consistent across studies</td><td style="padding:10px; border:1px solid #2a2a3a">Weak to moderate</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Van der Merwe 2009 (rugby players)</td><td style="padding:10px; border:1px solid #2a2a3a">DHT increased ~56%, DHT:T ratio up ~36% after creatine loading</td><td style="padding:10px; border:1px solid #2a2a3a">Single study, not replicated</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">High-intensity training studies</td><td style="padding:10px; border:1px solid #2a2a3a">No significant testosterone changes attributable to creatine vs. training alone</td><td style="padding:10px; border:1px solid #2a2a3a">Moderate</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Bottom line:</strong> If creatine has any testosterone effect, it is small, inconsistent, and likely indirect (via improved training performance → anabolic stimulus). Do not take creatine with the goal of raising testosterone. That's not what it does.</p>
+
+<h3>The DHT Study Everyone Cites</h3>
+
+<p>The van der Merwe 2009 study is frequently cited in supplement marketing as proof that creatine raises DHT. It deserves more careful reading than it usually gets.</p>
+
+<p>What the study actually found:</p>
+<ul>
+  <li>21 male rugby players, randomized creatine vs. placebo</li>
+  <li>After a 7-day loading phase (25 g/day), DHT rose by ~56% in the creatine group</li>
+  <li>After the 14-day maintenance phase (5 g/day), DHT remained elevated</li>
+  <li>Importantly: <strong>DHT levels remained within normal physiological range throughout</strong></li>
+  <li>Total testosterone did not significantly change</li>
+</ul>
+
+<p>Limitations of this single study:</p>
+<ul>
+  <li>Never replicated — subsequent studies did not confirm significant DHT elevation</li>
+  <li>Specific to a high-intensity 7-day loading protocol; most men do not load</li>
+  <li>Small sample size (n=21) with a specific athletic population</li>
+  <li>Proposed mechanism (creatine enhancing 5-alpha reductase activity) remains speculative</li>
+</ul>
+
+<p><strong>If hair loss is your concern:</strong> The DHT signal from creatine, even if real, is small and inconsistent. The stronger DHT driver by far is the delivery method of TRT you choose — injections have moderate DHT conversion, gels have higher, topical cream has highest. See: <a href="/blog/trt-and-hair-loss">TRT and Hair Loss →</a></p>
+
+<h2>Creatine + TRT: Does the Combination Make Sense?</h2>
+
+<p>Yes — and the reasoning is straightforward.</p>
+
+<p>TRT and creatine work through fundamentally different mechanisms that are genuinely complementary:</p>
+
+<table style="width:100%; border-collapse:collapse; margin: 16px 0;">
+  <thead><tr style="background:#1a1a2e"><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">Factor</th><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">TRT</th><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">Creatine</th></tr></thead>
+  <tbody>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Primary mechanism</td><td style="padding:10px; border:1px solid #2a2a3a">Androgen receptor signaling → increased protein synthesis, satellite cell activation, IGF-1 upregulation</td><td style="padding:10px; border:1px solid #2a2a3a">ATP resynthesis via phosphocreatine → more training volume capacity</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Lean mass effect</td><td style="padding:10px; border:1px solid #2a2a3a">Anabolic signaling environment</td><td style="padding:10px; border:1px solid #2a2a3a">Greater mechanical stimulus from training</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Timeline</td><td style="padding:10px; border:1px solid #2a2a3a">3–12 months for full body composition effect</td><td style="padding:10px; border:1px solid #2a2a3a">2–4 weeks to saturate muscle stores; training effect immediate</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Interaction</td><td style="padding:10px; border:1px solid #2a2a3a" colspan="2">Additive — each addresses a different bottleneck</td></tr>
+  </tbody>
+</table>
+
+<p>The research on TRT + resistance training consistently shows 2–4x greater lean mass gains than TRT without training (Bhasin 1996, Corona 2016). Creatine helps you do more work per session, which means more stimulus for the anabolic environment that TRT provides.</p>
+
+<h3>Protocol Interaction Notes</h3>
+
+<p>There are no negative interactions between creatine and TRT protocols. A few practical notes:</p>
+
+<ul>
+  <li><strong>Creatinine on labs:</strong> Creatine supplementation raises serum creatinine modestly. This is not kidney stress — it's just elevated substrate clearance. Note your creatine use on lab orders so your provider doesn't interpret elevated creatinine as a TRT-related kidney finding.</li>
+  <li><strong>Hydration:</strong> Creatine draws water into muscle cells. Staying well hydrated reduces the small risk of muscle cramping and is good practice for men managing hematocrit on TRT.</li>
+  <li><strong>No effect on TRT labs:</strong> Creatine does not meaningfully affect testosterone, free testosterone, estradiol, PSA, LH, FSH, or hematocrit readings.</li>
+</ul>
+
+<div style="border: 1px solid #2a2a3a; border-radius: 8px; padding: 16px; margin: 24px 0; background: #12121a;">
+  <p style="font-weight: 600; margin-bottom: 8px;">Already on TRT and not seeing the gains you expected?</p>
+  <p style="margin-bottom: 12px;">Protocol optimization often matters more than adding supplements. See what the most common bottlenecks actually are.</p>
+  <a href="/blog/why-isnt-my-trt-working" style="display: inline-block; background: #6366f1; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600;">Why Isn't My TRT Working? →</a>
+</div>
+
+<h2>The Practical Case for Creatine (Regardless of Hormonal Status)</h2>
+
+<p>Creatine monohydrate is one of the most studied, safety-confirmed supplements in sports nutrition. The evidence base spans decades and thousands of subjects.</p>
+
+<p>For men managing testosterone — whether borderline low, on TRT, or using alternatives like enclomiphene — creatine is worth taking because:</p>
+
+<ol>
+  <li><strong>Training volume is the primary driver of lean mass</strong>. Creatine gives you more of it.</li>
+  <li><strong>Muscle mass supports testosterone</strong>. More lean mass → higher androgen receptor density → better tissue response to testosterone.</li>
+  <li><strong>It's inexpensive and safe</strong>. At $0.10–0.20/day for bulk creatine monohydrate, it's the highest evidence-per-dollar supplement available.</li>
+  <li><strong>It protects during caloric deficits</strong>. Men losing weight on GLP-1 agonists alongside TRT benefit from creatine's anti-catabolic training effect.</li>
+</ol>
+
+<h2>Creatine in the Broader Testosterone Supplement Stack</h2>
+
+<p>Here's how creatine fits relative to other supplements men in the TRT / low-T space typically consider:</p>
+
+<table style="width:100%; border-collapse:collapse; margin: 16px 0;">
+  <thead><tr style="background:#1a1a2e"><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">Supplement</th><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">Direct Testosterone Effect</th><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">Performance / Body Comp Effect</th><th style="padding:10px; text-align:left; border:1px solid #2a2a3a">Evidence Quality</th></tr></thead>
+  <tbody>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Creatine monohydrate</td><td style="padding:10px; border:1px solid #2a2a3a">Minimal/indirect</td><td style="padding:10px; border:1px solid #2a2a3a">Strong (training volume, lean mass)</td><td style="padding:10px; border:1px solid #2a2a3a">⭐⭐⭐⭐⭐</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Vitamin D (if deficient)</td><td style="padding:10px; border:1px solid #2a2a3a">Moderate (in deficient men)</td><td style="padding:10px; border:1px solid #2a2a3a">Secondary benefit via T restoration</td><td style="padding:10px; border:1px solid #2a2a3a">⭐⭐⭐⭐</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Zinc (if deficient)</td><td style="padding:10px; border:1px solid #2a2a3a">Moderate (in deficient men)</td><td style="padding:10px; border:1px solid #2a2a3a">Secondary benefit</td><td style="padding:10px; border:1px solid #2a2a3a">⭐⭐⭐⭐</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Magnesium (if deficient)</td><td style="padding:10px; border:1px solid #2a2a3a">Modest (via SHBG modulation)</td><td style="padding:10px; border:1px solid #2a2a3a">Sleep improvement secondary benefit</td><td style="padding:10px; border:1px solid #2a2a3a">⭐⭐⭐</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Ashwagandha</td><td style="padding:10px; border:1px solid #2a2a3a">Modest (cortisol → T indirect)</td><td style="padding:10px; border:1px solid #2a2a3a">Recovery + sleep quality</td><td style="padding:10px; border:1px solid #2a2a3a">⭐⭐⭐</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Testosterone booster supplements</td><td style="padding:10px; border:1px solid #2a2a3a">Minimal in eugonadal men</td><td style="padding:10px; border:1px solid #2a2a3a">Minimal</td><td style="padding:10px; border:1px solid #2a2a3a">⭐⭐</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Tribulus terrestris</td><td style="padding:10px; border:1px solid #2a2a3a">No effect in clinical trials</td><td style="padding:10px; border:1px solid #2a2a3a">No effect</td><td style="padding:10px; border:1px solid #2a2a3a">⭐</td></tr>
+  </tbody>
+</table>
+
+<p>Creatine is unique in this stack because its value is not hormonal. It works regardless of your testosterone level. Combined with TRT (or while you're in the evaluation phase), it optimizes the one variable you directly control every training session.</p>
+
+<h2>Practical Protocol</h2>
+
+<ul>
+  <li><strong>Dose:</strong> 3–5 g creatine monohydrate daily</li>
+  <li><strong>Loading (optional):</strong> 20 g/day in 4 divided doses for 5–7 days to saturate faster; same end-state as no loading after ~4 weeks</li>
+  <li><strong>Timing:</strong> Timing matters less than consistency. Post-workout with a protein + carbohydrate meal may have modest advantage for uptake</li>
+  <li><strong>Form:</strong> Creatine monohydrate — generic bulk powder is identical to branded products at 1/5 the price. No need for creatine HCl, ethyl ester, or buffered versions</li>
+  <li><strong>Hydration:</strong> Increase water intake modestly (+8–16 oz/day) when starting</li>
+  <li><strong>Lab note:</strong> Tell your provider you're taking creatine when bloodwork includes BMP or CMP — slightly elevated creatinine is expected and benign</li>
+</ul>
+
+<div style="border: 1px solid #2a2a3a; border-radius: 8px; padding: 16px; margin: 24px 0; background: #12121a;">
+  <p style="font-weight: 600; margin-bottom: 8px;">Getting your foundational stack right matters more than any add-on.</p>
+  <p style="margin-bottom: 12px;">If you haven't checked your testosterone levels with the right panel, that's the highest-value next step.</p>
+  <a href="/quiz" style="display: inline-block; background: #6366f1; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600;">Take the Free TRT Decision Quiz →</a>
+</div>
+
+<p>Related: <a href="/blog/natural-testosterone-boosters">Natural Testosterone Boosters: What Actually Works →</a> | <a href="/blog/testosterone-and-muscle-building">Testosterone and Muscle Building →</a> | <a href="/blog/trt-and-hair-loss">TRT and Hair Loss →</a> | <a href="/blog/testosterone-and-vitamin-d">Testosterone and Vitamin D →</a> | <a href="/blog/testosterone-and-zinc">Testosterone and Zinc →</a> | <a href="/blog/testosterone-and-magnesium">Testosterone and Magnesium →</a> | <a href="/blog/trt-protocol-optimization">TRT Protocol Optimization →</a>`
+  }
+,
+  {
+    slug: "testosterone-and-cholesterol",
+    title: "Testosterone and Cholesterol: What TRT Actually Does to Your Lipid Panel",
+    description: "Does TRT raise your cholesterol? A data-driven breakdown of what testosterone therapy actually does to HDL, LDL, triglycerides, and cardiovascular risk — by delivery method.",
+    category: "health",
+    keywords: ["testosterone and cholesterol", "TRT cholesterol", "does TRT raise cholesterol", "testosterone HDL LDL", "TRT lipid panel"],
+    publishedAt: "2026-03-28",
+    readingTime: 11,
+    content: `
+<h1>Testosterone and Cholesterol: What TRT Actually Does to Your Lipid Panel</h1>
+
+<p>One of the most common questions men ask before starting TRT: <em>Will this wreck my cholesterol?</em></p>
+
+<p>The honest answer is nuanced. TRT does affect your lipid panel — but the direction, magnitude, and clinical significance depend heavily on delivery method, dose, baseline metabolic health, and what you do alongside therapy. Here's what the evidence actually shows.</p>
+
+<h2>The Short Version</h2>
+<ul>
+  <li><strong>HDL:</strong> Modest reduction with injections (5–15%), less with transdermals, more with oral TRT</li>
+  <li><strong>LDL:</strong> Typically neutral to modest reduction, especially in men with metabolic dysfunction baseline</li>
+  <li><strong>Triglycerides:</strong> Usually decrease, particularly when TRT improves insulin sensitivity</li>
+  <li><strong>Total cholesterol:</strong> Usually neutral to mildly lower</li>
+  <li><strong>Clinical significance:</strong> Modest HDL reduction in isolation is not the cardiovascular risk driver the internet makes it out to be</li>
+</ul>
+
+<h2>How Testosterone Interacts With Lipid Metabolism</h2>
+<p><strong>1. Hepatic lipase upregulation.</strong> Testosterone increases hepatic lipase activity, an enzyme that breaks down HDL particles. This is the primary mechanism behind HDL reductions seen with injectable testosterone — particularly at higher doses or longer injection intervals.</p>
+<p><strong>2. Insulin sensitivity improvement.</strong> In men with metabolic dysfunction, TRT often improves insulin sensitivity, which secondarily reduces triglycerides and VLDL.</p>
+<p><strong>3. Body composition remodeling.</strong> Reduced visceral fat mass — which TRT consistently produces over 12+ months — reduces dyslipidemia associated with central adiposity. The lipid benefit from fat loss can outpace the HDL-lowering from hepatic lipase.</p>
+<p><strong>4. Oral TRT — the exception.</strong> First-pass hepatic metabolism with oral testosterone (Jatenzo, Kyzatrex, Tlando) produces more pronounced lipid effects and larger HDL reductions than injectable routes.</p>
+
+<h2>What the Clinical Evidence Shows</h2>
+<table style="width:100%; border-collapse:collapse; margin:24px 0">
+  <thead><tr style="background:#1a1a2e">
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">Lipid Marker</th>
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">Typical Direction on TRT</th>
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">Magnitude</th>
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">Key Variables</th>
+  </tr></thead>
+  <tbody>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a"><strong>HDL-C</strong></td><td style="padding:10px; border:1px solid #2a2a3a">↓ Decrease</td><td style="padding:10px; border:1px solid #2a2a3a">5–15% injections; 0–8% gels; 15–25% oral</td><td style="padding:10px; border:1px solid #2a2a3a">Delivery method, dose, injection interval</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a"><strong>LDL-C</strong></td><td style="padding:10px; border:1px solid #2a2a3a">↔ Neutral to ↓ modest</td><td style="padding:10px; border:1px solid #2a2a3a">0–10% reduction in most trials</td><td style="padding:10px; border:1px solid #2a2a3a">Baseline metabolic health, body composition change</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a"><strong>Triglycerides</strong></td><td style="padding:10px; border:1px solid #2a2a3a">↓ Decrease</td><td style="padding:10px; border:1px solid #2a2a3a">10–20% in men with elevated baseline</td><td style="padding:10px; border:1px solid #2a2a3a">Insulin sensitivity improvement, visceral fat reduction</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a"><strong>Total Cholesterol</strong></td><td style="padding:10px; border:1px solid #2a2a3a">↔ Variable / neutral</td><td style="padding:10px; border:1px solid #2a2a3a">Usually &lt;5% change</td><td style="padding:10px; border:1px solid #2a2a3a">Depends on HDL + LDL direction balance</td></tr>
+  </tbody>
+</table>
+<p><strong>Key meta-analysis:</strong> Corona et al. (2016, <em>European Journal of Endocrinology</em>) pooled 58 RCTs (n=3,809 men) — TRT reduced total cholesterol, LDL, and triglycerides while producing a modest HDL decrease. Net lipid profile effect: metabolically neutral-to-favorable in the context of overall cardiovascular risk.</p>
+
+<h2>Delivery Method Matters — A Lot</h2>
+<table style="width:100%; border-collapse:collapse; margin:24px 0">
+  <thead><tr style="background:#1a1a2e">
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">Delivery Method</th>
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">HDL Effect</th>
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">Why</th>
+  </tr></thead>
+  <tbody>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Injectable IM or SubQ (once-weekly)</td><td style="padding:10px; border:1px solid #2a2a3a">↓ 5–15%</td><td style="padding:10px; border:1px solid #2a2a3a">Hepatic lipase upregulation; higher peak = more effect</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Transdermal gel</td><td style="padding:10px; border:1px solid #2a2a3a">↓ 0–8%</td><td style="padding:10px; border:1px solid #2a2a3a">Daily steady-state; lower peak = less hepatic lipase signal</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Oral (Jatenzo/Kyzatrex/Tlando)</td><td style="padding:10px; border:1px solid #2a2a3a">↓ 15–25%</td><td style="padding:10px; border:1px solid #2a2a3a">First-pass hepatic metabolism; SHBG suppression amplifies HDL catabolism</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Daily SubQ microdosing</td><td style="padding:10px; border:1px solid #2a2a3a">↓ &lt;5% (estimated)</td><td style="padding:10px; border:1px solid #2a2a3a">Lower peak; most stable daily levels; fewest lipase spikes</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Pellets</td><td style="padding:10px; border:1px solid #2a2a3a">↓ variable</td><td style="padding:10px; border:1px solid #2a2a3a">Long-acting steady release; depends on dose implanted</td></tr>
+  </tbody>
+</table>
+<p>If you have pre-existing low HDL or cardiovascular history, twice-weekly IM or daily SubQ injections produce less HDL impact than oral TRT or high-peak weekly injections.</p>
+
+<h2>Does HDL Reduction From TRT Actually Increase Cardiovascular Risk?</h2>
+<p>HDL cholesterol is a biomarker, not a mechanism. When TRT lowers HDL-C via hepatic lipase, it does not necessarily impair reverse cholesterol transport equivalently. The TRAVERSE trial (5,246 men, RCT, median 33 months) showed no increase in MACE (heart attack, stroke, cardiovascular death) despite modest HDL reductions.</p>
+<p>What actually matters for cardiovascular risk on TRT:</p>
+<ul>
+  <li><strong>Hematocrit elevation</strong> — the more significant blood viscosity variable</li>
+  <li><strong>Atrial fibrillation signal</strong> from TRAVERSE (OR ~1.57 — real and worth monitoring)</li>
+  <li><strong>Blood pressure</strong> — oral TRT carries an explicit Black Box BP warning</li>
+  <li><strong>Baseline risk factors</strong> — metabolic syndrome, existing cardiovascular disease</li>
+</ul>
+
+<h2>Who Should Be Most Careful About Lipids on TRT</h2>
+<table style="width:100%; border-collapse:collapse; margin:24px 0">
+  <thead><tr style="background:#1a1a2e">
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">Profile</th>
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">Concern Level</th>
+    <th style="padding:10px; border:1px solid #2a2a3a; text-align:left">Approach</th>
+  </tr></thead>
+  <tbody>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">HDL already &lt;35 mg/dL at baseline</td><td style="padding:10px; border:1px solid #2a2a3a">⚠️ Monitor closely</td><td style="padding:10px; border:1px solid #2a2a3a">Prefer transdermal or daily SubQ; recheck lipids at 8–12 weeks</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Elevated LDL + family history CAD</td><td style="padding:10px; border:1px solid #2a2a3a">⚠️ Consult cardiologist</td><td style="padding:10px; border:1px solid #2a2a3a">Full lipid panel + CV risk score pre-TRT; statin management if indicated</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Metabolic syndrome / insulin resistance</td><td style="padding:10px; border:1px solid #2a2a3a">🟢 May actually benefit</td><td style="padding:10px; border:1px solid #2a2a3a">TRT + lifestyle often improves TG + LDL; HDL reduction may be offset by metabolic gains</td></tr>
+    <tr style="background:#0f0f1a"><td style="padding:10px; border:1px solid #2a2a3a">Considering oral TRT (Jatenzo/Kyzatrex)</td><td style="padding:10px; border:1px solid #2a2a3a">⚠️ More significant HDL drop</td><td style="padding:10px; border:1px solid #2a2a3a">Baseline lipid panel required; monitor at 3 months; discuss statins if LDL elevated</td></tr>
+    <tr><td style="padding:10px; border:1px solid #2a2a3a">Lean, otherwise healthy, low-normal T</td><td style="padding:10px; border:1px solid #2a2a3a">🟢 Minimal concern</td><td style="padding:10px; border:1px solid #2a2a3a">Standard lipid monitoring; no special protocol modification needed</td></tr>
+  </tbody>
+</table>
+
+<h2>The Baseline Lipid Panel You Need Before Starting TRT</h2>
+<ul>
+  <li><strong>Standard lipid panel:</strong> Total cholesterol, HDL-C, LDL-C, triglycerides</li>
+  <li><strong>Non-HDL cholesterol</strong> — better predictor than LDL alone when TG is elevated</li>
+  <li><strong>ApoB</strong> if available — reflects atherogenic particle count better than LDL-C with TRT-driven HDL changes</li>
+  <li><strong>Fasting glucose + HbA1c</strong> — metabolic context for interpreting TG levels</li>
+</ul>
+
+<h2>Monitoring Schedule on TRT</h2>
+<ul>
+  <li><strong>Baseline:</strong> Before starting TRT</li>
+  <li><strong>8–12 weeks post-start:</strong> First recheck — most HDL change occurs in this window</li>
+  <li><strong>6 months:</strong> Comprehensive recheck including hematocrit, PSA, metabolic markers</li>
+  <li><strong>Annually thereafter</strong> (more frequently if on oral TRT or if baseline lipids were concerning)</li>
+</ul>
+
+<h2>Can You Protect HDL While on TRT?</h2>
+<ul>
+  <li><strong>Regular aerobic exercise</strong> — consistent evidence for HDL maintenance</li>
+  <li><strong>Reduce refined carbohydrates</strong> — reduces TG, supports HDL</li>
+  <li><strong>Maintain healthy body fat percentage</strong> — visceral fat reduction is HDL-positive</li>
+  <li><strong>Choose a lower-peak delivery method</strong> — daily SubQ vs. once-weekly IM produces less HDL impact</li>
+  <li><strong>Limit frequent alcohol</strong> — upregulates aromatase; liver metabolism competes especially with oral TRT</li>
+</ul>
+
+<h2>The Bottom Line</h2>
+<p>TRT modestly reduces HDL cholesterol — primarily through injectable and oral routes, less so with transdermal delivery. It typically reduces triglycerides and is neutral-to-positive on LDL. The net lipid profile effect is metabolically neutral in most clinical contexts, and the largest TRT safety trial showed no increase in cardiovascular events despite these lipid changes.</p>
+<p>Get a baseline lipid panel. Recheck at 8–12 weeks. Adjust delivery method and lifestyle accordingly. The fear that TRT will "wreck your cholesterol" is not supported by evidence.</p>
+
+<div style="border: 1px solid #2a2a3a; border-radius: 8px; padding: 16px; margin: 24px 0; background: #12121a;">
+  <p style="font-weight: 600; margin-bottom: 8px;">Concerned about how TRT fits your health profile?</p>
+  <p style="margin-bottom: 12px;">Our quiz maps your specific situation — metabolic health, risk factors, and goals — to the right starting path.</p>
+  <a href="/quiz" style="display: inline-block; background: #6366f1; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: 600;">Take the Free TRT Decision Quiz →</a>
+</div>
+
+<h2>Frequently Asked Questions</h2>
+<p><strong>Does TRT always lower HDL?</strong><br/>Injectable and oral TRT typically produce a 5–15% HDL reduction. Transdermal gels produce less. Daily SubQ injections produce the least HDL impact. The reduction is dose- and method-dependent, not inevitable.</p>
+<p><strong>Should I be worried about the HDL drop from TRT?</strong><br/>In most clinical contexts, a modest HDL reduction from TRT is not a significant cardiovascular driver. The TRAVERSE trial found no increase in heart attacks or strokes. Hematocrit elevation and atrial fibrillation are more clinically significant monitoring targets.</p>
+<p><strong>Does oral TRT affect cholesterol more than injections?</strong><br/>Yes. Oral testosterone undergoes first-pass hepatic metabolism and suppresses SHBG more, producing larger HDL reductions (15–25%) compared to 5–15% with injections. Men with low baseline HDL or cardiovascular history should discuss this before choosing oral TRT.</p>
+<p><strong>Will TRT improve my triglycerides?</strong><br/>In men with elevated TG due to metabolic dysfunction, TRT often reduces TG 10–20% via improved insulin sensitivity. If your TG is already optimal, TRT is unlikely to change it significantly.</p>
+<p><strong>What lipid labs should I check before starting TRT?</strong><br/>At minimum: total cholesterol, HDL, LDL, and triglycerides. Ideally add ApoB and non-HDL cholesterol for a more complete picture. Recheck at 8–12 weeks after starting.</p>
+<p><strong>Can I take a statin with TRT?</strong><br/>Yes. Statin therapy is not contraindicated with TRT. If your LDL or cardiovascular risk warrants statins, TRT and statins are commonly co-prescribed.</p>
+<p><strong>Does TRT affect LDL?</strong><br/>Most TRT trials show LDL to be neutral or modestly reduced (0–10%), particularly in men with metabolic dysfunction where TRT improves insulin sensitivity and body composition.</p>
+<p><strong>Which delivery method is best for men concerned about cholesterol?</strong><br/>Transdermal gel or daily SubQ injections produce the least HDL impact. Oral TRT produces the most. If HDL preservation is a priority — especially baseline below 40 mg/dL — transdermal or daily SubQ protocols are preferable.</p>
+
+<p>Related: <a href="/blog/trt-and-cardiovascular-health">TRT and Heart Health →</a> | <a href="/blog/trt-bloodwork-panel">TRT Bloodwork Panel →</a> | <a href="/blog/testosterone-and-diabetes">Testosterone and Insulin Resistance →</a> | <a href="/blog/oral-testosterone">Oral Testosterone (Jatenzo, Kyzatrex) →</a> | <a href="/blog/testosterone-gel-vs-injections">Testosterone Gel vs. Injections →</a> | <a href="/blog/trt-protocol-optimization">TRT Protocol Optimization →</a>`
   }
 ];
 
 export const siteUrl = "https://shotfreetrt.com";
 
 export function getAllArticles(): BlogArticle[] {
-  return [...articles].sort(
+  return [...articles, trtBloodDonationArticle, trtAndSsriArticle, trtAndOpioidsArticle, trtAndStatinsArticle, trtAndGlp1Article, trtBloodTestCostArticle, testosteroneAndMetforminArticle, trtAndFinasterideArticle, testosteroneAndAnemiaArticle, trtClinicsByStateArticle, testosteroneAndDopamineArticle, trtForBodybuildersArticle, trtAndBuprenorphineArticle, testosteroneBoostingFoodsArticle, testosteroneAndCaffeineArticle, testosteroneAndKetoArticle, testosteroneAndSoyArticle, testosteroneAndVitaminB12Article, doesTrtCauseInfertilityArticle, trtAndAcneArticle, testosteroneAndPornArticle, trtAndVaricoceleArticle, trtAndWaterRetentionArticle].sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 }
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
-  return articles.find((article) => article.slug === slug);
+  return [...articles, trtBloodDonationArticle, trtAndSsriArticle, trtAndOpioidsArticle, trtAndStatinsArticle, trtAndGlp1Article, trtBloodTestCostArticle, testosteroneAndMetforminArticle, trtAndFinasterideArticle, testosteroneAndAnemiaArticle, trtClinicsByStateArticle, testosteroneAndDopamineArticle, trtForBodybuildersArticle, trtAndBuprenorphineArticle, testosteroneBoostingFoodsArticle, testosteroneAndCaffeineArticle, testosteroneAndKetoArticle, testosteroneAndSoyArticle, testosteroneAndVitaminB12Article, doesTrtCauseInfertilityArticle, trtAndAcneArticle, testosteroneAndPornArticle, trtAndVaricoceleArticle].find((article) => article.slug === slug);
 }
 
 export function getRelatedArticles(slug: string, limit = 3): BlogArticle[] {

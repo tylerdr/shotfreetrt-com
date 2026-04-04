@@ -47,33 +47,34 @@ const modalities = [
     fertility: "Preserved",
     speed: "Medium",
     profile: "Best first move for most guys",
-    cue: "bg-emerald-500/15 text-emerald-300 border-emerald-400/40"
+    cue: "bg-blue-500/10 text-blue-300 border-blue-500/30"
   },
   {
     name: "SERM path (e.g., enclomiphene)",
     fertility: "Often preserved",
     speed: "Medium-fast",
     profile: "May support endogenous production for selected candidates",
-    cue: "bg-blue-500/15 text-blue-300 border-blue-400/40"
+    cue: "bg-indigo-500/10 text-indigo-300 border-indigo-500/30"
   },
   {
     name: "Oral / topical testosterone",
     fertility: "Often reduced",
     speed: "Fast",
     profile: "Needle-free delivery but still exogenous testosterone",
-    cue: "bg-amber-500/15 text-amber-300 border-amber-400/40"
+    cue: "bg-amber-500/10 text-amber-300 border-amber-500/30"
   },
   {
     name: "Injectable TRT",
     fertility: "Often suppressed",
     speed: "Fast",
-    profile: "Powerful option but outside this site’s first-choice path",
-    cue: "bg-rose-500/15 text-rose-300 border-rose-400/40"
+    profile: "Powerful option but outside this site's first-choice path",
+    cue: "bg-rose-500/10 text-rose-300 border-rose-500/30"
   }
 ];
 
 export default function HomePage() {
-  const latest = getAllArticles().slice(0, 3);
+  const articles = getAllArticles();
+  const latest = articles.slice(0, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -105,60 +106,63 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <section className="relative overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-br from-zinc-950 via-zinc-900 to-black p-8 shadow-2xl shadow-black/60 sm:p-10">
-        <div className="pointer-events-none absolute -right-12 -top-12 size-56 rounded-full bg-red-500/10 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-16 -left-16 size-64 rounded-full bg-amber-500/10 blur-3xl" />
-
-        <div className="relative space-y-5">
-          <p className="inline-flex items-center gap-2 rounded-full border border-red-500/50 bg-red-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-red-200">
-            <ShieldCheck className="size-4" />
-            Needle-free testosterone optimization
-          </p>
-          <h1 className="max-w-3xl text-4xl font-black leading-tight text-zinc-100 sm:text-5xl">
-            Build an <span className="text-red-400">alpha-level protocol</span> before you touch a needle.
+      {/* Hero */}
+      <section className="py-8 sm:py-12">
+        <div className="max-w-3xl space-y-5">
+          <h1 className="font-[family-name:var(--font-barlow-condensed)] text-5xl font-extrabold tracking-tight text-white sm:text-6xl md:text-7xl leading-none">
+            Evidence-based TRT information.<br />
+            <span className="text-blue-400">No clinic bias.</span>
           </h1>
-          <p className="max-w-2xl text-base text-zinc-300 sm:text-lg">
+          <p className="max-w-2xl text-lg leading-relaxed text-zinc-400">
             Take the quick assessment, let AI build your 30-day game plan, then compare
             fertility-preserving vs. exogenous options with clear tradeoffs.
           </p>
 
           <div className="flex flex-wrap gap-3">
-            <Button asChild size="lg" className="font-semibold">
+            <Button asChild size="lg" className="bg-blue-600 font-semibold text-white hover:bg-blue-500 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
               <Link href="/quiz/healthspan/advanced">
                 Start AI Testosterone Plan
                 <ArrowRight className="size-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-zinc-700 bg-zinc-950 text-zinc-200 hover:bg-zinc-800">
+            <Button asChild size="lg" variant="outline" className="border border-zinc-700 text-zinc-300 hover:border-zinc-500 bg-transparent">
               <Link href="/resources">Compare Needle-Free Options</Link>
             </Button>
-          </div>
-
-          <div className="grid gap-3 pt-2 text-sm text-zinc-300 sm:grid-cols-3">
-            <p className="rounded-lg border border-zinc-800 bg-zinc-950/70 px-3 py-2">No fluff protocols</p>
-            <p className="rounded-lg border border-zinc-800 bg-zinc-950/70 px-3 py-2">Lab-context decision support</p>
-            <p className="rounded-lg border border-zinc-800 bg-zinc-950/70 px-3 py-2">Fertility-aware pathways</p>
           </div>
         </div>
       </section>
 
-      <section className="mt-12 md:mt-14">
-        <h2 className="text-2xl font-bold text-foreground">The 4-block Shot Free TRT system</h2>
-        <p className="mt-2 max-w-3xl text-muted-foreground">
-          This is the Sprinter-style path: start with root-cause optimization, personalize the
-          protocol with AI, and only escalate after execution + objective data.
+      {/* Trust/stats bar */}
+      <section className="mb-10 flex flex-wrap items-center gap-x-8 gap-y-3 rounded-xl border border-[#222230] bg-[#12121A] px-6 py-4 text-sm font-medium text-zinc-400">
+        <span><span className="text-lg font-bold text-blue-400">{articles.length}+</span> articles published</span>
+        <span className="hidden sm:inline text-zinc-700">|</span>
+        <span>Evidence-based</span>
+        <span className="hidden sm:inline text-zinc-700">|</span>
+        <span>No clinic bias</span>
+        <span className="hidden sm:inline text-zinc-700">|</span>
+        <span>Every claim sourced</span>
+      </section>
+
+      {/* 4-block system */}
+      <section className="mb-12 md:mb-14">
+        <h2 className="font-[family-name:var(--font-barlow-condensed)] text-2xl font-bold text-white md:text-3xl">
+          The 4-block Shot Free TRT system
+        </h2>
+        <p className="mt-2 max-w-3xl text-zinc-400">
+          Start with root-cause optimization, personalize the protocol with AI,
+          and only escalate after execution + objective data.
         </p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {pillars.map((pillar) => {
             const Icon = pillar.icon;
             return (
-              <Card key={pillar.title} className="border-zinc-800 bg-zinc-950/80 text-zinc-100">
-                <CardHeader className="gap-3">
-                  <span className="inline-flex size-10 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900">
-                    <Icon className="size-5 text-red-300" />
+              <Card key={pillar.title} className="border-[#222230] bg-[#12121A] shadow-none hover:border-blue-500/30 transition-all group">
+                <CardHeader className="gap-0 p-6">
+                  <span className="mb-4 inline-flex size-10 items-center justify-center rounded-lg bg-blue-500/10">
+                    <Icon className="size-5 text-blue-400" />
                   </span>
-                  <CardTitle className="text-lg">{pillar.title}</CardTitle>
+                  <CardTitle className="mb-2 text-base font-semibold text-white">{pillar.title}</CardTitle>
                   <CardDescription className="text-zinc-400">{pillar.detail}</CardDescription>
                 </CardHeader>
               </Card>
@@ -167,11 +171,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-12 md:mt-14">
-        <Card className="border-zinc-800 bg-zinc-950/70 text-zinc-100">
+      {/* Comparison table */}
+      <section className="mb-12 md:mb-14">
+        <Card className="border-[#222230] bg-[#12121A] shadow-none">
           <CardHeader className="space-y-3 pb-4">
-            <CardTitle className="flex flex-wrap items-center gap-2 text-2xl leading-tight">
-              <Pill className="size-5 text-red-300" />
+            <CardTitle className="flex flex-wrap items-center gap-2 text-2xl leading-tight text-white">
+              <Pill className="size-5 text-blue-400" />
               Compare your options before committing
             </CardTitle>
             <CardDescription className="text-zinc-400">
@@ -182,7 +187,7 @@ export default function HomePage() {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[720px] border-collapse text-left text-sm">
                 <thead>
-                  <tr className="border-b border-zinc-800 text-zinc-400">
+                  <tr className="border-b border-[#1E2A4A] text-zinc-500">
                     <th className="py-3 pr-4 font-medium">Pathway</th>
                     <th className="py-3 pr-4 font-medium">Fertility impact</th>
                     <th className="py-3 pr-4 font-medium">Typical speed</th>
@@ -191,21 +196,21 @@ export default function HomePage() {
                 </thead>
                 <tbody>
                   {modalities.map((modality) => (
-                    <tr key={modality.name} className="border-b border-zinc-900 align-top">
+                    <tr key={modality.name} className="border-b border-[#222230] align-top">
                       <td className="py-4 pr-4">
                         <span className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${modality.cue}`}>
                           {modality.name}
                         </span>
                       </td>
-                      <td className="py-4 pr-4 text-zinc-200">{modality.fertility}</td>
-                      <td className="py-4 pr-4 text-zinc-200">{modality.speed}</td>
-                      <td className="py-4 text-zinc-300">{modality.profile}</td>
+                      <td className="py-4 pr-4 text-zinc-300">{modality.fertility}</td>
+                      <td className="py-4 pr-4 text-zinc-300">{modality.speed}</td>
+                      <td className="py-4 text-zinc-400">{modality.profile}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
+            <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-zinc-500">
               <Syringe className="size-4" />
               <p>
                 This site prioritizes non-injectable and fertility-aware decision paths first.
@@ -217,60 +222,59 @@ export default function HomePage() {
 
       <GuidePromoBanner />
 
-      <section className="mt-12 md:mt-14">
-        <h2 className="text-2xl font-bold">How ShotFreeTRT monetizes (transparent)</h2>
-        <div className="mt-5 grid gap-5 md:grid-cols-3">
-          <Card className="h-full">
-            <CardHeader className="space-y-3">
-              <CardTitle className="text-base">Affiliate partnerships</CardTitle>
-              <CardDescription>
-                Maximus-like telemed programs, labs, and supplements with clear disclosures.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card className="h-full">
-            <CardHeader className="space-y-3">
-              <CardTitle className="text-base">Educational products</CardTitle>
-              <CardDescription>
-                Premium protocol packs, checklists, and follow-up templates for men running
-                natural optimization sprints.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card className="h-full">
-            <CardHeader className="space-y-3">
-              <CardTitle className="text-base">Selective ad slots</CardTitle>
-              <CardDescription>
-                Minimal and relevant sponsor placements so the user journey stays clean.
-              </CardDescription>
-            </CardHeader>
-          </Card>
+      {/* Editorial methodology */}
+      <section className="mb-12 mt-12 rounded-xl border border-[#222230] bg-[#12121A] p-8 md:mb-14">
+        <h2 className="font-[family-name:var(--font-barlow-condensed)] text-2xl font-bold text-white">
+          How we evaluate and present TRT options
+        </h2>
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <span className="inline-flex size-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">1</span>
+            <h3 className="mt-2 font-semibold text-white">Research review</h3>
+            <p className="mt-1 text-sm text-zinc-400">Every article is grounded in peer-reviewed research and clinical guidelines.</p>
+          </div>
+          <div>
+            <span className="inline-flex size-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">2</span>
+            <h3 className="mt-2 font-semibold text-white">No rank manipulation</h3>
+            <p className="mt-1 text-sm text-zinc-400">Clinic comparisons are not influenced by affiliate commissions or sponsorships.</p>
+          </div>
+          <div>
+            <span className="inline-flex size-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">3</span>
+            <h3 className="mt-2 font-semibold text-white">Citations included</h3>
+            <p className="mt-1 text-sm text-zinc-400">Key claims link to source studies so you can verify and go deeper.</p>
+          </div>
+          <div>
+            <span className="inline-flex size-8 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">4</span>
+            <h3 className="mt-2 font-semibold text-white">Regular updates</h3>
+            <p className="mt-1 text-sm text-zinc-400">Articles are revised as new evidence emerges or guidelines change.</p>
+          </div>
         </div>
       </section>
 
-      <section className="mt-12 md:mt-14">
-        <h2 className="text-2xl font-bold">Read next</h2>
+      {/* Read next */}
+      <section className="mb-12 md:mb-14">
+        <h2 className="font-[family-name:var(--font-barlow-condensed)] text-2xl font-bold text-white">Read next</h2>
         <div className="mt-5 grid gap-5 md:grid-cols-3">
           {latest.map((article) => (
-            <Card key={article.slug} className="h-full">
+            <Card key={article.slug} className="h-full border-[#222230] bg-[#12121A] shadow-none hover:border-blue-500/40 transition-all">
               <CardHeader className="space-y-3">
-                <CardTitle className="text-base leading-snug">
-                  <Link href={`/blog/${article.slug}`} className="hover:text-primary">
+                <CardTitle className="text-base leading-snug text-white">
+                  <Link href={`/blog/${article.slug}`} className="hover:text-blue-300">
                     {article.title}
                   </Link>
                 </CardTitle>
-                <CardDescription>{article.description}</CardDescription>
+                <CardDescription className="text-zinc-400">{article.description}</CardDescription>
               </CardHeader>
-              <CardContent className="mt-auto flex items-center gap-2 text-xs text-muted-foreground">
-                <BadgeCheck className="size-4" />
-                {article.readTime} · {article.category}
+              <CardContent className="mt-auto flex items-center gap-2 text-xs text-zinc-500">
+                <BadgeCheck className="size-4 text-blue-400" />
+                {article.readTime} &middot; {article.category}
               </CardContent>
             </Card>
           ))}
         </div>
       </section>
 
-      <DisclosureNotice variant="both" title="Medical + Affiliate Disclosure" />
+      <DisclosureNotice variant="both" title="Disclosure" />
       <NewsletterSignup formId="home-newsletter-email" />
     </>
   );
