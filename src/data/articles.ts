@@ -22,6 +22,7 @@ import { trtAndAcneArticle } from "./trtAndAcne";
 import { testosteroneAndPornArticle } from "./testosteroneAndPorn";
 import { trtAndVaricoceleArticle } from "./trtAndVaricocele";
 import { trtAndWaterRetentionArticle } from "./trtAndWaterRetention";
+import { testosteroneAndNightSweatsArticle } from "./testosteroneAndNightSweats";
 
 export type BlogArticle = {
   slug: string;
@@ -22302,13 +22303,13 @@ Zinc appears to support normal GnRH pulsatility and LH receptor signaling. Zinc-
 export const siteUrl = "https://shotfreetrt.com";
 
 export function getAllArticles(): BlogArticle[] {
-  return [...articles, trtBloodDonationArticle, trtAndSsriArticle, trtAndOpioidsArticle, trtAndStatinsArticle, trtAndGlp1Article, trtBloodTestCostArticle, testosteroneAndMetforminArticle, trtAndFinasterideArticle, testosteroneAndAnemiaArticle, trtClinicsByStateArticle, testosteroneAndDopamineArticle, trtForBodybuildersArticle, trtAndBuprenorphineArticle, testosteroneBoostingFoodsArticle, testosteroneAndCaffeineArticle, testosteroneAndKetoArticle, testosteroneAndSoyArticle, testosteroneAndVitaminB12Article, doesTrtCauseInfertilityArticle, trtAndAcneArticle, testosteroneAndPornArticle, trtAndVaricoceleArticle, trtAndWaterRetentionArticle].sort(
+  return [...articles, trtBloodDonationArticle, trtAndSsriArticle, trtAndOpioidsArticle, trtAndStatinsArticle, trtAndGlp1Article, trtBloodTestCostArticle, testosteroneAndMetforminArticle, trtAndFinasterideArticle, testosteroneAndAnemiaArticle, trtClinicsByStateArticle, testosteroneAndDopamineArticle, trtForBodybuildersArticle, trtAndBuprenorphineArticle, testosteroneBoostingFoodsArticle, testosteroneAndCaffeineArticle, testosteroneAndKetoArticle, testosteroneAndSoyArticle, testosteroneAndVitaminB12Article, doesTrtCauseInfertilityArticle, trtAndAcneArticle, testosteroneAndPornArticle, trtAndVaricoceleArticle, trtAndWaterRetentionArticle, testosteroneAndNightSweatsArticle].sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 }
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
-  return [...articles, trtBloodDonationArticle, trtAndSsriArticle, trtAndOpioidsArticle, trtAndStatinsArticle, trtAndGlp1Article, trtBloodTestCostArticle, testosteroneAndMetforminArticle, trtAndFinasterideArticle, testosteroneAndAnemiaArticle, trtClinicsByStateArticle, testosteroneAndDopamineArticle, trtForBodybuildersArticle, trtAndBuprenorphineArticle, testosteroneBoostingFoodsArticle, testosteroneAndCaffeineArticle, testosteroneAndKetoArticle, testosteroneAndSoyArticle, testosteroneAndVitaminB12Article, doesTrtCauseInfertilityArticle, trtAndAcneArticle, testosteroneAndPornArticle, trtAndVaricoceleArticle, trtAndWaterRetentionArticle].find((article) => article.slug === slug);
+  return [...articles, trtBloodDonationArticle, trtAndSsriArticle, trtAndOpioidsArticle, trtAndStatinsArticle, trtAndGlp1Article, trtBloodTestCostArticle, testosteroneAndMetforminArticle, trtAndFinasterideArticle, testosteroneAndAnemiaArticle, trtClinicsByStateArticle, testosteroneAndDopamineArticle, trtForBodybuildersArticle, trtAndBuprenorphineArticle, testosteroneBoostingFoodsArticle, testosteroneAndCaffeineArticle, testosteroneAndKetoArticle, testosteroneAndSoyArticle, testosteroneAndVitaminB12Article, doesTrtCauseInfertilityArticle, trtAndAcneArticle, testosteroneAndPornArticle, trtAndVaricoceleArticle, trtAndWaterRetentionArticle, testosteroneAndNightSweatsArticle].find((article) => article.slug === slug);
 }
 
 export function getRelatedArticles(slug: string, limit = 3): BlogArticle[] {
