@@ -22308,7 +22308,7 @@ export function getAllArticles(): BlogArticle[] {
 }
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
-  return [...articles, trtBloodDonationArticle, trtAndSsriArticle, trtAndOpioidsArticle, trtAndStatinsArticle, trtAndGlp1Article, trtBloodTestCostArticle, testosteroneAndMetforminArticle, trtAndFinasterideArticle, testosteroneAndAnemiaArticle, trtClinicsByStateArticle, testosteroneAndDopamineArticle, trtForBodybuildersArticle, trtAndBuprenorphineArticle, testosteroneBoostingFoodsArticle, testosteroneAndCaffeineArticle, testosteroneAndKetoArticle, testosteroneAndSoyArticle, testosteroneAndVitaminB12Article, doesTrtCauseInfertilityArticle, trtAndAcneArticle, testosteroneAndPornArticle, trtAndVaricoceleArticle].find((article) => article.slug === slug);
+  return [...articles, trtBloodDonationArticle, trtAndSsriArticle, trtAndOpioidsArticle, trtAndStatinsArticle, trtAndGlp1Article, trtBloodTestCostArticle, testosteroneAndMetforminArticle, trtAndFinasterideArticle, testosteroneAndAnemiaArticle, trtClinicsByStateArticle, testosteroneAndDopamineArticle, trtForBodybuildersArticle, trtAndBuprenorphineArticle, testosteroneBoostingFoodsArticle, testosteroneAndCaffeineArticle, testosteroneAndKetoArticle, testosteroneAndSoyArticle, testosteroneAndVitaminB12Article, doesTrtCauseInfertilityArticle, trtAndAcneArticle, testosteroneAndPornArticle, trtAndVaricoceleArticle, trtAndWaterRetentionArticle].find((article) => article.slug === slug);
 }
 
 export function getRelatedArticles(slug: string, limit = 3): BlogArticle[] {
