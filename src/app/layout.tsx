@@ -57,6 +57,7 @@ const navItems = [
   { href: "/quiz/healthspan/advanced", label: "AI Plan" },
   { href: "/start-here", label: "Start Here" },
   { href: "/resources", label: "Resources" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/blog", label: "Blog" }
 ];
 
@@ -101,6 +102,7 @@ export default function RootLayout({
             <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-6 text-sm text-zinc-500 sm:px-6">
               <p>&copy; {new Date().getFullYear()} ShotFreeTRT &mdash; no injection-first bias.</p>
               <p>Educational content only. Always confirm treatment decisions with a licensed clinician.</p>
+              <p className="flex flex-wrap gap-3"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/pricing">Pricing</Link></p>
             </div>
           </footer>
           <GoogleAnalytics />

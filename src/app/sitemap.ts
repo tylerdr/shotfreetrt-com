@@ -33,6 +33,42 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9
+    },
+    {
+      url: `${siteUrl}/pricing`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9
+    },
+    {
+      url: `${siteUrl}/quiz/healthspan`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95
+    },
+    {
+      url: `${siteUrl}/quiz/healthspan/advanced`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.95
+    },
+    {
+      url: `${siteUrl}/guides/longevity-blueprint`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.85
+    },
+    {
+      url: `${siteUrl}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3
+    },
+    {
+      url: `${siteUrl}/terms`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3
     }
   ];
 
