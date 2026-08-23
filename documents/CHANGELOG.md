@@ -2,6 +2,23 @@
 
 *Append-only, newest first. Never edit old entries.*
 
+## 2026-08-23 — verified paid Blueprint delivery and commerce measurement (Codex session)
+
+**Branch:** feature/portfolio-commerce-search-20260823 (not deployed)
+**Tyler's prompt:** "I've gotten a couple sales on alive longevity and peaked labs please review both and protocl rank and other sites with buy buttons and ensure they are optimized for real value add and revenue optimization to drive conversion and use marketing best practices and are agent-native using the vercel tool to check sites. then review these and praxium landing to see why peaked labs and other are driving so much more meaningful searhc impressions than praxium landing and make all optimized for SEO/AEO/GEO end-to-end and conversion with proper usage, analytics and tracking setup for each and the full google system properly wired."
+
+**Shipped in this lane:**
+- Paid asset protection: request-order redirect/proxy for both legacy PDF URLs plus a Node download route with Stripe session, price, product, amount, currency, and quantity verification.
+- Server-verified success state with noindex/nofollow metadata; no download link is rendered for unverified sessions.
+- Sanitized first-touch attribution envelope in Stripe metadata/client reference ID, without PII.
+- GA4/first-party `begin_checkout`, verified `purchase`, and download events with transaction/value/currency/item fields.
+- Removed stale SearchAction schema and direct PDF Link prefetch; changed Blueprint promotion from free framing to $19 paid framing.
+- Added `scripts/verify-growth-readiness.mjs` and `npm run verify:growth`.
+
+**Verification:** `npm run verify:growth` passed; `npm run build` passed. Existing `npm run lint` script fails before linting because `next lint` is not supported by this Next 16 setup. No live checkout, external settings, deploy, or production write was performed.
+
+**Follow-up:** configure Stripe/GA4 production env, run an approved purchase/refund/download check after deploy, and consider a Stripe webhook ledger for durable fulfillment reconciliation.
+
 ---
 
 ## 2026-03-31 — testosterone-and-anemia article shipped (Codex session)

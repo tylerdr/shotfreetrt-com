@@ -1,7 +1,7 @@
 # shotfreetrt.com — Product Spec
 
-**Last updated:** 2026-03-31 (session: testosterone-and-anemia content ship)
-**Version:** 0.1
+**Last updated:** 2026-08-23 (session: verified paid Blueprint delivery)
+**Version:** 0.2
 
 ---
 
@@ -30,6 +30,17 @@ Men roughly 35-55 who are performance-minded, care about energy/libido/body comp
   - [ ] Article pages consistently funnel qualified readers into the quiz
 - **Status:** active
 
+### Feature 3: Paid Longevity Blueprint delivery
+- **Description:** A $19 digital guide sold through Stripe Checkout and released only after server-side verification of a completed payment for the expected product and price.
+- **Acceptance criteria:**
+  - [x] Legacy public PDF URLs redirect before static-file handling.
+  - [x] Node download route verifies session status, payment status, price, product, currency, and quantity.
+  - [x] Success page is non-indexable and renders a download link only for a verified session.
+  - [x] Checkout attribution is sanitized and contains no PII.
+  - [x] GA4 and first-party commerce events are semantically separated for checkout start, verified purchase, and download.
+  - [ ] Production env, real purchase/refund, and live analytics ingestion are verified.
+- **Status:** code-ready; not live from this session.
+
 ## Non-Goals
 What we're explicitly NOT building in this phase:
 - Full EMR or patient management tooling
@@ -45,6 +56,7 @@ What we're explicitly NOT building in this phase:
 ## Open Questions
 Unresolved product decisions. Agents should NOT unilaterally resolve these.
 - [ ] OQ001: How should GSC/indexing feedback be incorporated into the article backlog prioritization loop?
+- [ ] OQ002: Is a Stripe webhook-backed fulfillment ledger required for reconciliation beyond session verification?
 
 ## Scope Additions Log
 *Verbatim or close-paraphrase of Tyler's scope changes, not yet incorporated above.*
@@ -52,3 +64,4 @@ Unresolved product decisions. Agents should NOT unilaterally resolve these.
 | Date | Input | Status |
 |------|-------|--------|
 | 2026-03-31 | "Wire a new article into the shotfreetrt.com production site and deploy it." | incorporated |
+| 2026-08-23 | Portfolio commerce/search review: treat the Blueprint as paid, secure delivery behind Stripe verification, add attribution and event semantics, and remove stale search markup. | code-ready; production/account gates pending |

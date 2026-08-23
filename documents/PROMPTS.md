@@ -1318,3 +1318,14 @@ openclaw system event --text 'Done: wired 24 TRT articles into articles.ts, buil
 **Spec impact:** [Did this update SPEC.md? Which section?]
 
 ---
+
+## 2026-08-23 — Cross-site commerce, conversion, and search optimization
+
+**Tyler's exact words:**
+> I've gotten a couple sales on alive longevity and peaked labs please review both and protocl rank and other sites with buy buttons and ensure they are optimized for real value add and revenue optimization to drive conversion and use marketing best practices and are agent-native using the vercel tool to check sites. then review these and praxium landing to see why peaked labs and other are driving so much more meaningful searhc impressions than praxium landing and make all optimized for SEO/AEO/GEO end-to-end and conversion with proper usage, analytics and tracking setup for each and the full google system properly wired.
+
+**Context:** Portfolio-wide review covering every repository with an explicit `BuyButton` component plus Praxium landing; work is isolated per repository and production/account mutations remain approval-gated.
+**Action taken:** Pending audit and implementation on `feature/portfolio-commerce-search-20260823`.
+**Spec impact:** Pending evidence; expected to refine the article-to-purchase funnel, measurement, and technical-discovery criteria.
+
+---

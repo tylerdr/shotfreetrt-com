@@ -1,42 +1,35 @@
 # Session Handoff
 
-*Overwritten at the end of each coding session. If this file is current, start here.*
-
-**Session date:** 2026-03-31
+**Session date:** 2026-08-23
 **Agent:** Codex
-**Branch:** feature/design-overhaul-light-theme
-**Status:** complete
+**Branch:** feature/portfolio-commerce-search-20260823
+**Status:** code-ready; not deployed
 
----
+## Completed
 
-## What was completed this session
-- [x] Added `src/data/testosteroneAndAnemia.ts` with the full article body, visible FAQ, metadata, and internal links.
-- [x] Registered the article in `src/data/articles.ts` so the route statically generates.
-- [x] Ran `npm run build` successfully and deployed production via Vercel.
-- [x] Verified `https://shotfreetrt.com/blog/testosterone-and-anemia` returned HTTP 200.
+- Legacy public PDF URLs are blocked by request-order redirects and `src/proxy.ts`.
+- Paid fulfillment now uses `/api/download/longevity-blueprint` in the Node runtime and verifies a completed, paid Stripe session, the fixed $19 price, product name, currency, and single quantity before reading the PDF.
+- The success page is server-verified, has `noindex,nofollow` metadata, and exposes no download on missing/invalid/unpaid sessions.
+- Checkout captures a sanitized first-touch attribution envelope in Stripe metadata and a non-PII client reference ID.
+- GA4 and first-party events distinguish `begin_checkout`, verified `purchase`, and download; purchase tracking is rendered only after server verification.
+- Removed the stale SearchAction markup and the direct Next `Link` to a PDF. The Blueprint promotion now presents the product as a $19 paid guide.
+- Added `npm run verify:growth` deterministic commerce/search readiness checks.
 
-## Pick up here (priority order)
-- [ ] Review the live article for final editorial QA and internal-link placement.
-- [ ] Continue the next SEO article from the content backlog after the current design-overhaul work stabilizes.
+## Verification
 
-## Important context for next session
-- The repo is intentionally dirty with unrelated design-overhaul work; do not assume a clean branch.
-- Imported article modules are included through `getAllArticles()` and `getArticleBySlug()`, not by inserting them into the main `articles` array body.
-- `faqItems` only feeds FAQ schema on the blog page; visible FAQ content must live inside `content` as HTML.
-- This production deploy came from the current local branch state, not a new git push.
+- `npm run verify:growth` passed.
+- `npm run build` passed; Next reported the new dynamic checkout/download/success routes and proxy.
+- `npm run lint` remains unavailable because this repo's existing `next lint` script is incompatible with Next 16 (`Invalid project directory .../lint`).
+- `npx tsc --noEmit` was started but interrupted while the parent task was being finalized; `next build` completed with this repo's configured type-validation skip.
 
-## Decisions made this session
-- No new ADR. Followed the existing imported-article pattern for new long-form content files.
+## Required production gates
 
-## Tech debt created this session
-- None created directly by this article ship.
+- Set `STRIPE_SECRET_KEY` and verify the configured Stripe price belongs to the expected product. Set `STRIPE_BLUEPRINT_PRODUCT_ID` when the live product ID is confirmed.
+- Set `NEXT_PUBLIC_SITE_URL` to the approved canonical origin if it differs from `https://shotfreetrt.com`.
+- Configure GA4 measurement ID and confirm first-party analytics ingestion; no account settings or production deploy was changed in this session.
+- Run an approved real purchase/refund/download verification after deployment. No live checkout or payment was created here.
 
-## Files changed this session
-- `src/data/testosteroneAndAnemia.ts` (new article)
-- `src/data/articles.ts` (article registration)
-- `documents/PROMPTS.md` (prompt capture)
-- `documents/PLAN-testosterone-and-anemia-2026-03-31.md` (execution plan)
-- `documents/HANDOFF.md` (session handoff)
-- `documents/CHANGELOG.md` (shipment log)
-- `documents/BACKLOG.md` (next work)
-- `documents/SPEC.md` (scope log)
+## Next work
+
+- Review the draft diff, merge through the normal PR gate, deploy only with explicit approval, then verify both legacy PDF paths redirect and the authenticated download returns the private headers.
+- Add a Stripe webhook/fulfillment ledger if durable post-payment reconciliation is required beyond session verification.
