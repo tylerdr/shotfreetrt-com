@@ -9,6 +9,7 @@
 - [ ] T003: Wire Google Search Console / indexing visibility so article velocity can be measured `HIGH`
 - [ ] T006: Deploy and perform an approved real Stripe purchase/refund/dispute/download verification for the Blueprint `CRITICAL`
 - [ ] T007: Confirm production GA4 measurement ID and first-party event ingestion across checkout, purchase, and download `HIGH`
+- [ ] T008: Add idempotent migration/RPC for first-party commerce ingestion before enabling `SERVER_COMMERCE_INGESTION_READY` `CRITICAL`
 
 ## Next Up
 - [ ] T004: Publish the next diagnostic content piece after the current design-overhaul changes settle

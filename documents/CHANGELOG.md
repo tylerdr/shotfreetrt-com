@@ -34,6 +34,17 @@
 
 **Follow-up:** configure `ENTITLEMENT_SIGNING_SECRET`, run approved paid/refund/dispute/download probes, and confirm GA4 plus first-party `download_success` ingestion.
 
+## 2026-08-23 — browser-bound checkout state and fail-closed commerce ingestion (Codex follow-up)
+
+**Shipped:**
+- Added a signed HttpOnly browser state nonce issued before checkout creation, bound into Stripe metadata, and consumed by the success exchange.
+- Replaced recoverable entitlement payloads with AES-GCM encrypted, signed tokens requiring a minimum 32-byte signing/encryption secret.
+- Disabled GA automatic pageviews in favor of explicit pathname-only events and removed uncontrolled `utm_term`/`utm_content` attribution.
+- Restricted attribution to allowlisted source/medium/referrer values; free-form campaign values are discarded.
+- Removed non-idempotent first-party client purchase ingestion. Server commerce ingestion is now fail-closed behind `SERVER_COMMERCE_INGESTION_READY` until a migration-backed idempotent path exists.
+
+**Verification:** `npm run verify:growth`, filtered changed-file `npx tsc --noEmit`, `node --check scripts/verify-growth-readiness.mjs`, `git diff --check`, and `npm run build` passed. Full typecheck retains pre-existing article-shape errors outside this lane. No live checkout, external setting, or deployment was performed.
+
 ---
 
 ## 2026-03-31 — testosterone-and-anemia article shipped (Codex session)
