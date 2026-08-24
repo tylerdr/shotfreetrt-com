@@ -36,10 +36,10 @@ Men roughly 35-55 who are performance-minded, care about energy/libido/body comp
   - [x] Legacy public PDF URLs redirect before static-file handling.
   - [x] Node download route verifies session status, payment status, PaymentIntent success, price, product, currency, quantity, refund, and dispute state.
   - [x] Success page is non-indexable and renders a download link only for a verified session.
-  - [x] A browser-bound signed state nonce is issued before session creation and consumed at the success exchange.
+  - [x] A browser-bound signed state nonce is issued before session creation and consumed only after successful entitlement issuance at the success exchange; failed exchanges remain retryable.
   - [x] Raw Checkout Session IDs are exchanged server-side for a short-lived AES-GCM encrypted/signed HttpOnly entitlement cookie and never reused in browser URLs or analytics.
   - [x] Checkout attribution is sanitized and contains no PII.
-  - [x] GA4 and first-party commerce events are semantically separated for checkout start, verified purchase, download click, and server-recorded download success; URLs/query strings are sanitized and pageviews are explicit pathname-only events.
+  - [x] GA4 and first-party commerce events are semantically separated for checkout start, verified purchase, download click, and server-recorded download success; query strings are sanitized and pageviews are explicit origin-plus-pathname events.
   - [x] First-party server commerce ingestion is fail-closed behind `SERVER_COMMERCE_INGESTION_READY` until an idempotent migration/RPC exists.
   - [ ] Production env, real purchase/refund, and live analytics ingestion are verified.
 - **Status:** code-ready; not live from this session.

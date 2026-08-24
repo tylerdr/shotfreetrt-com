@@ -9,9 +9,9 @@
 
 - Legacy public PDF URLs are blocked by request-order redirects and `src/proxy.ts`.
 - Paid fulfillment now uses `/api/download/longevity-blueprint` in the Node runtime and verifies a completed, paid Stripe session, the fixed $19 price, product name, currency, single quantity, successful PaymentIntent, and charge refund/dispute state before reading the PDF.
-- Checkout now issues a browser-bound signed state nonce before Stripe session creation; the success exchange requires and consumes that state before redirecting cleanly. The entitlement cookie is AES-GCM encrypted, signed, short-lived, HttpOnly, and never contains a recoverable/plaintext Stripe session ID. The success page is server-verified, has `noindex,nofollow` metadata, and exposes no download on missing/invalid/unpaid/refunded/disputed sessions.
+- Checkout now issues a browser-bound signed state nonce before Stripe session creation; the success exchange requires that state, consumes it only after entitlement issuance succeeds, and redirects cleanly. Failed/unpaid/transient exchanges remain retryable. The entitlement cookie is AES-GCM encrypted, signed, short-lived, HttpOnly, and never contains a recoverable/plaintext Stripe session ID. The success page is server-verified, has `noindex,nofollow` metadata, and exposes no download on missing/invalid/unpaid/refunded/disputed sessions.
 - Checkout captures a sanitized first-touch attribution envelope in Stripe metadata and a non-PII client reference ID.
-- GA4 and first-party events distinguish `begin_checkout`, verified `purchase`, `download_click`, and server-recorded `download_success`; purchase tracking uses a non-authorizing HMAC order token, queues until gtag is ready, emits pathname-only explicit pageviews, and strips query/full URL data.
+- GA4 and first-party events distinguish `begin_checkout`, verified `purchase`, `download_click`, and server-recorded `download_success`; purchase tracking uses a non-authorizing HMAC order token, queues until gtag is ready, emits explicit query-free origin+pathname pageviews, and strips uncontrolled/query data.
 - Removed the stale SearchAction markup and the direct Next `Link` to a PDF. The Blueprint promotion now presents the product as a $19 paid guide.
 - Added `npm run verify:growth` deterministic commerce/search readiness checks.
 

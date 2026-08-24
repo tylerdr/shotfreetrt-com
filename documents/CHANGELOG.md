@@ -45,6 +45,14 @@
 
 **Verification:** `npm run verify:growth`, filtered changed-file `npx tsc --noEmit`, `node --check scripts/verify-growth-readiness.mjs`, `git diff --check`, and `npm run build` passed. Full typecheck retains pre-existing article-shape errors outside this lane. No live checkout, external setting, or deployment was performed.
 
+## 2026-08-23 — retry-safe checkout state and explicit GA location (Codex follow-up)
+
+**Shipped:**
+- Checkout-state cookies are consumed only after a verified entitlement cookie is successfully issued, so unpaid or transient Stripe failures remain retryable.
+- GA4 explicit pageviews now include `page_path` plus query-free `page_location` (`origin + pathname`) while automatic pageviews remain disabled.
+
+**Verification:** `npm run verify:growth`, changed-file TypeScript filter, `node --check scripts/verify-growth-readiness.mjs`, `git diff --check`, and `npm run build` passed. No deployment or external changes were made.
+
 ---
 
 ## 2026-03-31 — testosterone-and-anemia article shipped (Codex session)
