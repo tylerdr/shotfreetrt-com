@@ -34,10 +34,11 @@ Men roughly 35-55 who are performance-minded, care about energy/libido/body comp
 - **Description:** A $19 digital guide sold through Stripe Checkout and released only after server-side verification of a completed payment for the expected product and price.
 - **Acceptance criteria:**
   - [x] Legacy public PDF URLs redirect before static-file handling.
-  - [x] Node download route verifies session status, payment status, price, product, currency, and quantity.
+  - [x] Node download route verifies session status, payment status, PaymentIntent success, price, product, currency, quantity, refund, and dispute state.
   - [x] Success page is non-indexable and renders a download link only for a verified session.
+  - [x] Raw Checkout Session IDs are exchanged server-side for a short-lived signed HttpOnly entitlement cookie and never reused in browser URLs or analytics.
   - [x] Checkout attribution is sanitized and contains no PII.
-  - [x] GA4 and first-party commerce events are semantically separated for checkout start, verified purchase, and download.
+  - [x] GA4 and first-party commerce events are semantically separated for checkout start, verified purchase, download click, and server-recorded download success; URLs/query strings are sanitized.
   - [ ] Production env, real purchase/refund, and live analytics ingestion are verified.
 - **Status:** code-ready; not live from this session.
 

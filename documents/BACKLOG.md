@@ -7,7 +7,7 @@
 ## Active Sprint
 - [ ] T002: Verify live article rendering and on-page polish for `/blog/testosterone-and-anemia` `HIGH`
 - [ ] T003: Wire Google Search Console / indexing visibility so article velocity can be measured `HIGH`
-- [ ] T006: Deploy and perform an approved real Stripe purchase/refund/download verification for the Blueprint `CRITICAL`
+- [ ] T006: Deploy and perform an approved real Stripe purchase/refund/dispute/download verification for the Blueprint `CRITICAL`
 - [ ] T007: Confirm production GA4 measurement ID and first-party event ingestion across checkout, purchase, and download `HIGH`
 
 ## Next Up
@@ -16,7 +16,7 @@
 
 ## Tech Debt
 - [ ] TD001: The repo still carries unrelated local design-overhaul changes on this branch, which increases deployment ambiguity
-- [ ] TD002: Add a Stripe webhook/fulfillment ledger if session-only verification is insufficient for reconciliation
+- [ ] TD002: Add a Stripe webhook/fulfillment ledger if session revalidation is insufficient for reconciliation
 - [ ] TD003: Replace the stale `next lint` script with the repository's supported ESLint command for Next 16
 
 ## Open Questions (blocking work)

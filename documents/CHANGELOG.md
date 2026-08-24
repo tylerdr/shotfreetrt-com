@@ -19,6 +19,21 @@
 
 **Follow-up:** configure Stripe/GA4 production env, run an approved purchase/refund/download check after deploy, and consider a Stripe webhook ledger for durable fulfillment reconciliation.
 
+## 2026-08-23 — entitlement and analytics hardening (Codex follow-up)
+
+**Branch:** feature/portfolio-commerce-search-20260823 (not deployed)
+
+**Shipped:**
+- Added a server-side Stripe success exchange that consumes the raw Checkout Session ID, sets a signed short-lived HttpOnly entitlement cookie, and redirects to a clean success URL.
+- Removed Checkout Session IDs from download links, page URLs after exchange, GA4/Supabase payloads, and purchase transaction IDs; analytics uses a non-authorizing HMAC order token.
+- Revalidated PaymentIntent success plus all listed charge refund/dispute state before fulfillment; added fail-closed behavior for incomplete charge pagination.
+- Added server-side `download_success` recording after the PDF response is constructed; client event is explicitly `download_click`.
+- Queued GA4 events until gtag is ready, sanitized analytics paths/metadata, bounded attribution without invalid JSON truncation, and aligned privacy copy.
+
+**Verification:** `npm run verify:growth`, `node --check scripts/verify-growth-readiness.mjs`, `git diff --check`, and `npm run build` passed. A full `npx tsc --noEmit` still reports pre-existing `src/data/articles.ts` shape errors; no errors were reported in the changed commerce/analytics files when filtered. No live checkout, external setting, or deployment was performed.
+
+**Follow-up:** configure `ENTITLEMENT_SIGNING_SECRET`, run approved paid/refund/dispute/download probes, and confirm GA4 plus first-party `download_success` ingestion.
+
 ---
 
 ## 2026-03-31 — testosterone-and-anemia article shipped (Codex session)
