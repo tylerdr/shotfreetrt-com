@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import BlogContent from "@/components/BlogContent";
 import { DisclosureNotice } from "@/components/DisclosureNotice";
-import NewsletterSignup from "@/components/NewsletterSignup";
+import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { getAllArticles } from "@/data/articles";
 
 export const metadata: Metadata = {
@@ -29,13 +29,13 @@ export default function BlogIndexPage() {
           bloodwork interpretation, and hormone health.
         </p>
         <p className="mt-2 text-sm text-zinc-500">
-          New reader? Start with our{" "}
+          New reader?{" "}
           <Link href="/start-here" className="text-blue-400 underline hover:text-blue-300">
-            quickstart guide
+            Start here
           </Link>{" "}
-          or browse{" "}
-          <Link href="/resources" className="text-blue-400 underline hover:text-blue-300">
-            vetted tools
+          or take the{" "}
+          <Link href="/quiz/healthspan" className="text-blue-400 underline hover:text-blue-300">
+            free decision quiz
           </Link>
           .
         </p>
@@ -44,10 +44,7 @@ export default function BlogIndexPage() {
       <BlogContent posts={posts} />
 
       <DisclosureNotice variant="medical" />
-      <NewsletterSignup
-        formId="blog-listing-email"
-        buttonLabel="Get weekly protocols"
-      />
+      <NewsletterCTA />
     </>
   );
 }

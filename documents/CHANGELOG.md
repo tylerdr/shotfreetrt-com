@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-09-17 — Deterministic decision quiz, trust/privacy fixes, batch2 images, baseline gate repair (Claude Code)
+
+**Branch:** feat/shotfreetrt-trust-conversion-20260917 (draft PR against main; not merged)
+
+**Shipped:**
+- Rebuilt the TRT decision quiz from scratch as a deterministic, non-clinical funnel: 6 questions (intent, testing stage, fertility priority, route preference, cost clarity, timing), an in-memory-only `DecisionQuizEngine`, and a `DecisionBrief` result (situation summary, prioritized checklist with reasons, reading paths, print/save-as-PDF). Retired the old heuristic scorer (numeric "TRT candidacy score," "Roast Me" mode, lab-input "advanced" quiz) — deleted the API route, engine components, and lib modules that produced it. `/quiz`, `/quiz/healthspan/advanced`, and `/quiz/healthspan/result/[shareId]` all still resolve (redirect into the real quiz); `/quiz/healthspan` now renders it.
+- Made the homepage quiz-first (primary CTA) with the free decision guide as secondary; wired contextual quiz links into the blog template, blog listing, resources, and start-here pages.
+- Made the "local-only" privacy promise on `/quiz/*` and `/decision-guide` actually true: both the custom Supabase pageview tracker and Google Analytics now skip those paths entirely, including the automatic first-load GA pageview.
+- Newsletter capture now fails closed: `/api/newsletter` no longer writes to disk and no longer fakes a success response; it always returns 503 with a link to the real free guide. Removed the dead `<form action="#">` newsletter component in favor of a real CTA link.
+- Removed the misleading "$19" purchase framing for the Longevity Blueprint guide, whose PDF was already public with no real payment gate; deleted the unused BuyButton/checkout/Stripe code path rather than leaving it half-wired.
+- Corrected `/about`, `/start-here`, and `/resources` from a generic "healthspan"/"7-day natural T quickstart" scope to the actual decision-first product, and added one verified contextual reference each to PeakedLabs and AliveLongevity per the brand brief's cross-site linking policy.
+- Integrated the 7 approved batch2 illustrations (resize/format only, via `sharp`; masters kept outside the repo) into the home hero, decision-guide, resources, pricing, and two blog articles — provisional pending root's cleaner replacement batch.
+- Repaired the real baseline: removed `next.config.mjs`'s `ignoreBuildErrors`, fixed the single typo (`readingTime`→`readTime`) that was cascading into ~80 spurious type errors across `src/data/articles.ts`, replaced the no-longer-existent `next lint` with a working `eslint` setup, corrected the OG image's declared dimensions to match the real file, and added a print stylesheet. `tsc --noEmit`, `eslint .`, and `next build` all pass clean; 39/39 tests pass (19 pre-existing + 20 new).
+
+**Verification:** see `documents/HANDOFF.md` for exact commands and output.
+
+**Follow-up:** browser/mobile/print QA (no browser access in this session), root's cleaner image batch swap, root's commerce/infrastructure audit before any email/payment provider is re-enabled.
+
 ## 2026-09-17 — Google Search Console verification metadata (Codex orchestrator)
 
 **Branch:** fix/gsc-site-verification-20260917 (scoped PR; not merged)

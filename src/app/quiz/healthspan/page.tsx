@@ -1,29 +1,33 @@
 import type { Metadata } from "next";
 
-import { QuizEngine } from "@/components/quiz/QuizEngine";
+import { DecisionQuizEngine } from "@/components/quiz/DecisionQuizEngine";
 
 export const metadata: Metadata = {
-  title: "TRT Quiz: Lifestyle, SERM, or Needle-Free TRT?",
+  title: "TRT Decision Quiz: Get Your Personalized Decision Brief",
   description:
-    "Take the ShotFreeTRT quiz to see whether you should focus on lifestyle optimization first, explore a fertility-aware SERM path, or discuss oral/topical TRT with a clinician.",
+    "Answer 6 quick questions about your situation, testing stage, fertility priorities, delivery preference, cost clarity, and timing. Get a personalized checklist and reading list. No labs, no diagnosis, no treatment score.",
   alternates: {
     canonical: "/quiz/healthspan"
   }
 };
 
-export default function HealthspanQuizPage() {
+export default function DecisionQuizPage() {
   return (
-    <>
-      <section className="hero">
-        <h1>Should You Fix Lifestyle First, Consider a SERM, or Discuss TRT?</h1>
-        <p>
-          This TRT-focused quiz looks at symptoms, fertility goals, sleep, waist-driven metabolic drag,
-          training, stress, and lab context. The result is built to recommend lifestyle optimization first
-          where it matters — then rank SERM vs oral/topical TRT fit.
+    <div className="mx-auto max-w-3xl space-y-8">
+      <section className="space-y-3">
+        <p className="text-sm font-semibold uppercase tracking-widest text-primary">
+          Free · 6 questions · No account
+        </p>
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">
+          Get your TRT Decision Brief.
+        </h1>
+        <p className="max-w-2xl text-lg text-muted-foreground">
+          Six quick questions about your situation, not your symptoms or labs.
+          The result is a personalized checklist and reading list — not a
+          diagnosis, an eligibility score, or a treatment recommendation.
         </p>
       </section>
-
-      <QuizEngine />
-    </>
+      <DecisionQuizEngine />
+    </div>
   );
 }

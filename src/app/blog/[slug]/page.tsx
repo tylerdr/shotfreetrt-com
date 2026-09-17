@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -6,6 +7,7 @@ import { DisclosureNotice } from "@/components/DisclosureNotice";
 import GuidePromoBanner from "@/components/GuidePromoBanner";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { RelatedLinks } from "@/components/RelatedLinks";
+import { articleHeroImages } from "@/data/articleHeroImages";
 import { getAllArticles, getArticleBySlug, siteUrl } from "@/data/articles";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -68,6 +70,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     notFound();
   }
 
+  const heroImage = articleHeroImages[article.slug];
   const articleUrl = `${siteUrl}/blog/${article.slug}`;
   const wordCount = article.content
     ? Math.ceil(article.content.length / 5)
@@ -159,13 +162,31 @@ export default async function BlogPostPage({ params }: PageProps) {
         </h1>
         <p className="mt-3 text-base leading-7 text-zinc-400">{article.description}</p>
         <p className="mt-2 text-sm text-zinc-500">
-          Estimate your baseline first with the{" "}
+          Not sure what applies to you? Take the{" "}
           <Link href="/quiz/healthspan" className="text-blue-400 underline hover:text-blue-300">
-            Healthspan Quiz
+            free 2-minute decision quiz
+          </Link>{" "}
+          or use the{" "}
+          <Link href="/decision-guide" className="text-blue-400 underline hover:text-blue-300">
+            decision guide and quote calculator
           </Link>
           .
         </p>
       </div>
+
+      {heroImage ? (
+        <figure className="mb-8">
+          <Image
+            src={heroImage.src}
+            alt=""
+            width={heroImage.width}
+            height={heroImage.height}
+            sizes="(min-width: 768px) 700px, 100vw"
+            className="w-full rounded-xl border border-[#222230]"
+          />
+          <figcaption className="mt-2 text-xs text-zinc-500">{heroImage.caption}</figcaption>
+        </figure>
+      ) : null}
 
       {/* Keyword badges */}
       <div className="mb-8 flex flex-wrap gap-2" aria-label="Article topics">
@@ -210,10 +231,8 @@ export default async function BlogPostPage({ params }: PageProps) {
       <DisclosureNotice variant="medical" />
       <RelatedLinks slug={article.slug} />
       <NewsletterCTA
-        title="Want this level of detail every week?"
-        description="Subscribe for actionable TRT and testosterone optimization briefs with safety notes and implementation checkpoints."
-        buttonLabel="Send weekly brief"
-        formId={`article-${article.slug}-email`}
+        title="Preparing to see a clinician?"
+        description="Use the free decision guide for appointment questions and a written-quote comparison calculator before you commit."
       />
     </article>
   );

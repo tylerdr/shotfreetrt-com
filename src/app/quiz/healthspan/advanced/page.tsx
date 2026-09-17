@@ -1,29 +1,10 @@
-import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
-import { AdvancedQuizEngine } from "@/components/quiz/AdvancedQuizEngine";
-
-export const metadata: Metadata = {
-  title: "Advanced TRT Assessment",
-  description:
-    "Go deeper with lab-aware TRT assessment logic: total/free T, LH/FSH, prolactin, TSH, HbA1c, hematocrit, PSA, fertility context, and sleep-apnea follow-up.",
-  alternates: {
-    canonical: "/quiz/healthspan/advanced"
-  }
-};
-
-export default function AdvancedHealthspanQuizPage() {
-  return (
-    <>
-      <section className="hero">
-        <h1>Advanced TRT Assessment</h1>
-        <p>
-          This version uses your intro answers, then layers in labs, fertility context, and root-cause
-          workup signals so the result can better separate lifestyle-first, SERM, oral/topical TRT, and
-          “you need a better workup first.”
-        </p>
-      </section>
-
-      <AdvancedQuizEngine />
-    </>
-  );
+// The previous "advanced" quiz collected lab values (total/free T, LH, FSH,
+// prolactin, TSH, hematocrit, PSA) and scored them into a treatment-path
+// recommendation. That is a diagnostic function this site does not perform.
+// This URL stays live and redirects into the real, deterministic 6-question
+// decision quiz instead of collecting lab values.
+export default function AdvancedHealthspanQuizRedirectPage() {
+  redirect("/quiz/healthspan");
 }

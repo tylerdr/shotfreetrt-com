@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { DisclosureNotice } from "@/components/DisclosureNotice";
@@ -6,74 +7,40 @@ import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-type Option = {
+type Pathway = {
   title: string;
   category: string;
   summary: string;
-  fertility: string;
-  route: string;
-  caveat: string;
   href: string;
 };
 
-const pathways: Option[] = [
+const pathways: Pathway[] = [
   {
-    title: "Maximus-style enclomiphene programs",
-    category: "SERM / fertility-aware",
+    title: "Enclomiphene / SERM discussion",
+    category: "Fertility-aware",
     summary:
-      "Telemed pathway often used by men who want to stimulate endogenous signaling before exogenous testosterone.",
-    fertility: "Commonly positioned as fertility-preserving for selected patients",
-    route: "Oral capsules",
-    caveat:
-      "Response variability is real. Requires clinician oversight and follow-up labs.",
-    href: "/quiz/healthspan/advanced"
+      "A route some men discuss with a clinician when preserving fertility is a near-term goal.",
+    href: "/blog/enclomiphene-vs-trt"
   },
   {
-    title: "Needle-free topical testosterone clinics",
-    category: "Exogenous testosterone",
+    title: "Oral or topical TRT",
+    category: "Needle-free exogenous testosterone",
     summary:
-      "Gel/cream pathways for men avoiding injections but still choosing testosterone replacement.",
-    fertility: "May suppress fertility; discuss preservation planning upfront",
-    route: "Topical",
-    caveat:
-      "Transfer risk and dose consistency require strict protocol compliance.",
-    href: "/start-here"
+      "Still replacement testosterone. Compare absorption, transfer risk, and monitoring against injections.",
+    href: "/blog/testosterone-gel-vs-injections"
   },
   {
-    title: "Oral testosterone providers",
-    category: "Exogenous testosterone",
-    summary:
-      "Needle-free TRT option with fast symptom response for some men.",
-    fertility: "Typically similar suppression concerns to other TRT forms",
-    route: "Oral",
-    caveat:
-      "Lipid/liver and broader safety monitoring must be part of the plan.",
-    href: "/about"
-  }
-];
-
-const stack = [
-  {
-    name: "Creatine monohydrate",
-    why: "Supports strength progression and lean mass retention during natural optimization phases.",
-    href: "/start-here"
-  },
-  {
-    name: "Magnesium glycinate",
-    why: "Useful for sleep quality support when bedtime routine and caffeine timing are dialed.",
-    href: "/start-here"
-  },
-  {
-    name: "Omega-3",
-    why: "May support cardiometabolic markers while body-composition and diet protocols are running.",
-    href: "/start-here"
+    title: "Other TRT alternatives",
+    category: "Broader comparison",
+    summary: "A wider look at options beyond a single delivery route.",
+    href: "/blog/trt-alternatives"
   }
 ];
 
 export const metadata: Metadata = {
   title: "Resources",
   description:
-    "Compare fertility-preserving and needle-free testosterone pathways, telemed options, and practical stack recommendations.",
+    "Compare TRT pathways, understand what clinic quotes actually include, and get a personalized decision brief.",
   alternates: {
     canonical: "/resources"
   }
@@ -82,16 +49,29 @@ export const metadata: Metadata = {
 export default function ResourcesPage() {
   return (
     <>
-      <h1 className="page-title">Resource Stack: Natural First, Then Smart Escalation</h1>
+      <h1 className="page-title">Resources: Compare Pathways, Then Decide</h1>
       <p className="page-subtitle">
-        Start with behavior + biomarkers. If you still need a bigger hormonal push, use this page to
-        compare fertility-aware options, oral/topical TRT pathways, and practical support tools.
+        These are educational starting points, not a ranking or an
+        endorsement. Confirm every clinical and pricing detail directly with
+        a provider or clinician.
       </p>
 
-      <DisclosureNotice variant="both" title="Medical + FTC Notice" />
+      <DisclosureNotice variant="medical" title="Medical Notice" />
+
+      <figure className="mt-8">
+        <Image
+          src="/media/sft-web-batch2-02.webp"
+          alt=""
+          width={960}
+          height={640}
+          sizes="(min-width: 768px) 700px, 100vw"
+          className="w-full rounded-xl border border-border"
+        />
+        <figcaption className="mt-2 text-xs text-muted-foreground">Editorial illustration referencing comparison and reading paths — decorative, not a clinical diagram.</figcaption>
+      </figure>
 
       <section className="mt-8">
-        <h2 className="text-2xl font-bold">Telemed and therapy pathways</h2>
+        <h2 className="text-2xl font-bold">Compare pathways</h2>
         <div className="mt-4 grid gap-4 md:grid-cols-3">
           {pathways.map((option) => (
             <Card key={option.title} className="h-full">
@@ -102,41 +82,9 @@ export default function ResourcesPage() {
                 <CardTitle className="text-lg leading-snug">{option.title}</CardTitle>
                 <CardDescription>{option.summary}</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-2 text-sm text-muted-foreground">
-                <p>
-                  <strong className="text-foreground">Fertility:</strong> {option.fertility}
-                </p>
-                <p>
-                  <strong className="text-foreground">Route:</strong> {option.route}
-                </p>
-                <p>
-                  <strong className="text-foreground">Watchout:</strong> {option.caveat}
-                </p>
-                <Button asChild variant="outline" className="mt-2 w-full">
-                  <Link href={option.href} rel="sponsored noopener noreferrer" target="_blank">
-                    Compare pathway
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section className="mt-10">
-        <h2 className="text-2xl font-bold">Core support stack</h2>
-        <div className="mt-4 grid gap-4 md:grid-cols-3">
-          {stack.map((item) => (
-            <Card key={item.name}>
-              <CardHeader>
-                <CardTitle className="text-base">{item.name}</CardTitle>
-                <CardDescription>{item.why}</CardDescription>
-              </CardHeader>
               <CardContent>
-                <Button asChild variant="ghost" className="px-0">
-                  <Link href={item.href} rel="sponsored noopener noreferrer" target="_blank">
-                    Explore guidance →
-                  </Link>
+                <Button asChild variant="outline" className="w-full">
+                  <Link href={option.href}>Read the comparison</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -145,27 +93,36 @@ export default function ResourcesPage() {
       </section>
 
       <section className="mt-10 rounded-xl border border-border bg-card p-6">
-        <h2 className="text-xl font-semibold">Next step: AI-personalized protocol</h2>
+        <h2 className="text-xl font-semibold">Get your numbers right</h2>
         <p className="mt-2 text-muted-foreground">
-          Don’t guess. Run the advanced quiz, get your AI action plan, then decide if lifestyle,
-          enclomiphene-style support, or needle-free TRT deserves a clinician conversation.
+          See <Link href="/pricing">dated provider price examples</Link> on
+          ShotFreeTRT, or read PeakedLabs&apos;{" "}
+          <a href="https://peakedlabs.com/blog/how-much-does-trt-cost" rel="noreferrer">
+            TRT cost and hidden-fee breakdown
+          </a>{" "}
+          for a second, independent look at what clinics typically charge.
+        </p>
+      </section>
+
+      <section className="mt-10 rounded-xl border border-border bg-card p-6">
+        <h2 className="text-xl font-semibold">Not sure which lane applies to you?</h2>
+        <p className="mt-2 text-muted-foreground">
+          Take the free decision quiz for a personalized checklist and
+          reading list based on your situation, testing stage, fertility
+          priorities, delivery preference, cost clarity, and timing. It is
+          not a diagnosis or a treatment recommendation.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <Button asChild>
-            <Link href="/quiz/healthspan/advanced">Run Advanced Quiz</Link>
+            <Link href="/quiz/healthspan">Take the decision quiz</Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/start-here">Start 7-Day Protocol</Link>
+            <Link href="/decision-guide">Open the decision guide</Link>
           </Button>
         </div>
       </section>
 
-      <NewsletterCTA
-        title="Get weekly Shot-Free TRT updates"
-        description="Every week: one actionable protocol, one lab lens, one smart escalation insight."
-        buttonLabel="Join the weekly brief"
-        formId="resources-newsletter-email"
-      />
+      <NewsletterCTA />
     </>
   );
 }

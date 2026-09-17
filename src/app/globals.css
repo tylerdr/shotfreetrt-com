@@ -1185,3 +1185,46 @@ footer {
     padding: 7px 8px;
   }
 }
+
+/*
+ * Printing the decision guide, quote calculator, or quiz decision brief
+ * should produce a legible, ink-friendly page: white background, black
+ * text, no dark card backgrounds that clip or hide values, no decorative
+ * chrome. Elements marked print:hidden (nav, header, buttons) are already
+ * removed by Tailwind's print variant; this covers the remaining surfaces.
+ */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  main {
+    max-width: none !important;
+  }
+
+  .card,
+  [data-slot="card"],
+  section {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border-color: #CCCCCC !important;
+    box-shadow: none !important;
+  }
+
+  .text-muted-foreground,
+  [class*="text-zinc-"],
+  [class*="text-blue-"] {
+    color: #1A1A1A !important;
+  }
+
+  a {
+    color: #000000 !important;
+    text-decoration: underline !important;
+  }
+
+  img,
+  svg:not([role="img"]) {
+    display: none !important;
+  }
+}

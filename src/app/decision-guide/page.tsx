@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import QuotePlanner from "@/components/QuotePlanner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +20,17 @@ export default function DecisionGuidePage() {
       <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl">Arrive with better questions.<br />Not an AI prescription.</h1>
       <p className="max-w-3xl text-lg text-muted-foreground">Use the same questions with every clinician, then compare the written costs. This guide does not select a treatment, interpret your labs, or assess whether you qualify for TRT.</p>
       <p className="text-sm text-muted-foreground">Education for adults. Do not start, stop, or change prescribed treatment based on this page.</p>
+      <figure className="print:hidden">
+        <Image
+          src="/media/sft-web-batch2-04.webp"
+          alt=""
+          width={960}
+          height={640}
+          sizes="(min-width: 768px) 700px, 100vw"
+          className="w-full rounded-xl border border-[#222230]"
+        />
+        <figcaption className="mt-2 text-xs text-muted-foreground">Editorial illustration referencing the decision-guide process — decorative, not a clinical diagram.</figcaption>
+      </figure>
     </section>
     <Card>
       <CardHeader><CardTitle>Your appointment checklist</CardTitle></CardHeader>

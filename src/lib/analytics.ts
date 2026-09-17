@@ -3,6 +3,16 @@ const SUPABASE_URL = "https://mfzxaxzozqiehbwlfmcd.supabase.co";
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1menhheHpvenFpZWhid2xmbWNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1OTAyMzgsImV4cCI6MjA4ODE2NjIzOH0.aTrWd0kIxdU6d38A5gi28Ofq8OXiCZd-QrmS1Pm7Iyw";
 
+/**
+ * The decision quiz and decision guide promise that nothing entered stays
+ * only in the browser. To keep that promise literally true, these paths are
+ * exempt from all page-view and click analytics (both the Supabase tracker
+ * below and Google Analytics).
+ */
+export function isAnalyticsExemptPath(pathname: string): boolean {
+  return pathname.startsWith("/quiz") || pathname.startsWith("/decision-guide");
+}
+
 export type AnalyticsEvent = {
   event_type: string;
   page_url?: string;

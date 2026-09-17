@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://shotfreetrt.com"),
   title: { default: "ShotFreeTRT | Understand Your Options Before You Commit", template: "%s | ShotFreeTRT" },
   description: "Understand testosterone treatment options, compare clinic costs, and prepare questions for your clinician. Education, not prescriptions.",
-  openGraph: { type: "website", title: "ShotFreeTRT", description: "Compare options. Understand costs. Prepare for your clinician visit.", url: "https://shotfreetrt.com", siteName: "ShotFreeTRT", images: [{ url: "/og-shotfreetrt.png", width: 1200, height: 630 }] },
+  openGraph: { type: "website", title: "ShotFreeTRT", description: "Compare options. Understand costs. Prepare for your clinician visit.", url: "https://shotfreetrt.com", siteName: "ShotFreeTRT", images: [{ url: "/og-shotfreetrt.png", width: 1024, height: 1024 }] },
   twitter: { card: "summary_large_image", title: "ShotFreeTRT | Compare Before You Commit", description: "Free decision guide and clinic-cost worksheet. Education, not prescriptions.", images: ["/og-shotfreetrt.png"] },
   icons: { icon: "/favicon.png", shortcut: "/favicon.png", apple: "/favicon.png" },
   verification: { google: "eFS_GYPi2qp4xAw2BQ1BEaj0aA8-X5NpuY8rxCfKmpU" },

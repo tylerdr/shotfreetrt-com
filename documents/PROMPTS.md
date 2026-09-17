@@ -5,6 +5,40 @@
 
 ---
 
+## 2026-09-17 22:47 UTC
+
+**Tyler's exact words:**
+> Important user correction supersedes your prior instruction to retire quiz: "Quiz funnels are killer so we should keep a quiz funnel ideally, in addition to whatever lead magnets make sense. it can be for a recommendation or report or whatever makes sense, either deterministic or using AI to generate the result based on the quiz. But please ensure everything is conversion optimized and ready for revenue and scale."
+Resume from existing edits, do NOT discard other work. Root interrupted only to steer this correction. Preserve completed lint/trust/media fixes. RootGSCverifiedowner+sitemapSuccess170pages.
+Build a real highquality short quiz funnel now, deterministic is correct unless existing configuredAI can be proven. Use e.g. 6 concise multiple-choice questions to understand visitor intent, testing stage, fertility conversation priority, route questions, cost clarity, and next-step timing. Avoid collecting numericlabs/diagnosing or treatmenteligibility. Progress, backbutton, keyboardmobileaccessible, answerpersistenceonly incomponentmemory, no mandatoryemailwall. Clear personalized result: Your TRT Decision Brief with transparent reasons tied toanswers, prioritized questions/checklist, selected educationalreading paths, relevant quoteplannerCTA. Route preferences inform what toread/ask—not prescribedtreatment. Useful detailed onpage report and print/savePDF via printstyles, restart/editanswers. Copy truthfully personalized/deterministic—notAI. Funnel should retain /quiz/healthspan and /quiz/healthspan/advanced as functioning entry URLs/canonical redirects appropriately; nodeadlegacyresultlinks, nofakeclinicalscore. New authoredquiz canreplaceunsafeoldcode youremoved.
+Revenue funnel: HomeprimaryCTA quiz, secondaryfreeguide; resultprimary action appropriate decisionguide/comparecosts + downloadable/printableleadmagnet. ContextualCTA on relevantarticles. Optionalemail delivery ONLY if actual durableprovider configured/testable; doNOTimplement fakeform or claimdelivered withoutacceptedresponse. Never transmit quizanswers/labhealthdetails toanalyticsoremail. Removeanalytics injection/events onquiz/report/decisionguide screens so local-onlypromise istrue. Keepmail/purchasegates honest; rootparallelcommerceaudit checks availableinfrastructure. Prepare secure purchaseflow onlywith existing authorizedprice/productandfulfillment verification, noinventedbusinesscommitment. We need deliverusableconversionfunnel thisturn, notjustplan.
+Rootreviewnotes read ../release-review-notes.txt. ImagesnewcleanbatchgeneratedWEBrootwillharvest; useexisting7 provisionallyandawaitreplacement. PreservePR8features/sourcepricing. Fixbaselinegates, focusedbehavioraltests include quizbranching/back/completion/requiredanswers/nohealthscore/privacy + quote/math + endpointgates. Build/typecheck/lint, commit, NEWdraftPR; nomerge/deploy. Returnexactsession/head/testreport. Singlewriter; nootheragentsmaywriteapp. Completeboundedimplementationnow, no endlessbroadresearch.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-17 22:28 UTC
+
+**Tyler's exact words:**
+> You are the single Claude Code implementation writer for ShotFreeTRT. User explicitly requested orchestration through Claude and ChatGPT WEB, images integrated, site updates completed and GSC working. Work ONLY in current isolated worktree feat/shotfreetrt-trust-conversion-20260917. Other agents exist: never overwrite their edits or touch canonical dirty August checkout. Base includes researched PR8 from ChatGPT WEB; preserve its decision-guide, quote planner, source-backed pricing and proposal gates. Root orchestrator handles merge/deploy/browser. You may commit and open a draft PR but NEVER merge/deploy, change credentials/billing, send communications or enable purchases.
+Read CLAUDE.md and required docs, append user prompt to documents/PROMPTS.md first. Then implement bounded complete release:
+1. Integrate seven existing ChatGPT WEB illustrations from /Users/td/Documents/Codex/2026-09-17/own-drugfreetrt-com-candidate-source-repository/outputs/shotfreetrt-assets/batch2/sft-web-batch2-{01,02,04,05,06,08,09}.png. They are RGBA transparent outside soft artistic vignette; reviewer approves decorative use on existing dark ink backgrounds. Do not claim clinical diagrams or perfect halo removal. DO NOT use03,07,10. No image editing/cropping/background manipulation viaPython or other scripts; resizing/format optimization using sharp is authorized for responsive web delivery. Preserve masters outside repo, integrate webp underpublic/media. Match brief outputs/shotfreetrt-brand-brief.md. Home hero01, decisionguide04, resources02, pricing05, relevant sleep article06, healthhabitsarticle08, planning/guide09. Meaningful captions without medical claims or emptyalt if purelydecorative; width/height/sizes, no huge payloads. Track provenance in docs.
+2. Keep PR8 consumer education direction. Correct old About/Start Here to same scope. Add relevant contextual editorial references to VERIFIED actual PeakedLabs and AliveLongevity articles/tools; no linkfarm/no medicalproof using sisterblogs. Known destinations https://peakedlabs.com/blog/how-much-does-trt-cost and https://alivelongevity.com/protocol (verifyHTTPandtitle). Preserve articleURLs/no bulknoindex.
+3. Remove unsupported AI language, precise TRT candidacy score, Roast Me and treatment recommendation presentation from legacy quiz routes. Prefer retire misleading legacy UI in favor of real decision-guide/clinician-preparation route with clear navigation, rather than build a new medical algorithm. Retire unused quiz API safely if appropriate with focused tests; do not expose heuristic scores asvalidated. Avoid broadmedicalcorpusrewrite.
+4. Newsletter has no durable backend; replace misleading signup/delivery promises with useful guideCTA and failclosed API (no filesystemsubscriber writes, nofake success). Existing paidguide fulfillment not verified: disable new purchasecreation unless all actual validatedreadinessgates; remove misleading $19 promises/paid-access claim if staticPDF stillpublic. Do not delete legacyPDF assets or enableStripe/Supabase/providers. Ensure no inert buttons or deadforms. Audit affected CTAs.
+5. Correct OGdeclared dimensions torealfile dimensions or actualmatchingasset; fixmissinglogo reference with existing validlogo. Preserve exactGSCverificationtoken. Keep honest sitemaplastmod fromPR8. GSCrootalready verifiedowner andsitemapSuccess170pages Sept17.
+6. Repair broken Next16 lintscript and preexistingarticle TypeScript shape errors narrowly if feasible so real lint/typecheck/build pass; do not weakenchecks or blanketany. Tests mustbehaviorallyverify quote math, retiredquiz, newsletter/purchase failclosed. Run build, lint,typecheck,focusedtests and gitdiffcheck. No fakepassing underignoreBuildErrors; reportbaseline gaps preciselyifcannotfix.
+7. Requiredhandoffdocs plusprovenance; commitnormal. Open NEWdraftPR againstmain (includesPR8 ancestry) using bodyfile and disclose relationship. RootwillmergePR8 thenretarget/rebaseifneeded. Need exacthead, tests, changedfiles, previewURL and remainingrisks. Do not spend time broadresearch or generatedtext; execute highestvalueboundedpatch now. You may use Read/Write/Edit/Bash, no browser; root owns browser. Report tostdout conciseJSON result atcompletion.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
 ## 2026-09-17 — ShotFreeTRT growth, research, assets, and GSC setup
 
 **Tyler's exact words:**

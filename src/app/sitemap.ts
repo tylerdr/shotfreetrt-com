@@ -4,7 +4,7 @@ import { getAllArticles, siteUrl } from "@/data/articles";
 export default function sitemap(): MetadataRoute.Sitemap {
   // Do not manufacture fresh modification times on every build. Only dates
   // backed by an actual content change are supplied. Pilot remains noindex.
-  const paths = ["", "/about", "/start-here", "/resources", "/blog", "/pricing", "/decision-guide", "/quiz/healthspan", "/quiz/healthspan/advanced", "/guides/longevity-blueprint", "/privacy", "/terms"];
+  const paths = ["", "/about", "/start-here", "/resources", "/blog", "/pricing", "/decision-guide", "/quiz/healthspan", "/guides/longevity-blueprint", "/privacy", "/terms"];
   const revised = new Set(["", "/pricing", "/decision-guide"]);
   const staticPages: MetadataRoute.Sitemap = paths.map((path) => ({
     url: `${siteUrl}${path}`,

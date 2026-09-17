@@ -6,7 +6,8 @@ export const trtAndStatinsArticle: BlogArticle = {
   description:
     "Yes — statins and TRT are commonly co-prescribed. But the combination requires understanding: statin myopathy risk, testosterone's liver metabolism, HDL implications, and how to monitor both safely.",
   publishedAt: "2026-03-29",
-  readingTime: "12 min read",
+  author: "ShotFreeTRT Editorial Team",
+  readTime: "12 min read",
   category: "protocol",
   keywords: [
     "TRT and statins",
@@ -16,6 +17,7 @@ export const trtAndStatinsArticle: BlogArticle = {
     "TRT cardiovascular risk",
     "statins and testosterone",
   ],
+  sections: [],
   content: `
 <p>Statins are among the most commonly prescribed drugs in the world. If you're a man in your 40s or 50s evaluating TRT, there's a meaningful chance your doctor has already recommended a statin — or will. The question comes up constantly: <strong>can you take testosterone while on a statin?</strong></p>
 <p>The short answer is yes. There is no direct contraindication between statins and TRT. They are routinely co-prescribed. But the combination requires some knowledge — because statins and testosterone share metabolic pathways, create overlapping side effects, and affect lipids in ways that need to be tracked.</p>

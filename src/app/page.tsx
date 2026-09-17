@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ClipboardList, Scale, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -31,12 +32,21 @@ export default function HomePage() {
         <h1 className="font-[family-name:var(--font-barlow-condensed)] text-5xl font-extrabold leading-none tracking-tight sm:text-7xl">Considering TRT?<br /><span className="text-primary">Compare before<br />you commit.</span></h1>
         <p className="max-w-xl text-lg leading-relaxed text-muted-foreground">Prefer to avoid injections? Get clear on the options, the questions that matter, and what a clinic will actually charge—before your next appointment.</p>
         <div className="flex flex-wrap gap-3">
-          <Button asChild size="lg"><Link href="/decision-guide">Open the free decision guide <ArrowRight className="size-4" aria-hidden="true" /></Link></Button>
-          <Button asChild size="lg" variant="outline"><Link href="/pricing">Compare published prices</Link></Button>
+          <Button asChild size="lg"><Link href="/quiz/healthspan">Take the 2-minute decision quiz <ArrowRight className="size-4" aria-hidden="true" /></Link></Button>
+          <Button asChild size="lg" variant="outline"><Link href="/decision-guide">Open the free decision guide</Link></Button>
         </div>
         <p className="text-sm text-muted-foreground">No account. No lab upload. No treatment score. Education, not medical care.</p>
       </div>
-      <Card className="border-primary/40">
+      <Card className="overflow-hidden border-primary/40">
+        <Image
+          src="/media/sft-web-batch2-01.webp"
+          alt=""
+          width={960}
+          height={640}
+          sizes="(min-width: 1024px) 420px, 100vw"
+          priority
+          className="h-auto w-full border-b border-[#222230]"
+        />
         <CardHeader><p className="text-xs font-semibold uppercase tracking-widest text-primary">Inside your free guide</p><CardTitle className="text-2xl">A clearer conversation.<br />A more complete quote.</CardTitle></CardHeader>
         <CardContent className="space-y-5">
           {steps.map(({ icon: Icon, title, text }) => <div key={title} className="flex gap-3"><Icon className="mt-1 size-5 shrink-0 text-primary" aria-hidden="true" /><div><h2 className="font-semibold">{title}</h2><p className="mt-1 text-sm text-muted-foreground">{text}</p></div></div>)}

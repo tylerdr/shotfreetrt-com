@@ -1,7 +1,7 @@
 # shotfreetrt.com — Product Spec
 
 **Last updated:** 2026-09-17
-**Version:** 0.3 — decision-first proposal and draft PR implementation
+**Version:** 0.4 — decision-first proposal, draft PR implementation, and deterministic decision quiz
 
 ## Overview
 
@@ -48,11 +48,18 @@ Paying customer hypothesis: an independent clinic with existing inquiry volume, 
 - No EHR replacement, patient-record ingestion, automatic medical advice, or included traffic acquisition.
 - Status: proposal page only. Noindex and enrollment disabled by default. Written scope, clinical approval, appropriate legal/data review, operational contact destination, delivery and measurement acceptance are required before activation.
 
-### 5. Legacy quiz and commerce
+### 5. Decision quiz (rebuilt 2026-09-17)
 
-- Existing quiz routes, heuristic scoring, checkout, newsletter capture and paid-guide delivery remain in the repository.
-- They are not made safe or production-ready merely by changing homepage navigation. Their specific remediation gates are P0 in the growth plan.
-- No clinical validation of the legacy scoring model or complete payment/fulfillment verification is claimed.
+- Six-question deterministic funnel at `/quiz/healthspan` (canonical; `/quiz` and `/quiz/healthspan/advanced` redirect into it): intent, testing stage, fertility-conversation priority, delivery-route preference, cost clarity, decision timing. No symptoms, no lab values, no diagnosis, no numeric score.
+- Result is a "TRT Decision Brief": a plain-language reflection of the reader's own answers, a prioritized appointment-question checklist with stated reasons, 1-3 reading-path links, and a primary/secondary next action (pricing vs. decision guide). Every output is traceable to a specific answer — this is a rules-based mapping, not a model and not a clinical score.
+- Answers live only in component state; nothing is sent to a server, stored in localStorage/sessionStorage, or included in analytics. `/quiz/*` and `/decision-guide` are exempt from all page-view/click analytics.
+- The previous heuristic scorer (numeric "TRT candidacy score," "Roast Me" mode, a lab-input "advanced" assessment that scored total/free T, LH, FSH, prolactin, TSH, hematocrit, and PSA into a treatment-path recommendation) is retired: its API route, engine components, and lib modules were deleted, not patched. That was a diagnostic function this site does not perform.
+- Status: implemented on this branch; 20 new focused tests plus the 19 existing decision-guide tests pass. Browser/mobile/print QA of the quiz flow remains open (no browser access in this session).
+
+### 6. Newsletter and guide monetization
+
+- Newsletter capture has no durable backend and is designed to fail closed: `/api/newsletter` never persists an address and never reports success (503 always). The UI no longer offers an email-collection form; it links to the free decision guide instead.
+- The Longevity Blueprint PDF is free and publicly downloadable. The previous "$19 purchase" framing (BuyButton → Stripe checkout, never configured with a live key) has been removed rather than left half-wired. No Stripe/Supabase provider is enabled by this change.
 
 ## Non-goals for this phase
 
@@ -77,3 +84,4 @@ Paying customer hypothesis: an independent clinic with existing inquiry volume, 
 | 2026-03-31 | Publish `testosterone-and-anemia` article | Recorded as shipped in prior handoff |
 | 2026-09-17 | Google Search Console verification metadata | PR #7 merged; production ownership/indexing verification still open |
 | 2026-09-17 | Research ICP, offer, distribution, SEO/AEO/GEO, September revenue path; improve funnel and open PR with backlog | Research and draft PR #8 implemented; commercial hypotheses, clinical review and release gates remain open |
+| 2026-09-17 | Rebuild the quiz as a deterministic decision funnel; fix newsletter/purchase honesty; integrate 7 approved images; repair typecheck/lint baseline | Implemented on `feat/shotfreetrt-trust-conversion-20260917`; build/typecheck/lint/tests pass; browser QA and image-batch swap remain open |

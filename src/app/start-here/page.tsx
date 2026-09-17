@@ -3,77 +3,44 @@ import Link from "next/link";
 
 import { DisclosureNotice } from "@/components/DisclosureNotice";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const quickstart = [
+const steps = [
   {
-    day: "Day 1",
-    title: "Set Your Baseline",
-    actions: [
-      "Record body weight, waist circumference, resting heart rate, and blood pressure if available.",
-      "Define one primary 12-week goal: glucose control, blood pressure, sleep quality, or body-composition trend.",
-      "Create a simple tracking note for sleep hours, daily steps, and training completion."
-    ]
+    step: "1",
+    title: "Take the free decision quiz",
+    text: "Six quick questions about your situation, testing stage, fertility priorities, delivery preference, cost clarity, and timing. Get a personalized checklist and reading list in about 2 minutes.",
+    href: "/quiz/healthspan",
+    cta: "Take the quiz"
   },
   {
-    day: "Day 2",
-    title: "Anchor Sleep and Light",
-    actions: [
-      "Choose a consistent wake time for the next 7 days.",
-      "Get morning outdoor light exposure within the first hour after waking.",
-      "Set a caffeine cutoff at least 8 hours before bedtime."
-    ]
+    step: "2",
+    title: "Prepare for your appointment",
+    text: "Use the same written appointment checklist and a two-quote cost calculator before you talk to a clinician or clinic.",
+    href: "/decision-guide",
+    cta: "Open the decision guide"
   },
   {
-    day: "Day 3",
-    title: "Fix Meal Structure",
-    actions: [
-      "Build each meal around protein + fiber before adding refined carbs.",
-      "Pre-plan two repeatable breakfasts and two workday lunches.",
-      "Take a 10-minute walk after your largest meal."
-    ]
+    step: "3",
+    title: "See what clinics actually charge",
+    text: "Compare dated, sourced provider price examples with billing periods, commitments, and exclusions spelled out.",
+    href: "/pricing",
+    cta: "Compare published prices"
   },
   {
-    day: "Day 4",
-    title: "Install Strength Training",
-    actions: [
-      "Complete a 30-40 minute full-body session: squat, hinge, push, pull, carry.",
-      "Use moderate loads and leave 1-3 reps in reserve to manage recovery.",
-      "Schedule your second and third weekly sessions now."
-    ]
-  },
-  {
-    day: "Day 5",
-    title: "Add Zone 2 Cardio",
-    actions: [
-      "Perform 30-45 minutes of Zone 2 cardio at conversational effort.",
-      "Track duration and perceived effort, not perfection.",
-      "Plan at least one additional Zone 2 session for this week."
-    ]
-  },
-  {
-    day: "Day 6",
-    title: "Build Recovery Systems",
-    actions: [
-      "Create a 10-minute evening shutdown routine with low light and no work notifications.",
-      "Limit alcohol near bedtime and keep the bedroom cool and dark.",
-      "Use a two-minute breathing reset during high-stress periods."
-    ]
-  },
-  {
-    day: "Day 7",
-    title: "Review and Lock the Next 30 Days",
-    actions: [
-      "Review your week: adherence, sleep trend, training completion, and energy quality.",
-      "Keep what worked, remove one friction point, and set calendar blocks for next week.",
-      "Pick one article from the blog to deepen your next protocol."
-    ]
+    step: "4",
+    title: "Read the specific question you have",
+    text: "Browse the article library for symptoms, labs, delivery routes, side effects, and monitoring.",
+    href: "/blog",
+    cta: "Browse articles"
   }
 ];
 
 export const metadata: Metadata = {
   title: "Start Here",
   description:
-    "Follow this 7-day testosterone optimization quickstart to install high-return sleep, training, and recovery habits before medication escalation.",
+    "New to ShotFreeTRT? Take the free decision quiz, prepare for your appointment, compare published prices, and find the right article for your question.",
   alternates: {
     canonical: "/start-here"
   }
@@ -82,43 +49,54 @@ export const metadata: Metadata = {
 export default function StartHerePage() {
   return (
     <>
-      <h1 className="page-title">Start Here: 7-Day Natural T Quickstart</h1>
+      <h1 className="page-title">Start Here</h1>
       <p className="page-subtitle">
-        If you want better energy, strength, libido, and focus, use this 7-day setup
-        sprint first. Keep it simple, track objective signals, and avoid changing ten
-        variables at once.
+        New here? These four steps get you to a useful next action fast. None
+        of them require an account, a lab upload, or a health disclosure.
       </p>
 
       <DisclosureNotice variant="medical" title="Medical Disclaimer" />
 
-      <div className="quickstart-grid">
-        {quickstart.map((item) => (
-          <article key={item.day} className="card day-card">
-            <p className="meta" style={{ margin: "0 0 6px" }}>
-              {item.day}
-            </p>
-            <h2 style={{ margin: "0 0 10px" }}>{item.title}</h2>
-            <ul className="checklist">
-              {item.actions.map((action) => (
-                <li key={action}>{action}</li>
-              ))}
-            </ul>
-          </article>
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        {steps.map((item) => (
+          <Card key={item.step}>
+            <CardHeader>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Step {item.step}
+              </p>
+              <CardTitle className="text-lg">{item.title}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-muted-foreground">{item.text}</p>
+              <Button asChild variant="outline">
+                <Link href={item.href}>{item.cta}</Link>
+              </Button>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
-      <p className="page-subtitle" style={{ marginTop: 24 }}>
-        Continue with the <Link href="/resources">Resources</Link> page for
-        tools and supplement options, or go to the <Link href="/blog">Blog</Link>{" "}
-        for detailed deep-dives.
-      </p>
+      <section className="mt-8 rounded-xl border border-border bg-card p-6">
+        <h2 className="text-xl font-semibold">Foundations while you investigate</h2>
+        <p className="mt-2 text-muted-foreground">
+          Sleep, training, and body composition affect symptoms and lab
+          interpretation. See{" "}
+          <Link href="/blog/testosterone-and-energy">testosterone and energy</Link>{" "}
+          and{" "}
+          <Link href="/blog/strength-training-after-40-longevity">
+            strength training after 40
+          </Link>{" "}
+          on ShotFreeTRT. For broader healthspan foundations beyond
+          testosterone specifically, AliveLongevity&apos;s{" "}
+          <a href="https://alivelongevity.com/protocol" rel="noreferrer">
+            minimum-effective longevity protocol
+          </a>{" "}
+          is useful related reading, not a ShotFreeTRT recommendation or
+          affiliated service.
+        </p>
+      </section>
 
-      <NewsletterCTA
-        title="Get the 30-day Longevity Starter Plan"
-        description="Join the email list for a printable checklist, biomarker dashboard, and weekly implementation prompts."
-        buttonLabel="Send my starter plan"
-        formId="start-here-newsletter-email"
-      />
+      <NewsletterCTA />
     </>
   );
 }

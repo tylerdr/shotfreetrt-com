@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 
-import { BuyButton } from "@/components/BuyButton";
-import { NewsletterCTA } from "@/components/NewsletterCTA";
+import { Button } from "@/components/ui/button";
 
 const tocItems = [
   "The Science of Longevity in 2026",
@@ -54,14 +54,14 @@ const faqs = [
 export const metadata: Metadata = {
   title: "Longevity Blueprint Guide",
   description:
-    "The Longevity Blueprint (2026 Edition): a premium $19 evidence-based guide on exercise, nutrition, sleep, recovery, advanced interventions, and biomarker dashboards.",
+    "The Longevity Blueprint (2026 Edition): a free evidence-based guide on exercise, nutrition, sleep, recovery, advanced interventions, and biomarker dashboards.",
   alternates: {
     canonical: "/guides/longevity-blueprint"
   },
   openGraph: {
     title: "Longevity Blueprint (2026 Edition)",
     description:
-      "Premium longevity guide covering healthspan science, training, nutrition, sleep, advanced interventions, and biomarker systems.",
+      "Free longevity guide covering healthspan science, training, nutrition, sleep, advanced interventions, and biomarker systems.",
     type: "article",
     url: "https://shotfreetrt.com/guides/longevity-blueprint"
   }
@@ -71,24 +71,6 @@ export default function LongevityBlueprintPage() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "Product",
-        name: "The Longevity Blueprint (2026 Edition)",
-        description:
-          "A premium digital longevity guide covering evidence-based exercise, nutrition, sleep, recovery, advanced interventions, and biomarker strategy.",
-        brand: {
-          "@type": "Brand",
-          name: "ShotFreeTRT"
-        },
-        category: "Digital Guide",
-        offers: {
-          "@type": "Offer",
-          price: "19",
-          priceCurrency: "USD",
-          availability: "https://schema.org/InStock",
-          url: "https://shotfreetrt.com/guides/longevity-blueprint"
-        }
-      },
       {
         "@type": "FAQPage",
         mainEntity: faqs.map((faq) => ({
@@ -114,7 +96,7 @@ export default function LongevityBlueprintPage() {
         <p className="guide-badge-row">
           <span className="badge">Digital Guide</span>
           <span className="badge" style={{ background: "#166534", color: "#bbf7d0" }}>
-            Instant Access
+            Free PDF
           </span>
         </p>
         <h1>The Longevity Blueprint (2026 Edition)</h1>
@@ -123,12 +105,24 @@ export default function LongevityBlueprintPage() {
           practical systems across exercise, nutrition, sleep, biomarkers, and
           advanced interventions.
         </p>
-        <div className="guide-price-row">
-          <p className="guide-price" style={{ color: "#22c55e" }}>
-            $19
-          </p>
-        </div>
-        <BuyButton />
+        <Button asChild className="mt-4">
+          <a href="/longevity-blueprint.pdf" target="_blank" rel="noopener noreferrer">
+            Download the free PDF
+          </a>
+        </Button>
+        <figure style={{ marginTop: 20 }}>
+          <Image
+            src="/media/sft-web-batch2-09.webp"
+            alt=""
+            width={960}
+            height={640}
+            sizes="(min-width: 768px) 700px, 100vw"
+            style={{ width: "100%", height: "auto", borderRadius: 12 }}
+          />
+          <figcaption className="meta" style={{ marginTop: 8 }}>
+            Editorial illustration referencing longevity planning — decorative, not a clinical diagram.
+          </figcaption>
+        </figure>
       </section>
 
       <section className="guide-grid" aria-label="Guide details" style={{ marginTop: 24 }}>
@@ -183,12 +177,6 @@ export default function LongevityBlueprintPage() {
         </div>
       </section>
 
-      <NewsletterCTA
-        title="Get the Longevity Blueprint + Updates"
-        description="Buy the guide above, then subscribe for future editions and new longevity research summaries."
-        buttonLabel="Subscribe for updates"
-        formId="longevity-blueprint-guide-email"
-      />
     </>
   );
 }

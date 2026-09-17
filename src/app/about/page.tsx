@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Learn about ShotFreeTRT and our mission to publish practical, evidence-first healthy aging guidance.",
+    "ShotFreeTRT helps adults compare testosterone-treatment options, understand clinic costs, and prepare for a licensed clinician visit. Education, not prescriptions.",
   alternates: {
     canonical: "/about"
   }
@@ -16,36 +17,58 @@ export default function AboutPage() {
     <>
       <h1 className="page-title">About ShotFreeTRT</h1>
       <p className="page-subtitle">
-        ShotFreeTRT exists to make longevity research practical. We translate
-        complex evidence into weekly actions readers can apply immediately.
+        ShotFreeTRT helps adults move from a symptom, lab result, or treatment
+        question to a safer next question. We publish education and
+        comparison tools; we do not diagnose, score treatment eligibility, or
+        recommend an individual medicine or dose.
       </p>
 
       <div className="card-grid">
         <article className="card">
           <h2>Editorial Philosophy</h2>
           <p>
-            We prioritize interventions with human evidence, realistic adherence,
-            and measurable outcomes. Trend-driven shortcuts are excluded.
+            We label the evidence boundary explicitly: established,
+            associated, plausible, or uncertain. We cite primary sources
+            (Endocrine Society, AUA, FDA, NIH/PubMed) for clinical claims and
+            never treat a secondary article as medical proof.
           </p>
         </article>
 
         <article className="card">
           <h2>Who We Serve</h2>
           <p>
-            Professionals, parents, and performance-focused adults who want to
-            increase healthspan while balancing real-world schedules.
+            Adults roughly 35&ndash;55 who are comparing treatment providers or
+            preparing an appointment, often with questions about costs,
+            product differences, or fertility plans.
           </p>
         </article>
 
         <article className="card">
           <h2>How to Use This Site</h2>
           <p>
-            Start with one article, implement one protocol for 4 to 8 weeks,
-            then review progress using objective markers and daily quality of
-            life.
+            Take the free <Link href="/quiz/healthspan">decision quiz</Link>{" "}
+            for a personalized checklist, or go straight to the{" "}
+            <Link href="/decision-guide">decision guide</Link> to prepare
+            appointment questions and compare written clinic quotes. Then
+            browse the <Link href="/blog">articles</Link> for the specific
+            question you have.
           </p>
         </article>
       </div>
+
+      <section className="mt-8 rounded-xl border border-border bg-card p-6">
+        <h2 className="text-xl font-semibold">Beyond testosterone</h2>
+        <p className="mt-2 text-muted-foreground">
+          ShotFreeTRT&apos;s scope is testosterone treatment decisions. For
+          broader healthspan questions &mdash; biomarker tracking, sleep, and
+          training &mdash; AliveLongevity&apos;s{" "}
+          <a href="https://alivelongevity.com/protocol" rel="noreferrer">
+            minimum-effective longevity protocol
+          </a>{" "}
+          is useful related reading, not a ShotFreeTRT recommendation or
+          affiliated service.
+        </p>
+      </section>
 
       <NewsletterCTA />
     </>

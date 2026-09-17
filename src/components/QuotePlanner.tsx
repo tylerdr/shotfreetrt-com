@@ -74,7 +74,7 @@ export default function QuotePlanner() {
       </div>
       {estimates[0] && estimates[1] && <p className="rounded-lg border p-4" role="status">Annualized budget difference: <strong>{formatMoney(Math.abs(estimates[0].annualBudgetCents - estimates[1].annualBudgetCents))}</strong>. A price difference does not mean the treatments, services, or suitability are equivalent.</p>}
       <p className="text-sm text-muted-foreground">Method: monthly charges × 12; 28-day charges × 365 ÷ 28; then add annual extras and one-time fees. This is an annualized budget, not the cash charged in a calendar year or at checkout. Prepayments, renewal dates, taxes, dose changes, and cancellations can change actual bills. Convert longer plans only using their exact written terms.</p>
-      <p className="text-sm text-muted-foreground">This tool calculates entries in this tab; it does not submit them, save them, or include them in a share link. Refreshing clears entries. General site analytics may still record page visits; see the privacy policy. Do not enter identifying or medical information.</p>
+      <p className="text-sm text-muted-foreground">This tool calculates entries in this tab; it does not submit them, save them, or include them in a share link. Refreshing clears entries. This page does not send page-view or click analytics. Do not enter identifying or medical information.</p>
       <div className="flex flex-wrap gap-3 print:hidden">
         <Button type="button" onClick={() => window.print()}>Print my comparison and checklist</Button>
         <Button type="button" variant="outline" onClick={share}>Copy guide link</Button>

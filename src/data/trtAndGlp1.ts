@@ -6,7 +6,8 @@ export const trtAndGlp1Article: BlogArticle = {
   description:
     "Many men have both low testosterone and metabolic dysfunction. Here's what the research actually shows about combining TRT with GLP-1 agonists like Ozempic, Wegovy, and Mounjaro — and how to sequence them correctly.",
   publishedAt: "2026-03-29",
-  readingTime: "14 min read",
+  author: "ShotFreeTRT Editorial Team",
+  readTime: "14 min read",
   category: "protocol",
   keywords: [
     "TRT and Ozempic",
@@ -20,6 +21,7 @@ export const trtAndGlp1Article: BlogArticle = {
     "semaglutide testosterone",
     "TRT and weight loss",
   ],
+  sections: [],
   content: `
 <p>Two of the most searched men's health topics of 2025–2026 are <strong>low testosterone</strong> and <strong>GLP-1 agonists</strong> (Ozempic, Wegovy, Mounjaro, Zepbound). And for good reason: they frequently intersect. Obesity drives testosterone down — visceral fat aromatizes testosterone to estrogen, suppresses LH, and drives insulin resistance that further impairs Leydig cell function. Many men presenting for TRT evaluation are also carrying significant excess weight and are either already on a GLP-1 or considering one.</p>
 
