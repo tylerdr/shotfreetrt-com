@@ -5,7 +5,7 @@
 **Session date:** 2026-09-17
 **Agent:** Codex orchestrator
 **Branch:** fix/gsc-site-verification-20260917
-**Base:** origin/main at a7912bbba85987a9ccbbc026468e590755d93d7b7
+**Base:** origin/main at a7912bbba85987a9ccbbc026468e590755d93b7f
 **Status:** scoped PR prepared; not merged or deployed
 
 ## What was completed this session
@@ -21,7 +21,7 @@
 - `npm run build` passed on Next.js 16.1.6; generated static HTML includes `meta name="google-site-verification"` with the requested token.
 - `git diff --check` passed.
 - `npm run lint` remains blocked by the existing `next lint` script being interpreted as a directory argument by this Next setup.
-- `npx tsc --noEmit` reports existing `src/data/articles.ts` and imported article shape errors outside this change; `src/app/layout.tsx` is not among the reported files.
+- `npx tsc --noEmit` diagnostics match exactly between this head and a detached `origin/main` worktree; all reported article shape errors are in `src/data/articles.ts` and imported article modules, and `src/app/layout.tsx` is not among them.
 
 ## Remaining gates
 

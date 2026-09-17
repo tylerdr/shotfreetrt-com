@@ -8,7 +8,7 @@
 
 **Branch:** fix/gsc-site-verification-20260917 (scoped PR; not merged)
 
-**Shipped:**
+**Prepared:**
 - Added the requested Google Search Console verification token through Next metadata in `src/app/layout.tsx`.
 - Preserved the canonical dirty August commerce and analytics worktree by creating the change from `origin/main` in an isolated worktree.
 
