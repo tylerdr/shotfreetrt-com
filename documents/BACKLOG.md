@@ -6,7 +6,7 @@
 
 ## Active Sprint
 - [ ] T002: Verify live article rendering and on-page polish for `/blog/testosterone-and-anemia` `HIGH`
-- [ ] T003: Wire Google Search Console / indexing visibility so article velocity can be measured `HIGH`
+- [ ] T003: Wire Google Search Console / indexing visibility so article velocity can be measured `HIGH` — verification tag prepared in scoped PR; production verification remains open
 
 ## Next Up
 - [ ] T004: Publish the next diagnostic content piece after the current design-overhaul changes settle
@@ -14,12 +14,16 @@
 
 ## Tech Debt
 - [ ] TD001: The repo still carries unrelated local design-overhaul changes on this branch, which increases deployment ambiguity
+- [ ] TD003: Replace the stale `next lint` script with the repository's supported ESLint command for Next 16
 
 ## Open Questions (blocking work)
 - [ ] OQ001: Should production deploys continue from the current working branch, or should content ships move to isolated article branches? — blocks cleaner release hygiene
 
 ## Open Questions (non-blocking)
 - [ ] OQ002: Should diagnostic-category badges get a dedicated color treatment instead of falling back to the default blog badge style?
+
+## Prepared changes
+- [ ] P001: Review, merge, deploy, and verify the scoped GSC meta-tag PR before completing T003
 
 ## Completed
 - [x] T001: Ship `testosterone-and-anemia` article to production — done 2026-03-31
