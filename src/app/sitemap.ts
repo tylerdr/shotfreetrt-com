@@ -1,83 +1,19 @@
 import type { MetadataRoute } from "next";
-
 import { getAllArticles, siteUrl } from "@/data/articles";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: siteUrl,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1
-    },
-    {
-      url: `${siteUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8
-    },
-    {
-      url: `${siteUrl}/start-here`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.95
-    },
-    {
-      url: `${siteUrl}/resources`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9
-    },
-    {
-      url: `${siteUrl}/blog`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9
-    },
-    {
-      url: `${siteUrl}/pricing`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9
-    },
-    {
-      url: `${siteUrl}/quiz/healthspan`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.95
-    },
-    {
-      url: `${siteUrl}/quiz/healthspan/advanced`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.95
-    },
-    {
-      url: `${siteUrl}/guides/longevity-blueprint`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.85
-    },
-    {
-      url: `${siteUrl}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3
-    },
-    {
-      url: `${siteUrl}/terms`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3
-    }
-  ];
-
-  const articlePages: MetadataRoute.Sitemap = getAllArticles().map((article) => ({
-    url: `${siteUrl}/blog/${article.slug}`,
-    lastModified: new Date(article.updatedAt ?? article.publishedAt),
-    changeFrequency: "monthly",
-    priority: 0.7
+  // Do not manufacture fresh modification times on every build. Only dates
+  // backed by an actual content change are supplied. Pilot remains noindex.
+  const paths = ["", "/about", "/start-here", "/resources", "/blog", "/pricing", "/decision-guide", "/quiz/healthspan", "/quiz/healthspan/advanced", "/guides/longevity-blueprint", "/privacy", "/terms"];
+  const revised = new Set(["", "/pricing", "/decision-guide"]);
+  const staticPages: MetadataRoute.Sitemap = paths.map((path) => ({
+    url: `${siteUrl}${path}`,
+    ...(revised.has(path) ? { lastModified: "2026-09-17" } : {}),
   }));
-
+  const articlePages: MetadataRoute.Sitemap = getAllArticles().map((article) => {
+    const rawDate = article.updatedAt ?? article.publishedAt;
+    const date = new Date(rawDate);
+    return { url: `${siteUrl}/blog/${article.slug}`, ...(Number.isNaN(date.getTime()) ? {} : { lastModified: date }) };
+  });
   return [...staticPages, ...articlePages];
 }
