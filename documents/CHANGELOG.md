@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-09-17 — Google Search Console verification metadata (Codex orchestrator)
+
+**Branch:** fix/gsc-site-verification-20260917 (scoped PR; not merged)
+
+**Shipped:**
+- Added the requested Google Search Console verification token through Next metadata in `src/app/layout.tsx`.
+- Preserved the canonical dirty August commerce and analytics worktree by creating the change from `origin/main` in an isolated worktree.
+
+**Verification:** `npm ci --ignore-scripts`, `npm run build`, generated head inspection, and `git diff --check` passed. The existing `next lint` script fails before linting, and full typecheck retains pre-existing article data shape errors.
+
+**Follow-up:** independently review the PR, merge and deploy through the parent gate, then verify the live head and complete the GSC property action.
+
 ## 2026-03-31 — testosterone-and-anemia article shipped (Codex session)
 
 **Branch:** feature/design-overhaul-light-theme -> deployed locally to production alias

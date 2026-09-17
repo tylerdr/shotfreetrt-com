@@ -5,6 +5,17 @@
 
 ---
 
+## 2026-09-17 — ShotFreeTRT growth, research, assets, and GSC setup
+
+**Tyler's exact words:**
+> Yes it is shotfreetrt, ensure the repo is setup locally, its on google search console and chatgpt web app does deep research to improve and create plan to optimize and monetize it, with separate thread on web app generating all relevant image assets needed for it... before doing so, please review and define a brand identity so images can be cohesive and on brand background-free illustrations, high-quality images, diagrams or other media that is engaging and informative and value added but doesn't look like generic AI images, so find and use good prompts to give it nice aesthetics, generating 10+ at a time with clear instructions. We should ensure it is properly referencing articles from peaked labs, alive longevity and our other sites wehre relevant. But you act as orchestrator not implementor, drive subagents, claude code and chatgpt pro via browser for all the heavy lifting.
+
+**Bounded infrastructure scope added by Tyler's coordinator:**
+> GSC canonical URL property `https://shotfreetrt.com/` now has the authenticated property setup. Add only this exact HTML verification tag in the isolated current-main worktree, preserving any existing verification values: `<meta name="google-site-verification" content="eFS_GYPi2qp4xAw2BQ1BEaj0aA8-X5NpuY8rxCfKmpU" />`. Create a scoped PR with necessary validation. Do not merge, change DNS, add credentials, or expand security access.
+
+
+---
+
 ## 2026-03-31 20:40 UTC
 
 **Tyler's exact words:**

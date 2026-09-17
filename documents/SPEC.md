@@ -1,7 +1,7 @@
 # shotfreetrt.com — Product Spec
 
-**Last updated:** 2026-03-31 (session: testosterone-and-anemia content ship)
-**Version:** 0.1
+**Last updated:** 2026-09-17 (session: GSC verification metadata)
+**Version:** 0.2
 
 ---
 
@@ -52,3 +52,4 @@ Unresolved product decisions. Agents should NOT unilaterally resolve these.
 | Date | Input | Status |
 |------|-------|--------|
 | 2026-03-31 | "Wire a new article into the shotfreetrt.com production site and deploy it." | incorporated |
+| 2026-09-17 | Add the authenticated Google Search Console verification token for `https://shotfreetrt.com/` to the site head. | prepared in scoped PR; deployment and property verification pending |
