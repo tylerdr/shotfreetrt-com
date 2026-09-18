@@ -1,48 +1,54 @@
 # Session Handoff
 
-**Session date:** 2026-09-17 PT  
-**Branch:** `fix/release-identity-copy-drift-20260917`  
-**Base:** `main@ee2b5ca36fde9f4f605687db84170ba466f564e9`  
-**Status:** diagnostic/safety PR only; no production activation.
+**Date:** 2026-09-18  
+**Branch:** `feature/concern-journeys-20260918`  
+**PR:** https://github.com/tylerdr/shotfreetrt-com/pull/13  
+**Base:** `main@205a12ba4ac7650ac2160ec79f135b38ddf97a4d`  
+**Status:** functional application checks pass; draft held for dependency remediation, integrated browser and live-domain acceptance. No paid offer or affiliate activation.
 
-## Production source and deployment evidence
+## Read first
 
-The latest `main` commit is `ee2b5ca36fde9f4f605687db84170ba466f564e9`. Vercel reports production deployment `dpl_9nZFzYSLB7hLctv4jP8Uy9rnZ1ob` READY, target `production`, with aliases `shotfreetrt.com` and `www.shotfreetrt.com`, and metadata bound to that exact Git SHA. Application source is unchanged from the merged decision-first release beneath the documentation-only PR #11 closeout.
+- [Mars audit, adaptations and conversion experiments](MARS-FUNNEL-AUDIT-2026-09-18.md)
+- [Verified application evidence, dependency findings and release/revenue gates](RELEASE-GATES-2026-09-18.md)
+- [Exact user request](PROMPT-MARS-2026-09-18.md)
+- [Earlier copy-drift investigation](LIVE-RELEASE-DRIFT-2026-09-17.md)
+- [Backlog](BACKLOG.md), including preserved prior medical, commercial and indexing obligations
 
-The repository homepage source is the safer decision-first experience: “Considering TRT? Compare before you commit,” no treatment score, no lab upload, and explicit clinician/education boundaries.
+## Implemented
 
-## Newly observed release-integrity uncertainty
+Four distinct public topic guides and four noindex quiz variants reuse the existing six-question decision engine. Entry changes question order, never preselects answers or creates a diagnosis/treatment score. Homepage, navigation and eleven explicitly mapped article slugs lead to the relevant path. Existing approved illustrations, short source-linked lessons, output previews, FAQs, repeated contextual CTAs and a mobile sticky CTA make the pages easier to scan. Card actions were corrected to wrap at narrow grid widths.
 
-A fresh independent public-web fetch of `https://shotfreetrt.com/` on September 17 returned the older pre-release homepage: AI-generated 30-day testosterone plan language, the four-block protocol framing, “Best first move for most guys,” and “EVERY CLAIM SOURCED.” This conflicts with both current repository source and Vercel deployment metadata.
+The result now leads with its next useful action. A separate component receives no answers or concern identifier and provides generic site-link copying and a one-time seven-day calendar-file download. Both are deliberate user actions; no email, appointment, referral record or server-side health record is created.
 
-This is **not yet proof that Vercel origin is serving the wrong build**. The independent fetch may be stale or routed through another cache, and direct origin HTML retrieval was unavailable in this review environment. Do not label it a rollback without origin evidence.
+Topics and quiz variants use the existing analytics-isolated root; answer-dependent links keep `prefetch={false}`. Metadata includes canonical/OG fields, visible/schema breadcrumbs, public-topic sitemap entries, noindex variants, safe JSON and article image/word-count fixes. Existing article bodies remain unchanged; PR #10's source-refreshed articles are not silently merged or medically approved.
 
-See `documents/LIVE-RELEASE-DRIFT-2026-09-17.md` for the evidence boundary and exact reconciliation checklist.
+## Actual test/build receipts
 
-## Current patch
+[CI run 35395430216](https://github.com/tylerdr/shotfreetrt-com/actions/runs/35395430216) tested head `1e6cf20940c64a7236ad60ab27256f87b3561a1b` against main205a:
+- **73/73 tests pass**, zero failures.
+- **Lint passes**, zero errors, one pre-existing warning in `commitlint.config.js`.
+- **Full TypeScript and Next build pass**; **188/188 pages** generated.
+- The obsolete truthiness-source assertion was corrected to validate actual option IDs; a behavioral invalid-answer regression was added.
 
-Commit `13800151e9d9fbecc763feb24c2a9dc18e52a0b3` adds only release-integrity diagnostics and regressions:
+[CI run 35395754890](https://github.com/tylerdr/shotfreetrt-com/actions/runs/35395754890), application job `105764094686`, tested head `55f7df6b1e90bb4bd8ad31be139e5b1eb7e8abf1`. Its test/lint/build step and the additional **rendered-HTML acceptance step both passed**. The latter checks all eleven topic, quiz and worksheet documents, canonical/H1/OG/noindex/sitemap facts, and absence of the GA loader in isolated documents. A CI-only test GA ID makes the comparison non-vacuous by requiring the main root to contain the loader. No browser executes that build and it is not deployed/uploaded.
 
-- `X-ShotFreeTRT-Release` on hosted responses, sourced from `VERCEL_GIT_COMMIT_SHA`;
-- `X-ShotFreeTRT-Copy-Contract: decision-first-v1`;
-- uncached `/api/release` returning the deployed SHA and copy-contract version;
-- source regression coverage that rejects the retired treatment-plan homepage claims.
+Local calendar-export checks passed six cases under UTC and again under America/Los_Angeles. The tested source is byte-identical to blob `1edad86e6b5accfea9ea9112464a6befeff387a1`.
 
-No clinical content, recommendation logic, analytics, payments, email, customer data, domain/DNS setting, cache purge or production deployment is changed by this patch.
+These receipts do **not** establish browser interaction/accessibility, actual live release, clinical review, search indexing or paid fulfillment. Later documentation commits do not change application source, but final merge/deployment must still reference the exact approved head.
 
-After any separately authorized merge/deployment, verify the public custom domains, immutable Vercel deployment, root HTML and `/api/release` all agree before closing the incident.
+## Material release blockers
 
-## Parallel product work
+1. **Dependency baseline:** runtime audit reports eleven affected package entries, including the existing pinned Next.js 16.1.6 with critical advisories. See RELEASE-GATES for applicability limits and the verified 16.3.5 remediation candidate. No exploit or compromise was demonstrated. No blind force-upgrade or uncommitted lockfile substitution was performed. Functional CI success is not security clearance.
+2. **Live-domain identity:** PR #12 really merged to main205a and Vercel lists its READY production-target deployment `dpl_CVDbyuwHkZBwmLZ21LSqEkvbGtRz`. A subsequent domain lookup still returned older production `dpl_9nZFzYSLB7hLctv4jP8Uy9rnZ1ob` at `ee2b5ca36fde9f4f605687db84170ba466f564e9`. This discrepancy is not reconciled. The new PR13 journeys are not claimed live.
+3. **Integrated browser checks:** full mobile/keyboard/back/edit/restart/clipboard/download/print and real network inspection remain open. Vercel build-log/deploy actions returned tool-not-found; preview share URL generation failed. No remote browser result is claimed.
+4. **Commercial path:** no accepted ShotFreeTRT-specific paid offer or signed affiliate terms were established. A narrow live Stripe name search found no `ShotFree` products; that is not an exhaustive alias audit. The earlier dossier and clinic-pilot ideas remain proposals. No payment, email or referral/commission path is enabled here.
 
-Draft PR #10 (`feature/evidence-guides-roadmap-20260917`, head `34bfdba5a66ff93a8a5530a5f96a37b14f43dfb6`) remains a separate content-review lane. It refreshes three guides with primary sources and has its own release gates. Do not fold this diagnostic patch into that stacked clinical/editorial work or treat PR #10 as approved because this patch exists.
+## Next agent-owned execution
 
-## Remaining gates
+First resolve the dependency baseline with an actual committed lockfile and rerun acceptance. Then verify integrated browser behavior and reconcile the approved immutable deployment, root/www aliases, release headers and `/api/release`. `scripts/verify-production-funnel.mjs <approved-merge-sha>` is a reusable HTTP-only acceptance check; no successful production receipt from it is claimed.
 
-- Clinical/editorial triage of the remaining high-risk legacy article corpus is still open.
-- Clinic pilot scope, reviewer responsibility, legal/data safeguards and acceptance/refund terms remain unapproved.
-- Revenue, durable email and payment activation remain gated; no paid demand or fulfilled commerce is proven.
-- Public release/copy discrepancy remains open until origin-identifying evidence passes the checklist above.
+Before combining #10 and #13, reconcile their overlapping article-template and sitemap changes explicitly, preserving both the researched content catalog and contextual journey CTAs. Keep prior legacy-medical-content review requirements.
 
-## Control-plane note
+Prepare the exact paid deliverable or partner arrangement, approval, terms, disclosures, fulfillment/refund tests and support owner before commercial activation. Do not assign routine operations to Tyler or treat a quiz completion as revenue.
 
-This repository records implementation evidence only. Venture thesis, experiment, review coverage and commercial actuals belong in Amble. The scheduled review environment did not expose the Amble Sprinter MCP, so no canonical review receipt or coverage advancement is claimed here.
+Amble discovery returned no accessible connector. Roadmap/experiment reconciliation is pending; no accepted thesis write, task dispatch or canonical execution receipt is fabricated. Prior recorded Search Console ownership and sitemap submission are preserved; this session obtained no new ranking, traffic or indexing-performance dataset.

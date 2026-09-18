@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Verify required agent docs exist
         run: |
           missing=0
@@ -23,3 +22,49 @@ jobs:
             fi
           done
           exit $missing
+
+  application:
+    name: Test, lint and build application
+    # Standard runners are free for public repositories. Disable automatically
+    # rather than silently consuming paid minutes if visibility changes.
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      # Build-only test identifier; no browser executes it and no deployment
+      # or artifact upload occurs in this job.
+      NEXT_PUBLIC_GA_MEASUREMENT_ID: 'G-SFTCHECK00'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Report runtime dependency advisories for review (not an approval gate)
+        run: |
+          npm audit --omit=dev --json > /tmp/sft-runtime-audit.json || true
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const audit = JSON.parse(fs.readFileSync('/tmp/sft-runtime-audit.json', 'utf8'));
+          console.log(JSON.stringify({
+            metadata: audit.metadata,
+            error: audit.error,
+            advisories: Object.entries(audit.vulnerabilities || {}).map(([name, item]) => ({
+              name, severity: item.severity, isDirect: item.isDirect,
+              range: item.range, fixAvailable: item.fixAvailable,
+              via: item.via.map(value => typeof value === 'string' ? value : ({ title: value.title, url: value.url, severity: value.severity, range: value.range }))
+            }))
+          }, null, 2));
+          NODE
+      - name: Tests, lint and full TypeScript production build
+        run: npm run build
+      - name: Check rendered journey metadata and isolated HTML
+        run: node scripts/check-built-journeys.mjs
+      # No artifact uploads, cache configuration, secrets, deployment,
+      # remote browser automation, larger runners, or billing changes.
