@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { EditorialImageFrame } from "@/components/EditorialImageFrame";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 
 export const metadata: Metadata = {
@@ -22,6 +23,16 @@ export default function AboutPage() {
         comparison tools; we do not diagnose, score treatment eligibility, or
         recommend an individual medicine or dose.
       </p>
+
+      <figure className="mt-6 overflow-hidden rounded-xl border border-border">
+        <EditorialImageFrame
+          src="/media/sft-web-batch3-03.webp"
+          width={960}
+          height={640}
+          sizes="(min-width: 768px) 700px, 100vw"
+        />
+        <figcaption className="border-t border-border px-4 py-2 text-xs text-muted-foreground">Preparing the questions worth asking before you commit.</figcaption>
+      </figure>
 
       <div className="card-grid">
         <article className="card">
@@ -65,8 +76,9 @@ export default function AboutPage() {
           <a href="https://alivelongevity.com/protocol" rel="noreferrer">
             minimum-effective longevity protocol
           </a>{" "}
-          is useful related reading, not a ShotFreeTRT recommendation or
-          affiliated service.
+          is related reading from another site in our network. It is not a
+          ShotFreeTRT clinical recommendation, and it does not cover
+          testosterone treatment specifically.
         </p>
       </section>
 

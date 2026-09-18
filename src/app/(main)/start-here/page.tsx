@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { DisclosureNotice } from "@/components/DisclosureNotice";
+import { EditorialImageFrame } from "@/components/EditorialImageFrame";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,6 +58,16 @@ export default function StartHerePage() {
 
       <DisclosureNotice variant="medical" title="Medical Disclaimer" />
 
+      <figure className="mt-6 overflow-hidden rounded-xl border border-border">
+        <EditorialImageFrame
+          src="/media/sft-web-batch3-02.webp"
+          width={960}
+          height={640}
+          sizes="(min-width: 768px) 700px, 100vw"
+        />
+        <figcaption className="border-t border-border px-4 py-2 text-xs text-muted-foreground">Understanding what a testosterone test actually reports.</figcaption>
+      </figure>
+
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {steps.map((item) => (
           <Card key={item.step}>
@@ -91,8 +102,8 @@ export default function StartHerePage() {
           <a href="https://alivelongevity.com/protocol" rel="noreferrer">
             minimum-effective longevity protocol
           </a>{" "}
-          is useful related reading, not a ShotFreeTRT recommendation or
-          affiliated service.
+          is related reading from another site in our network. It is not a
+          ShotFreeTRT clinical recommendation.
         </p>
       </section>
 

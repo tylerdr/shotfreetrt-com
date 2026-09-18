@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import { DisclosureNotice } from "@/components/DisclosureNotice";
+import { EditorialImageFrame } from "@/components/EditorialImageFrame";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -58,16 +58,14 @@ export default function ResourcesPage() {
 
       <DisclosureNotice variant="medical" title="Medical Notice" />
 
-      <figure className="mt-8">
-        <Image
-          src="/media/sft-web-batch2-02.webp"
-          alt=""
+      <figure className="mt-8 overflow-hidden rounded-xl border border-border">
+        <EditorialImageFrame
+          src="/media/sft-web-batch3-07.webp"
           width={960}
           height={640}
           sizes="(min-width: 768px) 700px, 100vw"
-          className="w-full rounded-xl border border-border"
         />
-        <figcaption className="mt-2 text-xs text-muted-foreground">Editorial illustration referencing comparison and reading paths — decorative, not a clinical diagram.</figcaption>
+        <figcaption className="border-t border-border px-4 py-2 text-xs text-muted-foreground">Weighing the evidence behind each pathway before you compare providers.</figcaption>
       </figure>
 
       <section className="mt-8">
@@ -96,11 +94,11 @@ export default function ResourcesPage() {
         <h2 className="text-xl font-semibold">Get your numbers right</h2>
         <p className="mt-2 text-muted-foreground">
           See <Link href="/pricing">dated provider price examples</Link> on
-          ShotFreeTRT, or read PeakedLabs&apos;{" "}
+          ShotFreeTRT, or read PeakedLabs&apos; (another site in our network){" "}
           <a href="https://peakedlabs.com/blog/how-much-does-trt-cost" rel="noreferrer">
             TRT cost and hidden-fee breakdown
           </a>{" "}
-          for a second, independent look at what clinics typically charge.
+          for a second look at what clinics typically charge.
         </p>
       </section>
 

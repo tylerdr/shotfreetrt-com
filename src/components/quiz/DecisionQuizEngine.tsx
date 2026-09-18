@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,10 @@ export function DecisionQuizEngine() {
   const [answers, setAnswers] = useState<QuizAnswers>({});
   const [stepIndex, setStepIndex] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const headingRef = useRef<HTMLElement>(null);
+  const setHeadingRef = (el: HTMLElement | null) => {
+    headingRef.current = el;
+  };
 
   const totalQuestions = QUIZ_QUESTIONS.length;
   const currentQuestion = QUIZ_QUESTIONS[stepIndex];
@@ -30,6 +34,14 @@ export function DecisionQuizEngine() {
   const isLastQuestion = stepIndex === totalQuestions - 1;
 
   const brief = useMemo(() => buildDecisionBrief(answers), [answers]);
+
+  // Move focus to the new heading on every question change and when the
+  // result appears, so keyboard and screen-reader users get an announcement
+  // instead of focus silently staying on a button that just moved or
+  // disappeared.
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, [stepIndex, showResult]);
 
   function selectAnswer(questionId: QuestionId, optionId: string) {
     setAnswers((previous) => ({ ...previous, [questionId]: optionId }));
@@ -68,7 +80,7 @@ export function DecisionQuizEngine() {
             Your TRT Decision Brief
           </p>
         </div>
-        <h2 id="brief-heading" className="text-3xl font-bold">
+        <h2 id="brief-heading" ref={setHeadingRef} tabIndex={-1} className="text-3xl font-bold outline-none">
           Your TRT Decision Brief
         </h2>
         <p className="text-sm text-muted-foreground">
@@ -166,7 +178,9 @@ export function DecisionQuizEngine() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">{currentQuestion.title}</CardTitle>
+          <CardTitle ref={setHeadingRef} tabIndex={-1} className="text-2xl outline-none">
+            {currentQuestion.title}
+          </CardTitle>
           <p className="text-sm text-muted-foreground">{currentQuestion.helpText}</p>
         </CardHeader>
         <CardContent>
@@ -206,8 +220,10 @@ export function DecisionQuizEngine() {
       </div>
 
       <p className="text-sm text-muted-foreground">
-        No symptoms, lab values, or health details are collected. Your answers stay on this
-        page and are never sent anywhere.
+        Your answers to these questions — including anything about symptoms, testing, or
+        fertility — are held only in this page&apos;s memory. They are never sent to a
+        server, saved to a file, or included in analytics, and refreshing this page
+        clears them.
       </p>
     </section>
   );

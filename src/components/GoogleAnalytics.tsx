@@ -17,10 +17,12 @@ export default function GoogleAnalytics() {
     const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void })
       .gtag;
     if (!GA_ID || typeof gtag !== "function") return;
-    // The quiz and decision guide promise that nothing is sent off the
-    // page, so they are exempt from every page-view event, including the
-    // first load (send_page_view is disabled in the config script below;
-    // this effect is the only source of page_view events).
+    // This component is never rendered on /quiz or /decision-guide — they
+    // sit under a separate root layout ((isolated)/layout.tsx) that never
+    // mounts GoogleAnalytics at all, so GA's script never loads there in
+    // the first place. This check is a defensive second layer in case a
+    // future route is added under this layout without being added to
+    // isAnalyticsExemptPath; it is not what keeps those two routes clean.
     if (isAnalyticsExemptPath(pathname)) return;
     gtag("event", "page_view", {
       page_path: pathname,

@@ -5,6 +5,74 @@
 
 ---
 
+## 2026-09-18 00:12 UTC
+
+**Tyler's exact words:**
+> Continue and finish the same scoped correction pass; no work discarded. Controller found the missing PDF renderer so you need not keep probing: bundled Python /Users/td/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 has reportlab and pypdf (fresh import checks passed). Use that Python to generate a clean branded PDF from the corrected Markdown via ReportLab Platypus; pandoc can supply parsed intermediate if helpful. Do not install or explore more tools. All three PDF copies should match, metadata title clean, no stale price/outcome promises, readable headings/lists/page numbers and link back to site/quiz/decision-guide. Use pdfinfo/pdftotext and pdftoppm for focused QA. One additional precision correction: quiz answers are memory-only and refresh clears them, but browser back-forward cache may preserve a document; do not promise that leaving a page instantly destroys all answers. Remove that absolute leaving-page wording, keep accurate no server/storage/analytics promise. Finish original image/privacy/CTA/redirect/OG fixes and focused tests, typecheck/lint/build; commit/push existing draft PR9 and stop with exact handoff. No merge/deploy or further broad research. Previous root reviews and native QA passed baseline functionality. Completion now takes priority over optional polish.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-18 00:01 UTC
+
+**Tyler's exact words:**
+> Continue your correction pass from existing edits, preserving all work. Controller interrupted only to deliver fresh browser and independent artifact-review blockers before you run final checks. Read ../browser-qa-notes.txt now and incorporate those bounded corrections, then finish original scope, tests/typecheck/lint/build, commit/push/update draft PR9, and stop with exact handoff. No merge/deploy. No new exploration or redesign beyond these fixes. Use login:false for shell calls where supported to avoid slow shell startup.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-17 23:50 UTC
+
+**Tyler's exact words:**
+> <task-notification>
+<task-id>bataoghvu</task-id>
+<tool-use-id>toolu_019QLKJ7buLcmyqfbZcV7HTK</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-td-Documents-Codex-2026-09-17-own-drugfreetrt-com-candidate-source-repository-work-shotfreetrt-trust-conversion-20260917/aff93027-2e2d-456c-a36a-3c8d0eb10e35/tasks/bataoghvu.output</output-file>
+<status>completed</status>
+<summary>Background command "Clean stale build cache and retype-check" completed (exit code 0)</summary>
+</task-notification>
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-17 23:39 UTC
+
+**Tyler's exact words:**
+> Handoff: prior Claude writer completed commit 022ab08d12d2048a96e89608504c93f699905c6a and draft PR #9, then was stopped cleanly by controller. You are the sole new writer. Worktree is isolated and clean; canonical dirty checkout is not yours. Read current HANDOFF for completed checks, then execute this bounded correction pass. Root retains browser and release authority.
+
+Finish the current ShotFreeTRT release in the same worktree, sole writer. Preserve the user-requested quiz and all working changes. Do not merge or deploy.
+
+Final image direction: ten new WEB-generated originals exist at ../../outputs/shotfreetrt-assets/batch3/sft-web-batch3-01.png through -10.png. They have a flat etched editorial style but retain a soft light vignette. Use the strongest nonclinical assets in place of batch2 assets. Place them on deliberate warm-bone (#E9E5DA) editorial figure surfaces, within the dark site, rather than letting white glows float on black. Preserve actual alpha; optimize to WebP, keep useful responsive dimensions. Check asset manifest if present. No additional generation or programmatic background removal. Use only helpful placements; avoid huge decorative art pushing quiz CTA below fold.
+
+Privacy blocker: GoogleAnalytics.tsx suppresses explicit page_view but still injects gtag on quiz and guide, and client navigation retains it. Ensure the local-only promise is accurate. A robust route-isolation solution (full-document navigation into these routes, no third-party analytics scripts there) is preferred if simple; otherwise conservatively leave GA disabled pending privacy-safe measurement. Do not pretend pathname checks unload an already loaded SDK. Keep no answer values in analytics, URL, storage, or email. Narrow privacy wording to quiz answers / quote inputs, not an impossible claim that the page never makes network requests.
+
+Quiz logic final checks: validate option IDs, not just truthy answers; tested-but-unsure does not prove the user lacks a diagnosis, and already-paying does not prove they lack a complete quote. Make reasons match only selected answers. Review keyboard focus on question transitions and result announcement, back/edit/restart and print.
+
+Commerce audit: production has only GA ID, no Stripe/entitlement/email secrets. Existing $19 product is branded AliveLongevity. Keep payment and email claims truthful; do not repurpose or activate that product. User commercial-path clarification is pending. Free quiz, printable report, useful guide, cost planner and contextual article/owned-site links must work now.
+
+Complete focused behavioral tests, lint, tsc and production build. Document exact results and remaining external activation gates. Commit and push to the existing branch and update existing draft PR #9 (https://github.com/tylerdr/shotfreetrt-com/pull/9); do not create a duplicate PR. Report exact SHA. Do not include tsconfig.tsbuildinfo or unrelated generated artifacts. Stop after clear handoff for independent review.
+
+Independent review also found DecisionQuizEngine privacy copy says "No symptoms...or health details are collected" despite asking about symptoms/testing/fertility. Replace with accurate limited in-memory answer handling, distinguish no transmission from no collection, and no misleading health-data claims.
+
+Verified batch3 mapping: 01 notebook/compass (home); 02 blue specimen tubes/report (lab/start-here); 03 blank conversation cards (appointment questions/about); 04 checklist/clock (guide/monitoring); 05 botanical cards/shell (OMIT, not TRT-relevant); 06 coffee/moon (sleep/caffeine article); 07 notes/magnifier (resources/evidence); 08 dumbbell/meal (training/metabolic article); 09 planner notebook (guide/Blueprint); 10 calculator/coins (pricing/quote planner). Use purposefully, no decorative overload. Best priority assets are 01,02,04,06,09,10 plus relevant 07/08.
+
+Copy corrections from handoff: AliveLongevity and PeakedLabs ARE user-owned sister sites. Do not claim "not an affiliated service". Label related reading from our network accurately without implying clinical endorsement. Keep generated-art production details out of public captions: no "decorative, not a clinical diagram" captions; use a helpful content-specific caption or omit it, with empty alt for purely decorative art. A read-only reviewer is checking the existing Blueprint PDF; hold final claims about its quality pending root findings.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
 ## 2026-09-17 22:47 UTC
 
 **Tyler's exact words:**

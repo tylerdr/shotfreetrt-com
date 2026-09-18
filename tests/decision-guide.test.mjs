@@ -23,7 +23,7 @@ test("calculator cannot upload or persist entered quotes", () => {
   assert.match(component, /clipboard.writeText\(`\$\{window.location.origin\}\/decision-guide`\)/);
 });
 test("pilot stays noindex and needs explicit activation", () => {
-  const page = readFileSync(new URL("../src/app/for-clinics/page.tsx", import.meta.url), "utf8");
+  const page = readFileSync(new URL("../src/app/(main)/for-clinics/page.tsx", import.meta.url), "utf8");
   assert.match(page, /index: false/);
   assert.match(page, /CLINIC_PILOT_ENROLLMENT_ENABLED !== "true"/);
   assert.match(page, /Pilot enrollment is not open yet/);

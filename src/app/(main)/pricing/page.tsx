@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { EditorialImageFrame } from "@/components/EditorialImageFrame";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { EVIDENCE_DATE, providerSnapshots } from "@/lib/decision-guide";
@@ -18,16 +18,14 @@ export default function PricingPage() {
       <h1 className="text-4xl font-extrabold sm:text-5xl">Compare the bill.<br />Not just the headline.</h1>
       <p className="text-lg text-muted-foreground">ShotFreeTRT’s decision guide and quote calculator are free. The prices below belong to third-party clinics, not to ShotFreeTRT.</p>
       <Button asChild size="lg"><Link href="/decision-guide">Compare my written quotes</Link></Button>
-      <figure>
-        <Image
-          src="/media/sft-web-batch2-05.webp"
-          alt=""
+      <figure className="overflow-hidden rounded-xl border border-border">
+        <EditorialImageFrame
+          src="/media/sft-web-batch3-10.webp"
           width={960}
           height={640}
           sizes="(min-width: 768px) 700px, 100vw"
-          className="w-full rounded-xl border"
         />
-        <figcaption className="mt-2 text-xs text-muted-foreground">Editorial illustration referencing cost comparison — decorative, not a clinical diagram.</figcaption>
+        <figcaption className="border-t border-border px-4 py-2 text-xs text-muted-foreground">Working through what a written quote actually adds up to.</figcaption>
       </figure>
     </section>
     <div className="rounded-xl border bg-secondary p-5 text-sm">

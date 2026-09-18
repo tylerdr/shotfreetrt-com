@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ClipboardList, Scale, Wallet } from "lucide-react";
+import { EditorialImageFrame } from "@/components/EditorialImageFrame";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { sources } from "@/lib/decision-guide";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Needle-Free TRT Options, Costs and Questions to Ask",
   description: "Considering testosterone treatment but not sure about injections? Understand needle-free options, compare written clinic quotes, and prepare for a clinician visit. Free decision guide.",
   alternates: { canonical: "/" },
-  openGraph: { title: "Considering TRT? Compare the options before you commit.", description: "Needle-free does not mean fertility-preserving. Get a free decision guide and clinic-cost worksheet.", url: "https://shotfreetrt.com" },
+  openGraph: { title: "Considering TRT? Compare the options before you commit.", description: "Needle-free does not mean fertility-preserving. Get a free decision guide and clinic-cost worksheet.", url: "https://shotfreetrt.com", images: [{ url: "/og-shotfreetrt.png", width: 1024, height: 1024 }] },
 };
 
 const steps = [
@@ -38,14 +38,13 @@ export default function HomePage() {
         <p className="text-sm text-muted-foreground">No account. No lab upload. No treatment score. Education, not medical care.</p>
       </div>
       <Card className="overflow-hidden border-primary/40">
-        <Image
-          src="/media/sft-web-batch2-01.webp"
-          alt=""
+        <EditorialImageFrame
+          src="/media/sft-web-batch3-01.webp"
           width={960}
           height={640}
           sizes="(min-width: 1024px) 420px, 100vw"
           priority
-          className="h-auto w-full border-b border-[#222230]"
+          className="border-b border-border"
         />
         <CardHeader><p className="text-xs font-semibold uppercase tracking-widest text-primary">Inside your free guide</p><CardTitle className="text-2xl">A clearer conversation.<br />A more complete quote.</CardTitle></CardHeader>
         <CardContent className="space-y-5">

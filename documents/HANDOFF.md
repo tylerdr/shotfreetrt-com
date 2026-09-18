@@ -2,75 +2,84 @@
 
 **Session date:** 2026-09-17
 **Branch:** `feat/shotfreetrt-trust-conversion-20260917`
-**Base:** `main` at `3b69be9d48a59977467cb7f0443f5d3ad51c7745` (includes draft PR #8's decision-guide/quote-planner/source-pricing work)
-**Status:** draft PR; build, typecheck, lint, and full test suite pass locally; not merged, not deployed.
+**PR:** #9 (draft, https://github.com/tylerdr/shotfreetrt-com/pull/9) — updated by this pass, not merged, not deployed.
+**Status:** build, typecheck, lint, and full test suite pass locally against this exact working tree.
 
 ## Start here
 
-This session both trimmed and rebuilt: an early pass retired the legacy quiz UI/API, then Tyler explicitly corrected that decision mid-session ("Quiz funnels are killer so we should keep a quiz funnel") and asked for a real, deterministic, conversion-focused quiz funnel instead. What shipped reflects the correction: the quiz is back, rebuilt clean.
+This is a bounded correction pass on top of commit `022ab08` (the quiz rebuild + trust/privacy session), driven by browser QA and an independent artifact review that found real gaps in that commit. Nothing from `022ab08` was discarded; this pass fixes specific, named defects in it. Root retains browser and deploy authority — no browser QA was performed here (see release gates below).
 
-## Implemented this session
+## Fixed this pass
 
-### 1. New deterministic decision quiz (replaces the retired heuristic scorer)
-- `src/lib/quiz/decision-quiz.ts`: pure, dependency-free module. Six questions — intent, testing stage, fertility-conversation priority, delivery-route preference, cost clarity, decision timing. No symptoms, no lab values, no diagnosis. `buildDecisionBrief(answers)` deterministically maps answers to a `DecisionBrief`: a situation summary traceable 1:1 to each answer, a prioritized appointment-question checklist with plain-language reasons, 1-3 reading-path links into existing articles, and a primary/secondary next action (`/pricing` vs `/decision-guide` depending on cost clarity). No score, no candidacy field, no AI call.
-- `src/components/quiz/DecisionQuizEngine.tsx`: client component. Progress bar, Back/Next, keyboard-accessible radio groups (Radix), answers held only in `useState` (never localStorage/sessionStorage/fetch/analytics). Result screen has Print/Save-as-PDF (`window.print()`), Edit answers, Start over. No email wall.
-- Routes: `/quiz/healthspan` renders the real quiz (canonical entry). `/quiz` and `/quiz/healthspan/advanced` redirect into it (the old "advanced" lab-input quiz is not rebuilt — collecting lab values to score a treatment path is exactly the diagnostic function this site does not perform). `/quiz/healthspan/result/[shareId]` redirects to `/quiz/healthspan` (the old share links decoded a stored candidacy score; nothing durable exists to redisplay now that answers are in-memory only, so this avoids both a dead link and a resurrected fake score).
-- Deleted, not patched: `src/app/api/quiz/healthspan/route.ts` (the scoring API), `src/components/quiz/{QuizEngine,AdvancedQuizEngine,QuizResult}.tsx`, `src/lib/quiz/healthspan-*.ts`. These produced a numeric "TRT candidacy score," an unvalidated "Roast Me" mode, and a treatment-path recommendation presented as personalized medical guidance.
+### 1. Privacy: real route isolation, not a pathname check
+`022ab08`'s GA/analytics exemption for `/quiz/*` and `/decision-guide` only skipped firing a `page_view` event by pathname — it did not stop GA's script from loading, did not stop GA's own automatic engagement pings once loaded, and could not "unload" GA if a user arrived via client-side navigation from a page where it had already loaded.
 
-### 2. Revenue funnel wiring
-- Homepage hero: primary CTA is now the quiz (`/quiz/healthspan`); secondary is the free decision guide. Pricing remains reachable via the existing mid-page cards.
-- Blog article template and blog listing link to the quiz alongside the decision guide.
-- Resources and Start Here pages point to the quiz as the "not sure where to start" path.
+Fix: split the single root layout into two route groups, each with its own root layout:
+- `src/app/(main)/layout.tsx` — every route except quiz/decision-guide. Renders `GoogleAnalytics` and the Supabase `AnalyticsProvider`.
+- `src/app/(isolated)/layout.tsx` — `/quiz/*` and `/decision-guide`. Renders neither.
 
-### 3. Privacy: quiz and decision-guide are actually local-only now
-- `src/lib/analytics.ts` exports `isAnalyticsExemptPath()` (paths starting with `/quiz` or `/decision-guide`).
-- `AnalyticsProvider` (custom Supabase-backed pageview tracker) and `GoogleAnalytics` (GA4) both skip these paths, including the automatic first-load pageview (`send_page_view: false` in the GA config call, replaced with an explicit effect that itself respects the exemption).
-- `QuotePlanner`'s copy no longer hedges with "analytics may still record page visits" — it's now unconditionally true that this page sends no analytics.
+Because these are two distinct root layouts (each its own `<html>`/`<body>`), Next.js performs a full document navigation whenever a link crosses between them — this is documented Next.js behavior for multi-root-layout apps, not a workaround. Confirmed by rebuilding with a test `NEXT_PUBLIC_GA_MEASUREMENT_ID` and diffing the prerendered HTML: `googletagmanager` appears on `/` and `/pricing`, and is completely absent from `/quiz/healthspan` and `/decision-guide`. `isAnalyticsExemptPath()` in `src/lib/analytics.ts` is retained as a second, defensive layer (documented as such in comments), not the primary guarantee.
 
-### 4. Newsletter and purchase: fail closed, no fake promises
-- `/api/newsletter` no longer writes to a JSON file on disk and no longer returns a fake success message. It always returns `503` with an honest message and a link to the real free resource. Deleted `data/subscribers.json` (was always empty; the write path is gone).
-- Deleted `src/components/NewsletterSignup.tsx` (fetch-based form with no honest success path) and reworked `src/components/NewsletterCTA.tsx` from a dead `<form action="#">` into a real `Link` button, defaulting to `/decision-guide`. Updated all 5 call sites.
-- The Longevity Blueprint guide was advertised as a "$19" purchase (`BuyButton` → `/api/checkout` → Stripe) while its PDF (`/longevity-blueprint.pdf`) was already public with no gate. Removed the purchase framing entirely: the guide page now says "Free PDF" and links straight to the PDF. Deleted `src/components/BuyButton.tsx`, `src/app/api/checkout/route.ts` (no `STRIPE_SECRET_KEY` was ever configured; nothing was disabled that was working), and the `success/` page (a "Purchase Complete" page for a purchase flow that no longer exists). No Stripe/Supabase credentials were touched; `stripe` was removed from `package.json` as an unused dependency.
+Shared chrome (header/nav/footer) extracted to `src/components/SiteChrome.tsx`; fonts to `src/app/fonts.ts`; shared metadata (favicon, GSC verification token, metadataBase) to `src/app/site-metadata.ts` — both layouts import these so nothing drifts between them.
 
-### 5. About / Start Here / Resources corrected to the decision-first scope
-- `/about`, `/start-here`, `/resources` no longer describe a general "healthspan"/"7-day natural T quickstart" product. They now describe what the site actually does (decision quiz, decision guide, quote calculator, sourced pricing) and route accordingly.
-- Added one contextual, verified external reference each where it earns its place per the brand brief's cross-site linking policy (verified `HTTP 200` + title via `curl`, 2026-09-17):
-  - PeakedLabs — `https://peakedlabs.com/blog/how-much-does-trt-cost` (Resources page, cost-evaluation context).
-  - AliveLongevity — `https://alivelongevity.com/protocol` (About and Start Here, broader-healthspan-foundations context, explicitly labeled "not a ShotFreeTRT recommendation or affiliated service").
-- No inbound article URLs were changed and no articles were bulk-noindexed.
+### 2. Conversion/accessibility-critical CSS bug (blue-on-blue button text)
+`src/app/globals.css` had an unlayered `a { color: #60A5FA }` rule. Cascade layers ignore selector specificity and source order — an unlayered rule always beats a layered one — so this rule was beating Tailwind's `@layer utilities` `text-primary-foreground` class on every `Button asChild` anchor (e.g. the homepage's primary quiz CTA), rendering the button text in link-blue instead of its variant's intended color. Fixed by moving the rule into `@layer base`. Verified in the compiled CSS (`.next/static/chunks/*.css`) that `a{color:...}` now sits in the `base` layer and `.text-primary-foreground` sits in `utilities`, which is declared later/higher-priority.
 
-### 6. Seven approved illustrations integrated (batch2, provisional)
-- Source: `outputs/shotfreetrt-assets/batch2/sft-web-batch2-{01,02,04,05,06,08,09}.png` (masters kept outside the repo). `03`, `07`, `10` were not used, per instruction.
-- `scripts/optimize-batch2-images.mjs` (sharp): resize-only, `fit: cover` to 960×640, WebP quality 75 — no cropping/background/editing scripts. Output in `public/media/*.webp`, 25-83KB each.
-- Placement: home hero → `01`; `/decision-guide` → `04`; `/resources` → `02`; `/pricing` → `05`; `/blog/trt-and-sleep-apnea` → `06`; `/blog/testosterone-boosting-foods` → `08`; `/guides/longevity-blueprint` → `09` (article placements via `src/data/articleHeroImages.ts`).
-- All marked `alt=""` (purely decorative, per the brand brief's own accessibility rule) with a visible caption stating "decorative, not a clinical diagram" — these are soft artistic vignettes with a visible glow, not clean clinical cutouts. **Root has a new clean batch in progress and will swap these when ready; treat this integration as provisional**, not final art direction.
+### 3. Quiz logic corrections
+- `isQuizComplete()` was a truthy check (`Boolean(answers[id])`); it now validates the answer is one of that question's real option ids.
+- Two prioritized-question reasons didn't match their trigger answer: "tested but unsure of results" no longer claims "no confirmed diagnosis yet" (separate, accurate reason); "already paying" no longer claims "no cost picture yet" (now: confirm nothing was left out of the existing quote).
+- Added focus management: the question/result heading receives focus on every transition (`src/components/quiz/DecisionQuizEngine.tsx`), so keyboard and screen-reader users get an announcement on Back/Next/result.
 
-### 7. Baseline gates repaired
-- `next.config.mjs`: removed `typescript.ignoreBuildErrors`. Full-project `tsc --noEmit` is clean.
-- Root cause of ~80 cascading, misleading type errors in `src/data/articles.ts`: a single `readingTime` (should be `readTime`) typo at one object broke contextual typing for the entire 150+-item array literal. Fixed there and in three standalone article modules (`testosteroneAndMetformin.ts`, `trtAndGlp1.ts`, `trtAndStatins.ts`) that had the same typo, plus added the `author`/`sections` fields those three were also missing. **No `any` was introduced; no check was weakened.**
-- `next lint` no longer exists in Next 16. Replaced with `eslint` directly: added `eslint`, `eslint-config-next` as devDependencies, `eslint.config.mjs` (flat config, `eslint-config-next/core-web-vitals` + `/typescript`), `package.json` `lint` script now `eslint .`. Lint is clean (0 errors; 1 pre-existing warning in `commitlint.config.js`, not touched).
-- OG image metadata declared `1200×630`; the actual file (`public/og-shotfreetrt.png`) is `1024×1024`. Corrected the metadata to match the real file rather than generating a new cropped asset (out of scope: no image editing beyond resize/format). JSON-LD `logo` already pointed at `favicon.png` (not the previously-flagged missing `/logo.png`) — no change needed there. GSC verification token preserved exactly. `sitemap.ts` updated to include `/quiz/healthspan` (real content again) and to drop the two now-redirect-only quiz paths.
-- Added `npm test` script (`node --experimental-strip-types --test tests/*.test.mjs`) — previously undocumented despite `AGENTS.md` referencing it.
-- Added a site-wide print stylesheet (`@media print` in `globals.css`): white background, black text, card borders lightened, images hidden — so printing the decision guide, quote calculator, or the quiz's decision brief produces a legible page instead of a dark-theme dump.
+### 4. Quiz privacy copy corrected twice
+- First: replaced "No symptoms, lab values, or health details are collected" (false — the quiz asks about symptoms/testing/fertility) with accurate wording that distinguishes collection (happens, in memory) from transmission (never happens).
+- Second (independent review, after the first fix): removed an absolute "...or leave the page" claim, since browser back/forward cache can preserve an already-rendered document — leaving a page does not guarantee destruction. The promise is now scoped to what's actually true: never sent to a server/storage/analytics, and refreshing clears it.
 
-## Verification evidence (this session, this exact working tree)
+### 5. Restored `/guides/longevity-blueprint/success` redirect
+`022ab08` deleted this page along with the removed purchase flow, which would 404 old inbound links (some carrying a stale `?session_id=`). Restored as a compatibility redirect to `/guides/longevity-blueprint` — no "purchase verified" claim, just a redirect.
 
-- `npx tsc --noEmit -p tsconfig.json`: **clean, 0 errors.**
-- `npm run lint` (`eslint .`): **0 errors**, 1 pre-existing warning unrelated to this session's files.
-- `npm run build` (`next build`, Next 16.1.6, Turbopack): **success, 178/178 static pages generated**, full type validation ran (no "Skipping validation of types").
-- `npm test`: **39/39 pass** (19 pre-existing decision-guide/quote-math tests + 20 new: quiz branching/completion/required-answers/no-score, retired-route redirects, newsletter/purchase fail-closed, analytics exemption, OG/GSC metadata).
-- `git diff` reviewed file-by-file before commit; no unrelated files touched.
-- No Vercel preview was built in this session (no browser/deploy access here; root owns browser/deploy per the task boundary).
+### 6. Homepage OpenGraph image
+The homepage's own `openGraph` metadata object overrode the root layout's entirely (Next.js does not deep-merge metadata objects across levels), silently dropping the 1024×1024 OG image on `/`. Added it explicitly to the homepage's own `openGraph.images`.
+
+### 7. AliveLongevity / PeakedLabs framing corrected
+Both are the user's own sister sites, not unaffiliated third parties. `022ab08` had added copy explicitly claiming "not a ShotFreeTRT recommendation or affiliated service" for AliveLongevity and framed PeakedLabs as an "independent look" — both false. Copy on `/about`, `/start-here`, `/resources` now says "another site in our network" without implying clinical endorsement.
+
+### 8. Batch3 images replace all batch2 placements
+Ten new WEB-generated originals at `outputs/shotfreetrt-assets/batch3/` (flat etched editorial style, soft light vignette, real alpha). Used 9 of 10 (05 omitted — botanical/shell, not TRT-relevant) per the verified mapping:
+
+| Asset | Placement |
+|---|---|
+| 01 | Home hero |
+| 02 | `/start-here` |
+| 03 | `/about` |
+| 04 | `/decision-guide` |
+| 06 | `/blog/trt-and-sleep-apnea` |
+| 07 | `/resources` |
+| 08 | `/blog/testosterone-boosting-foods` |
+| 09 | `/guides/longevity-blueprint` |
+| 10 | `/pricing` |
+
+`scripts/optimize-batch3-images.mjs` (sharp, resize-only to 960×640, alpha preserved via WebP — no flattening, no background removal, no additional generation). Built `src/components/EditorialImageFrame.tsx`, which mounts each image on a warm-bone surface (`--editorial-frame: #E9E5DA`, added as a real CSS variable per the theming convention, not a hardcoded hex in a component) instead of letting the vignette float directly on the dark site background. All "decorative, not a clinical diagram" production-process captions replaced with content-specific ones (or omitted); `alt=""` retained since the art is purely decorative. Deleted the now-unreferenced batch2 webp files from `public/media/`.
+
+### 9. Longevity Blueprint PDF regenerated (was stale and actively misleading)
+Prior PDF had: a `$24` price on a page now presented as free, no ShotFreeTRT branding or links on the first/last page, a metadata title leaking a localhost URL, and unqualified outcome claims ("Most adults can generate major improvements..." with bare 2-4/8-12 week timelines). No PDF-rendering toolchain existed in this repo (`pandoc` is installed but has no PDF engine — `pdflatex`/`wkhtmltopdf`/etc. are all absent). The bundled Python runtime at `/Users/td/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3` has `reportlab`/`pypdf`; wrote `scripts/generate-longevity-blueprint-pdf.py` (ReportLab Platypus — parses the specific Markdown constructs this doc uses: headings, blockquotes, pipe tables, bullet/numbered/checkbox lists, inline bold/italic/links) to regenerate it. Corrected the Markdown source (`guides/longevity-blueprint.md`): price line → "Free" + a branding/CTA line linking to the quiz and decision guide; qualified the two outcome-guarantee passages; added an "About ShotFreeTRT" closing section with quiz/decision-guide links. Output has a clean title (`The Longevity Blueprint (2026 Edition) — ShotFreeTRT`), a branded footer with real page numbers on every page, and no stale price/claims. All three served copies (`guides/longevity-blueprint.pdf`, `public/longevity-blueprint.pdf`, `public/guides/longevity-blueprint.pdf`) are byte-identical (built once, copied). QA'd with `pdfinfo`, `pdftotext -layout`, and `pdftoppm` (rendered page 1 and the last page to PNG and visually inspected).
+
+The guide's on-page CTA and `GuidePromoBanner.tsx` still link to the PDF (`/longevity-blueprint.pdf`, `/guides/longevity-blueprint.pdf`) — restored to the original behavior now that the PDF is actually correct.
+
+## Verification evidence (this exact working tree)
+
+- `npx tsc --noEmit -p tsconfig.json`: **clean, 0 errors** (ran after `rm -rf .next` to clear stale `.next/types`).
+- `npm run lint` (`eslint .`): **0 errors**, 1 pre-existing warning (`commitlint.config.js`, unrelated, not touched).
+- `npm test`: **43/43 pass** (was 39; added tests for route isolation, the restored success redirect, the corrected PDF source, and the corrected quiz privacy copy; updated all path assertions for the `(main)`/`(isolated)` route-group move).
+- `npm run build` (`next build`, Turbopack): **success, 179/179 static/SSG pages** (was 178 — `+1` for the restored `/guides/longevity-blueprint/success` redirect page). Verified separately with a test GA id that GA's script is present in `/` and `/pricing`'s prerendered HTML and absent from `/quiz/healthspan` and `/decision-guide`'s, then rebuilt clean without the test env var.
+- PDF QA: `pdfinfo` (clean title/metadata, 31 pages), `pdftotext -layout` (no `$24`, no `localhost`, no unqualified "major improvements" claim, branding present on page 1 and the last page, footer page numbers present on every page), `pdftoppm` rendering of page 1 and page 31 visually inspected.
 
 ## Release gates still open (unchanged unless noted)
 
-1. Browser/mobile/print QA of the exact PR head — not performed here (no browser access in this environment). The print stylesheet and quiz's Print/Save-as-PDF button are implemented but not visually verified in a real browser.
-2. Root's parallel "new clean" image batch is expected to replace the provisional batch2 assets integrated here — swap when available; don't treat alpha-channel presence alone as a finished visual result (per root review notes).
-3. Root's parallel commerce/infrastructure audit should confirm whether any durable, testable email or payment provider actually exists before either is re-enabled. Nothing here re-enables Stripe or any email provider.
-4. Legacy article corpus (`src/data/articles.ts` and standalone modules) was **not** rewritten beyond the two targeted typo/type fixes and the two new hero-image insertions — per instruction, this was intentionally out of scope. Inline article CTAs linking to `/quiz` or `/quiz/healthspan` now correctly point at the real, working quiz.
-5. Full-project TypeScript/lint/build now pass without `ignoreBuildErrors`; keep it that way — do not reintroduce the flag as a shortcut for future article-data errors.
-6. Independent clinical/editorial review of legacy high-risk article claims remains open (unchanged from prior handoff); this session's quiz and CTA changes don't constitute that review.
+1. **Browser/mobile/print QA of the exact PR head — still not performed.** No browser access in this environment; root owns this. In particular: visually confirm the button-contrast fix and the route-isolation full-page-reload behavior in an actual browser (structural/CSS-layer proof was done here; DOM-level confirmation was not).
+2. Clinical/editorial triage of the legacy article corpus remains open (unchanged from prior handoffs).
+3. Commerce/infrastructure audit (Stripe/email) remains open. Production has only a GA measurement ID configured — no Stripe, entitlement, or email secret. Nothing in this pass activates any payment or email path. The existing $19 product referenced anywhere is AliveLongevity's, not repurposed or activated here.
+4. Tyler's commercial-path clarification (what, if anything, gets sold and how) is still pending.
 
-## Files changed this session
+## Files changed this pass
 
-See `git diff --stat` on this branch for the full list. Notable deletions: `src/app/api/{checkout,quiz/healthspan}/route.ts`, `src/components/{BuyButton,NewsletterSignup}.tsx`, `src/components/quiz/{QuizEngine,AdvancedQuizEngine,QuizResult}.tsx`, `src/lib/quiz/healthspan-*.ts`, `src/app/guides/longevity-blueprint/success/page.tsx`, `data/subscribers.json`. Notable additions: `src/lib/quiz/decision-quiz.ts`, `src/components/quiz/DecisionQuizEngine.tsx`, `src/data/articleHeroImages.ts`, `eslint.config.mjs`, `scripts/optimize-batch2-images.mjs`, `public/media/*.webp`, `tests/decision-quiz.test.mjs`, `tests/trust-and-privacy-gates.test.mjs`.
+See `git diff --stat` / `git log` on this branch. Notable: `src/app/layout.tsx` deleted and replaced by `src/app/(main)/layout.tsx` + `src/app/(isolated)/layout.tsx` + `src/app/fonts.ts` + `src/app/site-metadata.ts` + `src/components/SiteChrome.tsx`; all non-quiz/decision-guide routes moved under `src/app/(main)/`; quiz/decision-guide moved under `src/app/(isolated)/`; new `src/components/EditorialImageFrame.tsx`; new `scripts/optimize-batch3-images.mjs` and `scripts/generate-longevity-blueprint-pdf.py`; `guides/longevity-blueprint.md` and all three PDF copies regenerated; batch2 webp assets deleted, batch3 added.

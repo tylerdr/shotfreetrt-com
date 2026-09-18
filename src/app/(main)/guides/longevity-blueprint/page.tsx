@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 
+import { EditorialImageFrame } from "@/components/EditorialImageFrame";
 import { Button } from "@/components/ui/button";
 
 const tocItems = [
@@ -110,17 +110,15 @@ export default function LongevityBlueprintPage() {
             Download the free PDF
           </a>
         </Button>
-        <figure style={{ marginTop: 20 }}>
-          <Image
-            src="/media/sft-web-batch2-09.webp"
-            alt=""
+        <figure className="overflow-hidden rounded-xl border border-border" style={{ marginTop: 20 }}>
+          <EditorialImageFrame
+            src="/media/sft-web-batch3-09.webp"
             width={960}
             height={640}
             sizes="(min-width: 768px) 700px, 100vw"
-            style={{ width: "100%", height: "auto", borderRadius: 12 }}
           />
-          <figcaption className="meta" style={{ marginTop: 8 }}>
-            Editorial illustration referencing longevity planning — decorative, not a clinical diagram.
+          <figcaption className="meta border-t border-border px-4 py-2">
+            Planning out the Blueprint&apos;s day-to-day systems.
           </figcaption>
         </figure>
       </section>

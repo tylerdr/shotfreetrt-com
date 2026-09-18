@@ -119,14 +119,15 @@ export const QUIZ_QUESTIONS: readonly QuizQuestion[] = [
 
 export type QuizAnswers = Partial<Record<QuestionId, string>>;
 
-export function isQuizComplete(answers: QuizAnswers): boolean {
-  return QUIZ_QUESTIONS.every((question) => Boolean(answers[question.id]));
-}
-
 function getOption(questionId: QuestionId, optionId: string | undefined): QuizOption | null {
   if (!optionId) return null;
   const question = QUIZ_QUESTIONS.find((item) => item.id === questionId);
   return question?.options.find((option) => option.id === optionId) ?? null;
+}
+
+/** True only if every question has an answer that is one of that question's actual option ids. */
+export function isQuizComplete(answers: QuizAnswers): boolean {
+  return QUIZ_QUESTIONS.every((question) => getOption(question.id, answers[question.id]) !== null);
 }
 
 export type PrioritizedQuestion = {
@@ -170,17 +171,27 @@ function buildPrioritizedQuestions(answers: QuizAnswers): PrioritizedQuestion[] 
     );
   }
 
-  if (answers.testingStage === "not-tested" || answers.testingStage === "unsure-results") {
+  if (answers.testingStage === "not-tested") {
     boost(
       visitQuestions[0],
-      "You don't have a confirmed diagnosis yet, so start with this."
+      "You haven't been tested yet, so start with this before discussing any treatment."
+    );
+  } else if (answers.testingStage === "unsure-results") {
+    boost(
+      visitQuestions[0],
+      "You've been tested but aren't sure what the results mean, so ask this to get a clear read before deciding anything."
     );
   }
 
-  if (answers.costClarity === "no-idea" || answers.costClarity === "already-paying") {
+  if (answers.costClarity === "no-idea") {
     boost(
       visitQuestions[6],
-      "You don't have a full written cost picture yet, so get every number in writing."
+      "You don't have a cost picture yet, so get every number in writing before deciding."
+    );
+  } else if (answers.costClarity === "already-paying") {
+    boost(
+      visitQuestions[6],
+      "You're already paying, so use this to confirm nothing was left out of what you were quoted."
     );
   }
 

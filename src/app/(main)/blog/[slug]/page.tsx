@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { DisclosureNotice } from "@/components/DisclosureNotice";
+import { EditorialImageFrame } from "@/components/EditorialImageFrame";
 import GuidePromoBanner from "@/components/GuidePromoBanner";
 import { NewsletterCTA } from "@/components/NewsletterCTA";
 import { RelatedLinks } from "@/components/RelatedLinks";
@@ -175,16 +175,14 @@ export default async function BlogPostPage({ params }: PageProps) {
       </div>
 
       {heroImage ? (
-        <figure className="mb-8">
-          <Image
+        <figure className="mb-8 overflow-hidden rounded-xl border border-[#222230]">
+          <EditorialImageFrame
             src={heroImage.src}
-            alt=""
             width={heroImage.width}
             height={heroImage.height}
             sizes="(min-width: 768px) 700px, 100vw"
-            className="w-full rounded-xl border border-[#222230]"
           />
-          <figcaption className="mt-2 text-xs text-zinc-500">{heroImage.caption}</figcaption>
+          <figcaption className="border-t border-[#222230] px-4 py-2 text-xs text-zinc-500">{heroImage.caption}</figcaption>
         </figure>
       ) : null}
 

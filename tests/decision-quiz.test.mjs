@@ -113,9 +113,9 @@ test("quiz engine keeps answers in component memory only: no fetch, storage, or 
 
 test("retired quiz routes redirect instead of rendering a fake score, and stay live", () => {
   const files = [
-    "../src/app/quiz/page.tsx",
-    "../src/app/quiz/healthspan/advanced/page.tsx",
-    "../src/app/quiz/healthspan/result/[shareId]/page.tsx"
+    "../src/app/(isolated)/quiz/page.tsx",
+    "../src/app/(isolated)/quiz/healthspan/advanced/page.tsx",
+    "../src/app/(isolated)/quiz/healthspan/result/[shareId]/page.tsx"
   ];
   for (const file of files) {
     const source = readFileSync(new URL(file, import.meta.url), "utf8");
@@ -130,7 +130,7 @@ test("retired quiz routes redirect instead of rendering a fake score, and stay l
 
 test("the real quiz entry page renders the deterministic engine, not the retired scoring UI", () => {
   const source = readFileSync(
-    new URL("../src/app/quiz/healthspan/page.tsx", import.meta.url),
+    new URL("../src/app/(isolated)/quiz/healthspan/page.tsx", import.meta.url),
     "utf8"
   );
   assert.match(source, /DecisionQuizEngine/);
