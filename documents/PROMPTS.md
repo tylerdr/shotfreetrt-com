@@ -5,6 +5,34 @@
 
 ---
 
+## 2026-09-18 00:52 UTC
+
+**Tyler's exact words:**
+> Final bounded correction pass. You remain sole app writer in this isolated ShotFreeTRT worktree; other agents are reviewing, do not revert their changes. Start after independent review finishes. No merge/deploy/payment activation. Fix these confirmed release issues only, with focused validation and commit/push PR9:
+1. Browser mobile390x844 main has class px-4 but computed padding 28px 0px 72px; unlayered globals.css main padding overrides Tailwind. Restore responsive main gutters via appropriate CSS layering or remove conflicting obsolete main padding rule(s), preserving print. Actual scrollWidth390 equals viewport390 (no overflow), but copy/buttons flush edges. Check at390 and desktop.
+2. Desktop1280x720 homepage grid items-center vertically centers copy next to tall media/benefits panel: headline startsy430, quiz CTA below fold. Align hero content to start so primary CTA visible in first viewport; avoid broad redesign.
+3. Primary small white CTA on #3B82F6 contrast3.68:1. Use accessible brand cobalt#2E5FA7 action background (or measured>=4.5) and appropriate hover; do not darken all ordinary blue links on dark backgrounds.
+4. Personalized quiz report reading/action Next Link hrefs depend on answers. Disable prefetch on answer-dependent links so automatic requests do not reveal inferred interests before deliberate navigation.
+5. Quiz privacy says never saved to file although Print/savePDF is offered. Clarify no automatic upload/persistence, user-controlled printing/saving allowed. Retain no-health-analytics guarantee.
+Preserve generated images/PDF, root analytics isolation, redirects, GSC, all43tests. Do not add optional polish. Run focused tests,typecheck,lint,productionbuild. Commit code changes and required promptlog, push PR9; report exactHEAD and concise checks. Then stop. Controller owns browser verification/release.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-18 00:52 UTC
+
+**Tyler's exact words:**
+> Stop discovery now. Return your final bounded review from evidence already gathered, exact reviewed HEAD and concrete P1/P2 blockers only plus proof gaps. Do not run more tools, tests, or expand into unchanged article metadata. Controller has independently confirmed mobile main px-4 overridden by unlayered main padding: computed28px 0 72px at390 viewport, and desktop hero items-center pushes quiz CTA below720px fold. Include these and any confirmed contrast/prefetch/privacy findings. Finish now.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
 ## 2026-09-18 00:33 UTC
 
 **Tyler's exact words:**

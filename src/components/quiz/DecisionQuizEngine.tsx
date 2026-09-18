@@ -126,7 +126,7 @@ export function DecisionQuizEngine() {
           <CardContent className="space-y-3">
             {brief.readingPaths.map((path) => (
               <div key={path.href}>
-                <Link href={path.href} className="font-medium underline">
+                <Link href={path.href} prefetch={false} className="font-medium underline">
                   {path.title}
                 </Link>
                 <p className="text-sm text-muted-foreground">{path.description}</p>
@@ -137,10 +137,10 @@ export function DecisionQuizEngine() {
 
         <div className="flex flex-wrap gap-3 print:hidden">
           <Button asChild size="lg">
-            <Link href={brief.primaryAction.href}>{brief.primaryAction.label}</Link>
+            <Link href={brief.primaryAction.href} prefetch={false}>{brief.primaryAction.label}</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link href={brief.secondaryAction.href}>{brief.secondaryAction.label}</Link>
+            <Link href={brief.secondaryAction.href} prefetch={false}>{brief.secondaryAction.label}</Link>
           </Button>
         </div>
 
@@ -221,9 +221,10 @@ export function DecisionQuizEngine() {
 
       <p className="text-sm text-muted-foreground">
         Your answers to these questions — including anything about symptoms, testing, or
-        fertility — are held only in this page&apos;s memory. They are never sent to a
-        server, saved to a file, or included in analytics, and refreshing this page
-        clears them.
+        fertility — are held only in this page&apos;s memory. They are never automatically
+        sent to a server, saved to a file, or included in analytics, and refreshing this
+        page clears them. Your result can be printed or saved as a PDF at the end, but only
+        if you choose to.
       </p>
     </section>
   );

@@ -114,3 +114,41 @@ test("quiz privacy copy distinguishes no-transmission from no-collection and doe
   assert.doesNotMatch(engine, /No symptoms, lab values, or health details are collected/);
   assert.doesNotMatch(engine, /leave the page|leaving the page/i);
 });
+
+test("quiz privacy copy allows the deliberate print/save-as-PDF feature it also offers", () => {
+  const engine = read("../src/components/quiz/DecisionQuizEngine.tsx");
+  assert.match(engine, /Print or save as PDF/);
+  // Bare "never...saved to a file" would contradict the button above; must be qualified as automatic-only.
+  assert.doesNotMatch(engine, /never sent to a\s*\n?\s*server, saved to a file/);
+  assert.match(engine, /never automatically\s*\n?\s*sent to a\s*\n?\s*server, saved to a file/);
+});
+
+test("answer-dependent result links do not prefetch (would leak inferred answers via automatic requests)", () => {
+  const engine = read("../src/components/quiz/DecisionQuizEngine.tsx");
+  const linkTags = engine.match(/<Link\s+href=\{[^}]+\}[^>]*>/g) ?? [];
+  const answerDependent = linkTags.filter((tag) => /path\.href|primaryAction\.href|secondaryAction\.href/.test(tag));
+  assert.ok(answerDependent.length >= 3, "expected the three answer-dependent result links");
+  for (const tag of answerDependent) {
+    assert.match(tag, /prefetch=\{false\}/, `expected prefetch={false} on: ${tag}`);
+  }
+});
+
+test("primary CTA button uses an accessible action color, not the low-contrast text-primary blue", () => {
+  const button = read("../src/components/ui/button.tsx");
+  assert.match(button, /default:\s*"bg-action text-primary-foreground hover:bg-action\/90"/);
+  const css = read("../src/app/globals.css");
+  assert.match(css, /--action:\s*#2E5FA7/);
+});
+
+test("main element gutters aren't zeroed by the legacy unlayered padding rule", () => {
+  const css = read("../src/app/globals.css");
+  assert.doesNotMatch(css, /main\s*\{\s*padding:\s*36px 0 72px/);
+  assert.match(css, /padding-top:\s*36px/);
+  assert.match(css, /padding-bottom:\s*72px/);
+});
+
+test("homepage hero aligns content to start so the primary CTA isn't pushed below the fold by a taller sibling", () => {
+  const home = read("../src/app/(main)/page.tsx");
+  assert.doesNotMatch(home, /grid items-center gap-8/);
+  assert.match(home, /grid items-start gap-8/);
+});

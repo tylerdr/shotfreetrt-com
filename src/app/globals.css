@@ -26,6 +26,13 @@
   --popover-foreground: #E0E7FF;
   --primary: #3B82F6;
   --primary-foreground: #FFFFFF;
+  /* Action/button background only — distinct from --primary, which stays
+     #3B82F6 for ordinary text links and text-primary labels on the dark
+     background (already >=4.5:1 there). White text on #3B82F6 is ~3.68:1,
+     below WCAG AA; white on #2E5FA7 is ~6.3:1. Scoped to Button's default
+     variant so it doesn't darken ordinary blue links or other bg-primary
+     UI (progress fill, checkboxes) that weren't flagged. */
+  --action: #2E5FA7;
   --secondary: #1A1A26;
   --secondary-foreground: #E0E7FF;
   --muted-foreground: #9CA3AF;
@@ -113,8 +120,16 @@ body {
   font-weight: 600;
 }
 
+/* Longhand top/bottom only (not the `padding` shorthand): the shorthand's
+   implicit `0` for left/right was an unlayered rule beating Tailwind's
+   `px-4`/`sm:px-6` on the actual <main> element in SiteChrome.tsx, zeroing
+   the responsive horizontal gutters (flush-edge copy/buttons on mobile).
+   Legacy pages that still use plain CSS classes (not Tailwind utilities)
+   rely on this rule for vertical rhythm, so it stays — just without the
+   horizontal collision. */
 main {
-  padding: 36px 0 72px;
+  padding-top: 36px;
+  padding-bottom: 72px;
 }
 
 .hero {
@@ -980,6 +995,7 @@ footer {
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-action: var(--action);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -1015,6 +1031,7 @@ footer {
   --popover-foreground: #E0E7FF;
   --primary: #3B82F6;
   --primary-foreground: #FFFFFF;
+  --action: #2E5FA7;
   --secondary: #1A1A26;
   --secondary-foreground: #E0E7FF;
   --muted: #1A1A26;

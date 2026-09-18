@@ -1,13 +1,25 @@
 # Session Handoff
 
-**Session date:** 2026-09-17
+**Session date:** 2026-09-17/18
 **Branch:** `feat/shotfreetrt-trust-conversion-20260917`
 **PR:** #9 (draft, https://github.com/tylerdr/shotfreetrt-com/pull/9) — updated by this pass, not merged, not deployed.
 **Status:** build, typecheck, lint, and full test suite pass locally against this exact working tree.
 
-## Start here
+## Second correction pass (this update): 5 confirmed issues from browser/independent review of `7e1122e`
 
-This is a bounded correction pass on top of commit `022ab08` (the quiz rebuild + trust/privacy session), driven by browser QA and an independent artifact review that found real gaps in that commit. Nothing from `022ab08` was discarded; this pass fixes specific, named defects in it. Root retains browser and deploy authority — no browser QA was performed here (see release gates below).
+1. **Mobile gutters (390px width):** `main { padding: 36px 0 72px; }` in `globals.css` was unlayered, so its implicit `0` for left/right beat Tailwind's `px-4`/`sm:px-6` on `<main>` — content sat flush against the viewport edge. Fixed to longhand `padding-top`/`padding-bottom` only (no horizontal declaration to conflict with); print rule untouched.
+2. **Desktop hero fold (1280×720):** homepage hero `grid items-center` vertically centered the copy against a taller sibling panel, pushing the primary quiz CTA below the fold. Changed to `items-start`.
+3. **CTA contrast:** white text on `#3B82F6` is ~3.68:1 (fails WCAG AA 4.5:1). Added `--action: #2E5FA7` (white-on-it is ~6.3:1), used only by `Button`'s default variant — ordinary blue links/labels and other `bg-primary` UI are untouched, per instruction not to darken those.
+4. **Answer-dependent Link prefetch:** the quiz result screen's reading-path and action links have answer-dependent hrefs; added `prefetch={false}` to all three so Next.js doesn't auto-request them (and thus leak inferred answers) before a deliberate click.
+5. **Privacy copy vs. Print/Save PDF:** "never sent to a server, saved to a file, or included in analytics" contradicted the offered print/save button. Qualified to "never automatically" + a note that user-initiated printing/saving is available.
+
+Verified in compiled output, not just source: `main{padding-top:36px;padding-bottom:72px}` (no horizontal decl); `--action:#2e5fa7`/`bg-action` rules present; prerendered homepage HTML has `grid items-start gap-8` and the hero CTA using `bg-action`. `next build` also auto-scaffolded `next.config.mjs`'s `experimental.globalNotFound` + `src/app/global-not-found.tsx` (Next 16's own 404 handling for the multi-root-layout structure from the prior pass) — kept as generated, not hand-authored. Full detail: `documents/CHANGELOG.md`.
+
+`tsc` clean · `eslint .` 0 errors (1 pre-existing) · `npm test` 48/48 (43 preserved + 5 new) · `next build` 179/179 pages. No browser QA performed (still no browser access here) — root/controller owns that.
+
+## First correction pass
+
+This was a bounded correction pass on top of commit `022ab08` (the quiz rebuild + trust/privacy session), driven by browser QA and an independent artifact review that found real gaps in that commit. Nothing from `022ab08` was discarded; this pass fixes specific, named defects in it. Root retains browser and deploy authority — no browser QA was performed here (see release gates below).
 
 ## Fixed this pass
 

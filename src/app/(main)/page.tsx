@@ -26,7 +26,7 @@ export default function HomePage() {
   ] };
   return <div className="space-y-14">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-    <section className="grid items-center gap-8 py-5 lg:grid-cols-[1.3fr_1fr] sm:py-10">
+    <section className="grid items-start gap-8 py-5 lg:grid-cols-[1.3fr_1fr] sm:py-10">
       <div className="space-y-6">
         <p className="text-sm font-semibold uppercase tracking-widest text-primary">For men comparing testosterone treatment options</p>
         <h1 className="font-[family-name:var(--font-barlow-condensed)] text-5xl font-extrabold leading-none tracking-tight sm:text-7xl">Considering TRT?<br /><span className="text-primary">Compare before<br />you commit.</span></h1>

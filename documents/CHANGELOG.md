@@ -4,6 +4,23 @@
 
 ---
 
+## 2026-09-18 — Second correction pass: mobile gutters, hero fold, CTA contrast, Link prefetch, print/save copy (Claude Code)
+
+**Branch:** feat/shotfreetrt-trust-conversion-20260917 (same draft PR #9; not merged)
+
+**Context:** five confirmed release issues found by browser/independent review of the prior correction pass (`7e1122e`).
+
+**Shipped:**
+- Mobile gutters: `main { padding: 36px 0 72px; }` in `globals.css` was unlayered, so its implicit `0` for left/right beat Tailwind's `px-4`/`sm:px-6` on the actual `<main>` element — copy/buttons sat flush against the viewport edge at 390px width. Changed to longhand `padding-top`/`padding-bottom` only, so it no longer declares (and can't conflict on) the horizontal axis; print media query untouched.
+- Homepage hero: `grid items-center` vertically centered the copy column against a taller benefits panel, pushing the primary quiz CTA below the fold at 1280×720. Changed to `items-start`.
+- CTA contrast: white text on the primary button's `#3B82F6` background is ~3.68:1, below WCAG AA's 4.5:1. Added a new `--action: #2E5FA7` token (white-on-`--action` is ~6.3:1) used only by `Button`'s default variant, so ordinary `text-primary` links/labels and other `bg-primary` UI (progress, checkboxes) — not flagged, not touched — keep the original blue.
+- Quiz result screen's reading-path and primary/secondary action `<Link>`s have hrefs that depend on quiz answers (e.g. a fertility article only renders if fertility priority was answered high/some). Added `prefetch={false}` to all three so Next.js doesn't automatically request those answer-dependent URLs before a deliberate click.
+- Quiz privacy copy said answers are "never sent to a server, saved to a file, or included in analytics" while also offering a "Print or save as PDF" button — contradictory. Qualified to "never automatically sent/saved/analyzed," with an explicit note that printing/saving is available if the user chooses it.
+
+**Verification:** `tsc --noEmit` clean; `eslint .` 0 errors (1 pre-existing unrelated warning); `npm test` 48/48 pass (43 preserved + 5 new, one per fix above); `next build` succeeds, 179/179 pages. Verified in the compiled output (not just source): `main{padding-top:36px;padding-bottom:72px}` with no horizontal declaration; `--action:#2e5fa7` and `bg-action` rules present; prerendered homepage HTML shows `grid items-start gap-8` and the hero CTA using `bg-action`. `next build` itself additionally scaffolded `next.config.mjs`'s `experimental.globalNotFound` and `src/app/global-not-found.tsx` (Next 16's own multi-root-layout 404 handling, triggered by the route-group split from the prior pass) — kept, not authored by hand.
+
+**Follow-up:** none of this pass's fixes are visually confirmed in a real browser (still no browser access here); root/controller owns that verification.
+
 ## 2026-09-17 — Correction pass: route-isolated privacy, batch3 images, button-contrast fix, corrected Blueprint PDF (Claude Code)
 
 **Branch:** feat/shotfreetrt-trust-conversion-20260917 (continuation of the same draft PR #9; not merged)
