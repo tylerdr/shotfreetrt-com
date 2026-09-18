@@ -5,6 +5,31 @@
 
 ---
 
+## 2026-09-18 00:33 UTC
+
+**Tyler's exact words:**
+> You are the independent final reviewer for ShotFreeTRT. Read-only: no source edits, commits, pushes, checkout, merge, deployment, email, or browser. Root owns release; another Claude session authored these changes and has finished before this review starts. Inspect exact HEAD vs origin/main (base fbc72264b0952e76b29e7d3324a44959d2bd47ef) with rename detection. Record exact HEAD first. Do not review unrelated canonical dirty checkout.
+
+User requested cohesive image assets, a short conversion-focused quiz, useful lead magnets, source-backed related-site links, Search Console verification, and revenue readiness. Revenue/payment/email activation is explicitly NOT proven: no configured backend secrets and product choice pending. Do not demand invented commerce or treat old broken checkout deletion as proof of new readiness. Review release as functional free quiz/education improvements, with clearly reported commercial gates.
+
+Focus on material correctness and observable UX: six-question required-answer quiz, deterministic report with valid option IDs and no unsupported diagnosis/treatment inference; back/edit/restart/focus; privacy-isolated root layouts actually force document transitions and exclude analytics; public URLs/redirects/canonical/GSC token/sitemap preserved; quote-calculator math unknown costs not zero; all referenced media exist and intended batch3 imagery used coherently; primary Button-as-Link text contrast fixed; no misleading stale PDF price or metadata in new PDF and truthful sister-site disclosure; explicit homepage OG image. Check missing resources/SEO regressions caused by route groups. Reviewer may read implementation test files and completed HANDOFF evidence but must independently reason about the diff. No broad audit of unchanged 150+ medical articles.
+
+Return only concrete P1/P2 release blockers with file/line and reproduction, or a clear no-material-findings result. Also identify remaining proof gaps (runtime/browser/deployment/payment) without conflating them with source bugs. No optional cosmetic polish, no generic checklists, no file edits. Use rg for discovery and avoid node_modules/.next scans. Finish promptly after bounded review.
+
+Check the actual primary CTA contrast values as well as inheritance. White small text on #3B82F6 is below 4.5:1; if final CSS still uses that pair, flag a targeted accessible action color correction rather than a broad theme redesign.
+
+Efficiency: previous independent review already covered initial commit 022ab08 against main and found quote arithmetic sound. Concentrate on HEAD changes since 022ab08 plus surviving integration points; do not dump lockfile or thousands of deleted legacy quiz lines. Review route moves with rename detection. No rebuilding or dependency installation during read-only review.
+
+Privacy counterexample to assess: personalized report Link hrefs depend on fertility/testing/route answers. Next.js default Link prefetch may automatically request those article URLs when results enter the viewport, before the visitor clicks, revealing answer-derived interests to server logs despite local-only wording. Check and flag if result/read-next/answer-dependent CTA links lack prefetch={false}; ordinary deliberate user navigation is fine.
+
+Also ensure privacy wording allows the deliberate Print/Save PDF feature: avoid absolute "never saved to a file" when the user can save the report. The accurate promise is no automatic upload/persistence; user-initiated printing/saving is under their control. Treat as a small copy correction, not a redesign.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
 ## 2026-09-18 00:12 UTC
 
 **Tyler's exact words:**
