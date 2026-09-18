@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-09-18 — Release closeout archive (Codex orchestrator)
+
+**Branch:** `chore/shotfreetrt-release-closeout-20260917` from merged production `main` at `9c0b6ad7717ca231930cafc62bbd806672f99f20`
+
+**Recorded receipt:** PRs 8 and 9 are merged; production deployment `dpl_5xKdoezKjmnsp5fewm4rZryQkXGg` is READY. The merged release passed 48/48 tests, TypeScript, lint, and build. Local production-build browser proof against the identical source passed mobile, desktop, full six-question quiz, network/privacy, quote-planner, and PDF flows. Live smoke checks passed for homepage/media/mobile, quiz entry and progression with no analytics scripts, HTTP PDF/redirect, GSC, and sitemap; Search Console ownership is verified and the sitemap contains 170 pages.
+
+**Archived:** the ShotFreeTRT brand brief and image prompts are now under `documents/brand/`. Nine release asset masters from Batch3 (01, 02, 03, 04, 06, 07, 08, 09, 10) are under `design/source/`; seven visible placements were confirmed, and earlier drafts, logs, secrets, and generated caches were excluded.
+
+**Remaining gates:** revenue, email, and payment activation remain disabled pending an approved and verified commercial path. Medical/editorial review of the legacy article corpus remains open.
+
+---
+
 ## 2026-09-18 — Second correction pass: mobile gutters, hero fold, CTA contrast, Link prefetch, print/save copy (Claude Code)
 
 **Branch:** feat/shotfreetrt-trust-conversion-20260917 (same draft PR #9; not merged)
