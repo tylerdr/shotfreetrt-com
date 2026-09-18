@@ -9,3 +9,7 @@ pnpm-debug.log*
 .env*
 .vercel
 *.tsbuildinfo
+
+# Deterministic assets: generated before dev, tests and production builds.
+public/media/research/*.svg
+.qa/

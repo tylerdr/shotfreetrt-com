@@ -1,0 +1,49 @@
+/* Scoped to researched guides: no changes to the inherited brand, quiz or privacy roots. */
+.article-content .evidence-guide { color: var(--foreground); line-height: 1.8; }
+.article-content .evidence-guide h2 { line-height: 1.2; margin-top: 0; font-size: clamp(1.55rem, 4vw, 2rem); }
+.article-content .evidence-guide h3 { line-height: 1.4; font-size: 1.2rem; }
+.evidence-guide .eg-summary, .evidence-guide .eg-note, .evidence-guide .eg-next { border: 1px solid var(--border); border-radius: 1rem; padding: clamp(1.15rem, 3vw, 2rem); background: var(--card); margin: 1.5rem 0; }
+.evidence-guide .eg-summary { border-top: 3px solid var(--primary); }
+.evidence-guide .eg-eyebrow { color: var(--primary); text-transform: uppercase; letter-spacing: .1em; font-size: .75rem; font-weight: 700; }
+.evidence-guide .eg-summary > p { font-size: 1.18rem; line-height: 1.7; }
+.evidence-guide small, .evidence-guide .eg-sources span { color: var(--muted-foreground); display: block; line-height: 1.6; }
+.evidence-guide .eg-toc { border-block: 1px solid var(--border); padding-block: 1.2rem; margin-block: 2rem; }
+.evidence-guide .eg-toc ol { columns: 2; column-gap: 2rem; }
+.evidence-guide .eg-toc li { break-inside: avoid; margin-block: .5rem; }
+.evidence-guide .eg-section { margin-block: 3rem; scroll-margin-top: 10rem; }
+.evidence-guide .eg-citation { font-size: .8em; white-space: nowrap; padding-inline: .15rem; text-decoration: underline; }
+.evidence-guide .eg-figure { margin: 2rem 0; overflow: hidden; border: 1px solid var(--border); border-radius: 1rem; }
+.evidence-guide .eg-figure img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; }
+.evidence-guide .eg-figure figcaption { padding: 1rem; line-height: 1.6; font-size: .84rem; color: var(--muted-foreground); background: var(--card); }
+.evidence-guide .eg-table-scroll { overflow-x: auto; margin: 1.5rem 0; max-width: 100%; border-radius: .75rem; border: 1px solid var(--border); }
+.article-content .evidence-guide table { margin: 0; width: 100%; min-width: 620px; border-collapse: collapse; font-size: .92rem; }
+.article-content .evidence-guide caption { text-align: left; font-weight: 700; padding: 1rem; color: var(--foreground); background: var(--card); }
+.article-content .evidence-guide th, .article-content .evidence-guide td { padding: 1rem; border: 1px solid var(--border); vertical-align: top; text-align: left; }
+.article-content .evidence-guide thead th { background: var(--secondary); color: var(--foreground); }
+.evidence-guide .eg-flow-grid, .evidence-guide .eg-timings, .evidence-guide .eg-metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-block: 1.5rem; }
+.evidence-guide .eg-timings { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.evidence-guide .eg-flow, .evidence-guide .eg-timing, .evidence-guide .eg-metric-grid > div { background: var(--card); border: 1px solid var(--border); border-radius: .8rem; padding: 1.1rem; min-width: 0; }
+.evidence-guide .eg-flow h3, .evidence-guide .eg-timing h3 { margin: 0 0 1rem; }
+.evidence-guide .eg-flow ol { list-style: none; counter-reset: steps; padding: 0; margin: 0; }
+.evidence-guide .eg-flow li { position: relative; padding: .6rem 0 .6rem 2rem; border-top: 1px solid var(--border); }
+.evidence-guide .eg-flow li::before { counter-increment: steps; content: counter(steps); position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+.evidence-guide .eg-timing > strong { font-size: 1.5rem; line-height: 1.25; color: var(--primary); }
+.evidence-guide .eg-timing p { font-size: .85rem; line-height: 1.6; margin-block: .6rem; }
+.evidence-guide .eg-metric-grid strong { display: block; font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.5; }
+.evidence-guide .eg-metric-grid span { font-size: .87rem; }
+.evidence-guide .eg-next > div { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; }
+.evidence-guide .eg-next a { display: inline-flex; min-height: 44px; align-items: center; font-weight: 700; text-decoration: underline; }
+.evidence-guide .eg-sources li { margin-block: 1rem; overflow-wrap: anywhere; scroll-margin-top: 10rem; }
+.evidence-guide :focus-visible { outline: 3px solid var(--ring); outline-offset: 4px; }
+@media (max-width: 600px) {
+ .evidence-guide .eg-toc ol { columns: 1; }
+ .evidence-guide .eg-flow-grid, .evidence-guide .eg-timings, .evidence-guide .eg-metric-grid { grid-template-columns: 1fr; }
+ .evidence-guide .eg-section { margin-block: 2.25rem; }
+}
+@media print {
+ .evidence-guide .eg-toc, .evidence-guide .eg-next { display: none; }
+ .evidence-guide .eg-table-scroll { overflow: visible; }
+ .article-content .evidence-guide table { min-width: 0; font-size: 9pt; table-layout: fixed; }
+ .evidence-guide .eg-figure, .evidence-guide .eg-flow, .evidence-guide .eg-note { break-inside: avoid; }
+ .evidence-guide .eg-section { margin-block: 1.3rem; }
+}
