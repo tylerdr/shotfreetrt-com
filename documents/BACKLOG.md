@@ -1,6 +1,6 @@
 # Backlog
 
-The detailed, acceptance-criteria-backed growth backlog is in **[GROWTH-PLAN-2026-09-17.md](GROWTH-PLAN-2026-09-17.md), section 10**. Release evidence and explicit limitations are in **[HANDOFF.md](HANDOFF.md)**. “Implemented” below means on draft PR #8, not merged or production-ready.
+The detailed, acceptance-criteria-backed growth backlog is in **[GROWTH-PLAN-2026-09-17.md](GROWTH-PLAN-2026-09-17.md), section 10**. Release evidence and explicit limitations are in **[HANDOFF.md](HANDOFF.md)**. PRs 8 and 9 are merged to `main`; the production receipt is recorded in `HANDOFF.md`.
 
 ## Immediate release and revenue priorities
 
@@ -9,7 +9,7 @@ The detailed, acceptance-criteria-backed growth backlog is in **[GROWTH-PLAN-202
 - [x] G003a / P0-01 (partial, 2026-09-17): Full-project `tsc --noEmit`, `eslint .`, and `next build` now pass clean with no `ignoreBuildErrors` escape hatch. Independent browser/mobile/print QA still not done — no browser access in this environment.
 - [x] G004a / P0-02 (partial, 2026-09-17): Retired the legacy heuristic quiz (candidacy score, "Roast Me" mode, lab-input advanced quiz) and replaced it with a deterministic, non-clinical decision quiz. High-risk article corpus triage remains open — deliberately out of scope this session (avoid broad medical corpus rewrite).
 - [x] G005a / P0-03,04 (partial, 2026-09-17): Newsletter now fails closed (no filesystem writes, no fake success); misleading "$19" purchase framing removed from the Longevity Blueprint guide along with its unused checkout/BuyButton code. Quiz and decision-guide screens are now exempt from all page-view/analytics tracking. Verified checkout/fulfillment (P0-05) remains open — no payment provider is configured or enabled.
-- [ ] G003b / P0-01: Independent browser/mobile/print QA for the exact PR head (this branch). Check the new quiz's keyboard/mobile flow, the new print stylesheet output, long CTA wrapping on narrow phones, and calculator interactions. Partial browser QA already found and fixed one release blocker this pass (blue-on-blue button text); full pass still not done — no browser access in this environment.
+- [x] G003b / P0-01: Independent browser/mobile/print QA for the merged release. Mobile, desktop, full quiz, quote, print/PDF, and network/privacy checks passed; the receipt is in HANDOFF.md.
 - [ ] G004b / P0-02: Clinical/editorial triage of the remaining high-risk legacy articles. The quiz retirement/rebuild and CTA changes are not a substitute for this review.
 - [ ] G006 / P0-06–07: Approve the proposed clinic scope, reviewer responsibilities, acceptance/refund terms and appropriate legal/data safeguards. Enable and test a real business inquiry destination only after approval. Enrollment remains disabled and the pilot page remains noindex.
 - [ ] G007 / P0-08–11: Validate public prospect records, run an approved small outreach cohort, close the first paid pilot, ship its accepted template and measure aggregate business utility. No outreach or paid demand is claimed completed.
@@ -23,7 +23,7 @@ The detailed, acceptance-criteria-backed growth backlog is in **[GROWTH-PLAN-202
 ## Existing active work (retained)
 
 - [ ] T002: Verify live article rendering and on-page polish for `/blog/testosterone-and-anemia` `HIGH`.
-- [ ] T003: Wire Google Search Console / indexing visibility so article velocity can be measured `HIGH`. PR #7's verification tag is merged and preserved in PR #8; production ownership/indexing verification remains open. The GSC Wizard connection returned a subscription-required error in this session.
+- [x] T003: Wire Google Search Console / indexing visibility so article velocity can be measured `HIGH`. Ownership is verified and `sitemap.xml` was submitted successfully with 170 pages.
 
 ## Existing next-up work (reordered)
 
@@ -37,13 +37,13 @@ The detailed, acceptance-criteria-backed growth backlog is in **[GROWTH-PLAN-202
 
 ## Existing questions (retained)
 
-- [ ] OQ001: Confirm production release workflow and isolation of content/design work. PR #8 must stay separate from local dirty work and must not be auto-promoted on the basis of this plan.
+- [x] OQ001: Confirm production release workflow and isolation of content/design work. PRs 8 and 9 are merged; the closeout archive is isolated from application source.
 - [ ] OQ002: Decide whether diagnostic-category badges need dedicated styling after higher-priority release and revenue work.
 
 ## Prior GSC work
 
 - [x] P001a: GSC verification metadata PR #7 merged into main.
-- [ ] P001b: Independently verify production tag, property ownership and indexing. A token in source alone does not establish these outcomes.
+- [x] P001b: Independently verify production tag, property ownership and indexing. Ownership is verified and the 170-page sitemap submission succeeded.
 
 ## Previously completed
 
