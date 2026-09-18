@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run generate:evidence && next dev",
+    "build": "npm test && next build",
     "start": "next start",
     "lint": "eslint .",
+    "generate:evidence": "node --experimental-strip-types scripts/generate-evidence-visuals.mjs",
+    "pretest": "npm run generate:evidence",
     "test": "node --experimental-strip-types --test tests/*.test.mjs"
   },
   "dependencies": {
