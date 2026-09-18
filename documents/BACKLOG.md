@@ -19,6 +19,8 @@ The detailed, acceptance-criteria-backed growth backlog is in **[GROWTH-PLAN-202
 - [x] G011 (2026-09-17): Made the quiz/decision-guide "local-only" privacy promise structurally true (separate root layout, not a pathname check) after browser QA found GA still loading on those routes. See HANDOFF.md.
 - [x] G012 (2026-09-17): Fixed a release-blocking CSS bug where primary CTA button text rendered blue-on-blue site-wide, found by browser QA.
 - [x] G013 (2026-09-17): Regenerated the Longevity Blueprint PDF (stale price, no branding, localhost in metadata, unqualified outcome claims) via a new ReportLab-based build script; all three served copies now byte-identical.
+- [x] G014a (2026-09-17): Add externally verifiable release/copy identity and regression coverage after an independent public-web fetch returned older treatment-plan homepage copy than current repository/Vercel metadata. Draft PR #12 adds release headers, `/api/release`, and source regression tests; preview QA passed 51/51 tests plus lint and production build.
+- [ ] G014b (release gate): After a separately authorized merge/deployment of PR #12, verify the actual `shotfreetrt.com` and `www` origin headers, `/api/release`, immutable deployment and root HTML agree before classifying the current discrepancy as origin drift vs. third-party crawler/cache lag. Do not purge caches or alter DNS/domain settings from this task.
 
 ## Existing active work (retained)
 
