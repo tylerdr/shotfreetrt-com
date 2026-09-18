@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { captureFirstTouchAttribution } from "@/lib/attribution";
 import { trackPageView } from "@/lib/analytics";
 
 const TENANT_ID = "015fd669-36bc-4847-9d7d-d0ad20bf90b5";
@@ -11,6 +12,10 @@ export { TENANT_ID };
 export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const lastPathname = useRef("");
+
+  useEffect(() => {
+    captureFirstTouchAttribution();
+  }, []);
 
   useEffect(() => {
     if (pathname !== lastPathname.current) {

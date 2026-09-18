@@ -1,38 +1,80 @@
+import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
 
-export default function LongevityBlueprintSuccessPage() {
+import { BlueprintDownloadLink } from "@/components/BlueprintDownloadLink";
+import { PurchaseTracking } from "@/components/PurchaseTracking";
+import {
+  BLUEPRINT_ENTITLEMENT_COOKIE,
+  verifyBlueprintEntitlementToken
+} from "@/lib/entitlement";
+import { verifyBlueprintCheckoutSession } from "@/lib/stripe-server";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Longevity Blueprint Purchase",
+  description: "Access your verified Longevity Blueprint purchase.",
+  robots: {
+    index: false,
+    follow: false,
+    nocache: true,
+    googleBot: {
+      index: false,
+      follow: false,
+      noimageindex: true,
+      noarchive: true
+    }
+  }
+};
+
+export default async function LongevityBlueprintSuccessPage() {
+  const cookieStore = await cookies();
+  const entitlement = verifyBlueprintEntitlementToken(
+    cookieStore.get(BLUEPRINT_ENTITLEMENT_COOKIE)?.value
+  );
+  const verification = await verifyBlueprintCheckoutSession(entitlement?.sessionId);
+
+  if (!verification.ok) {
+    return (
+      <section className="hero guide-hero">
+        <p className="guide-badge-row">
+          <span className="badge">Purchase Not Verified</span>
+        </p>
+        <h1>We Couldn&apos;t Confirm This Purchase</h1>
+        <p>
+          The download stays locked until Stripe confirms a completed payment. If
+          you just paid, reopen the confirmation link from your Stripe receipt or
+          return to the guide and try again.
+        </p>
+        <p style={{ marginBottom: 0 }}>
+          <Link className="guide-secondary-link" href="/guides/longevity-blueprint">
+            Return to the Longevity Blueprint
+          </Link>
+        </p>
+      </section>
+    );
+  }
+
+  const downloadHref = "/api/download/longevity-blueprint";
+
   return (
     <>
+      <PurchaseTracking purchase={verification.purchase} />
       <section className="hero guide-hero">
         <p className="guide-badge-row">
           <span className="badge">Purchase Complete</span>
           <span className="badge" style={{ background: "#166534", color: "#bbf7d0" }}>
-            Thank You
+            Verified by Stripe
           </span>
         </p>
         <h1>Your Longevity Blueprint Is Ready</h1>
         <p>
-          Thank you for your purchase. Your download link is below so you can access
-          The Longevity Blueprint (2026 Edition) immediately.
+          Your paid purchase is verified. Download The Longevity Blueprint (2026
+          Edition) below and keep the link for your personal use.
         </p>
-        <a
-          href="/longevity-blueprint.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="cta-button"
-          style={{
-            display: "inline-block",
-            marginTop: 16,
-            padding: "12px 24px",
-            background: "#22c55e",
-            color: "#000",
-            borderRadius: 12,
-            fontWeight: 600,
-            textDecoration: "none"
-          }}
-        >
-          ⬇ Download The Longevity Blueprint PDF
-        </a>
+        <BlueprintDownloadLink href={downloadHref} />
       </section>
 
       <section style={{ marginTop: 24 }}>

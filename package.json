@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "verify:growth": "node scripts/verify-growth-readiness.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.55",

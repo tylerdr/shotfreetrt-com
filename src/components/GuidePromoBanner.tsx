@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { ArrowRight, FileDown, Flame } from "lucide-react";
+import { ArrowRight, Flame } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,7 +20,7 @@ export default function GuidePromoBanner({
       <CardHeader className="gap-3">
         <p className="inline-flex w-fit items-center gap-2 rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-blue-200">
           <Flame className="size-4" />
-          Free guide
+          $19 digital guide
         </p>
         <CardTitle className="text-2xl font-black text-white">The Shot-Free TRT Blueprint</CardTitle>
       </CardHeader>
@@ -38,9 +38,9 @@ export default function GuidePromoBanner({
             </Link>
           </Button>
           <Button asChild variant="outline" className="border-blue-500/40 bg-transparent text-blue-300 hover:bg-blue-500/10">
-            <Link href="/guides/longevity-blueprint.pdf">
-              Download PDF
-              <FileDown className="size-4" />
+            <Link href="/guides/longevity-blueprint">
+              View guide &amp; buy
+              <ArrowRight className="size-4" />
             </Link>
           </Button>
         </div>

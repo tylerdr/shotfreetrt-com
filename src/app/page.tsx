@@ -90,11 +90,6 @@ export default function HomePage() {
         "@type": "WebSite",
         name: "ShotFreeTRT",
         url: siteUrl,
-        potentialAction: {
-          "@type": "SearchAction",
-          target: `${siteUrl}/blog?query={search_term_string}`,
-          "query-input": "required name=search_term_string"
-        }
       }
     ]
   };

@@ -2,7 +2,9 @@
 
 import Script from "next/script";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+
+import { flushGa4EventQueue, trackGa4Event } from "@/lib/analytics";
 
 const GA_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ||
@@ -10,21 +12,14 @@ const GA_ID =
 
 export default function GoogleAnalytics() {
   const pathname = usePathname();
-  const initialized = useRef(false);
 
   useEffect(() => {
-    const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void })
-      .gtag;
-    if (!GA_ID || typeof gtag !== "function") return;
-    // gtag's default send_page_view covers the first load; track client-side
-    // route changes after that so SPA navigations are counted.
-    if (!initialized.current) {
-      initialized.current = true;
-      return;
-    }
-    gtag("event", "page_view", {
+    if (!GA_ID) return;
+    // Auto pageviews are disabled below. Emit one explicit pathname-only view
+    // for the initial render and every client-side route transition.
+    trackGa4Event("page_view", {
       page_path: pathname,
-      page_location: window.location.href,
+      page_location: window.location.origin + pathname,
       page_title: document.title,
     });
   }, [pathname]);
@@ -36,13 +31,20 @@ export default function GoogleAnalytics() {
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
         strategy="afterInteractive"
+        onReady={flushGa4EventQueue}
       />
       <Script id="ga4-init" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${GA_ID}');
+          gtag('config', '${GA_ID}', { send_page_view: false });
+          if (Array.isArray(window.__sftGa4Queue)) {
+            window.__sftGa4Queue.forEach(function(item) {
+              gtag('event', item.eventName, item.params);
+            });
+            window.__sftGa4Queue = [];
+          }
         `}
       </Script>
     </>

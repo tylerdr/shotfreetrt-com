@@ -11,6 +11,53 @@ export type AnalyticsEvent = {
   metadata?: Record<string, unknown>;
 };
 
+export type Ga4EventParams = Record<string, string | number | boolean | object | undefined>;
+
+type BrowserAnalyticsWindow = Window & {
+  gtag?: (name: "event", eventName: string, params: Ga4EventParams) => void;
+  __sftGa4Queue?: Array<{ eventName: string; params: Ga4EventParams }>;
+};
+
+function safeAnalyticsPath(value: string): string {
+  if (!value) return "";
+
+  try {
+    const parsed = new URL(value, typeof window !== "undefined" ? window.location.origin : "https://shotfreetrt.com");
+    return parsed.pathname.startsWith("/") ? parsed.pathname.slice(0, 240) : "";
+  } catch {
+    return value.startsWith("/") ? value.split(/[?#]/, 1)[0].slice(0, 240) : "";
+  }
+}
+
+function sanitizeAnalyticsValue(value: unknown, key = ""): unknown {
+  if (typeof value === "string") {
+    if (key === "page_location") {
+      try {
+        const parsed = new URL(value);
+        return `${parsed.origin}${parsed.pathname}`.slice(0, 300);
+      } catch {
+        return "";
+      }
+    }
+    if (/^https?:\/\//i.test(value) || value.startsWith("//")) {
+      return safeAnalyticsPath(value);
+    }
+    return value.includes("?") || value.includes("#")
+      ? value.split(/[?#]/, 1)[0]
+      : value;
+  }
+  if (Array.isArray(value)) return value.map((entry) => sanitizeAnalyticsValue(entry, key));
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([entryKey, entry]) => [
+        entryKey,
+        sanitizeAnalyticsValue(entry, entryKey)
+      ])
+    );
+  }
+  return value;
+}
+
 function getSessionId(): string {
   if (typeof window === "undefined") return "";
   let sid = sessionStorage.getItem("_av_sid");
@@ -42,10 +89,20 @@ export async function trackEvent(
     const payload = {
       tenant_id: tenantId,
       event_type: event.event_type,
-      page_url: event.page_url || (typeof window !== "undefined" ? window.location.href : ""),
-      referrer: event.referrer || (typeof document !== "undefined" ? document.referrer : ""),
-      session_id: event.session_id || getSessionId(),
-      metadata: { ...getContext(), ...event.metadata },
+      page_url: safeAnalyticsPath(
+        event.page_url || (typeof window !== "undefined" ? window.location.pathname : "")
+      ),
+      referrer: safeAnalyticsPath(
+        event.referrer || (typeof document !== "undefined" ? document.referrer : "")
+      ),
+      session_id:
+        event.session_id && !/^cs_/i.test(event.session_id)
+          ? sanitizeAnalyticsValue(event.session_id)
+          : getSessionId(),
+      metadata: sanitizeAnalyticsValue({ ...getContext(), ...event.metadata }) as Record<
+        string,
+        unknown
+      >,
     };
 
     await fetch(`${SUPABASE_URL}/rest/v1/analytics`, {
@@ -82,4 +139,34 @@ export function trackCtaClick(
 
 export function trackImpression(tenantId: string, itemType: string, itemId: string, metadata?: Record<string, unknown>) {
   return trackEvent(tenantId, { event_type: "impression", metadata: { item_type: itemType, item_id: itemId, ...metadata } });
+}
+
+export function trackGa4Event(eventName: string, params: Ga4EventParams = {}) {
+  if (typeof window === "undefined") return;
+
+  const analyticsWindow = window as BrowserAnalyticsWindow;
+  const gtag = analyticsWindow.gtag;
+  const safeParams = sanitizeAnalyticsValue(params) as Ga4EventParams;
+
+  if (typeof gtag === "function") {
+    gtag("event", eventName, safeParams);
+    return;
+  }
+
+  analyticsWindow.__sftGa4Queue ??= [];
+  analyticsWindow.__sftGa4Queue.push({ eventName, params: safeParams });
+}
+
+export function flushGa4EventQueue() {
+  if (typeof window === "undefined") return;
+
+  const analyticsWindow = window as BrowserAnalyticsWindow;
+  const gtag = analyticsWindow.gtag;
+  const queue = analyticsWindow.__sftGa4Queue;
+  if (typeof gtag !== "function" || !queue?.length) return;
+
+  analyticsWindow.__sftGa4Queue = [];
+  for (const event of queue) {
+    gtag("event", event.eventName, event.params);
+  }
 }
