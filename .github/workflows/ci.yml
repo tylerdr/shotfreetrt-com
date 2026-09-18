@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Verify required agent docs exist
         run: |
           missing=0
@@ -23,3 +22,28 @@ jobs:
             fi
           done
           exit $missing
+
+  application:
+    name: Test, lint and build application
+    # Standard hosted runner usage is free for public repositories. Do not
+    # silently enable paid private-repository runs if visibility changes.
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Tests, lint and full TypeScript production build
+        run: npm run build
+      # Deliberately no artifact upload, persistent cache, secrets, deployment,
+      # browser automation, larger runner, or billing-setting changes.
