@@ -1,38 +1,35 @@
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+
 type NewsletterCTAProps = {
   title?: string;
   description?: string;
   buttonLabel?: string;
-  formId?: string;
+  href?: string;
   compact?: boolean;
 };
 
+// There is no durable email-delivery backend. Rather than collect addresses
+// a subscriber will never actually receive anything from, this links to a
+// real, working, free resource instead of an email form.
 export function NewsletterCTA({
-  title = "Get weekly longevity protocols",
-  description = "Join the ShotFreeTRT newsletter for evidence-based strategies on training, nutrition, sleep, and biomarkers.",
-  buttonLabel = "Subscribe",
-  formId = "newsletter-email",
+  title = "Get the free decision guide",
+  description = "No email required. Read the appointment checklist, compare written clinic quotes with the calculator, and see dated provider price examples.",
+  buttonLabel = "Open the decision guide",
+  href = "/decision-guide",
   compact = false
 }: NewsletterCTAProps) {
   return (
     <section
       className={`cta${compact ? " cta-compact" : ""}`}
-      aria-label="Newsletter sign up"
+      aria-label="Free decision guide"
     >
       <h2>{title}</h2>
       <p>{description}</p>
-      <form className="cta-form" action="#" method="post">
-        <label htmlFor={formId} className="sr-only">
-          Email address
-        </label>
-        <input
-          id={formId}
-          name="email"
-          type="email"
-          placeholder="you@company.com"
-          required
-        />
-        <button type="submit">{buttonLabel}</button>
-      </form>
+      <Button asChild>
+        <Link href={href}>{buttonLabel}</Link>
+      </Button>
     </section>
   );
 }

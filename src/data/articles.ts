@@ -22167,10 +22167,12 @@ Zinc appears to support normal GnRH pulsatility and LH receptor signaling. Zinc-
     slug: "testosterone-and-cholesterol",
     title: "Testosterone and Cholesterol: What TRT Actually Does to Your Lipid Panel",
     description: "Does TRT raise your cholesterol? A data-driven breakdown of what testosterone therapy actually does to HDL, LDL, triglycerides, and cardiovascular risk — by delivery method.",
+    author,
     category: "health",
     keywords: ["testosterone and cholesterol", "TRT cholesterol", "does TRT raise cholesterol", "testosterone HDL LDL", "TRT lipid panel"],
     publishedAt: "2026-03-28",
-    readingTime: 11,
+    readTime: "11 min read",
+    sections: [],
     content: `
 <h1>Testosterone and Cholesterol: What TRT Actually Does to Your Lipid Panel</h1>
 

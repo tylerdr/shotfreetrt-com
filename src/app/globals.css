@@ -14,6 +14,10 @@
   --accent-2: #3B82F6;
   --border: #222230;
   --radius: 0.75rem;
+  /* Warm-bone mounting surface for editorial illustrations: these carry a
+     soft light vignette that reads as a stark glow directly on the dark
+     background, so they sit on this surface instead. */
+  --editorial-frame: #E9E5DA;
   --background: #0A0A0F;
   --foreground: #E0E7FF;
   --card: #12121A;
@@ -22,6 +26,13 @@
   --popover-foreground: #E0E7FF;
   --primary: #3B82F6;
   --primary-foreground: #FFFFFF;
+  /* Action/button background only — distinct from --primary, which stays
+     #3B82F6 for ordinary text links and text-primary labels on the dark
+     background (already >=4.5:1 there). White text on #3B82F6 is ~3.68:1,
+     below WCAG AA; white on #2E5FA7 is ~6.3:1. Scoped to Button's default
+     variant so it doesn't darken ordinary blue links or other bg-primary
+     UI (progress fill, checkboxes) that weren't flagged. */
+  --action: #2E5FA7;
   --secondary: #1A1A26;
   --secondary-foreground: #E0E7FF;
   --muted-foreground: #9CA3AF;
@@ -57,14 +68,22 @@ body {
   font-family: var(--font-body, Inter), "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-a {
-  color: #60A5FA;
-  text-decoration: none;
-}
+/* Layered (not bare) so Tailwind's utilities layer — e.g. text-primary-foreground
+   on Button asChild anchors — always wins over this default link color,
+   regardless of selector order. An unlayered `a { color }` rule would beat
+   ANY layered utility class no matter how specific, which previously made
+   button-styled CTA links render in link-blue instead of their variant's
+   text color. */
+@layer base {
+  a {
+    color: #60A5FA;
+    text-decoration: none;
+  }
 
-a:hover {
-  color: #93C5FD;
-  text-decoration: none;
+  a:hover {
+    color: #93C5FD;
+    text-decoration: none;
+  }
 }
 
 .container {
@@ -101,8 +120,16 @@ a:hover {
   font-weight: 600;
 }
 
+/* Longhand top/bottom only (not the `padding` shorthand): the shorthand's
+   implicit `0` for left/right was an unlayered rule beating Tailwind's
+   `px-4`/`sm:px-6` on the actual <main> element in SiteChrome.tsx, zeroing
+   the responsive horizontal gutters (flush-edge copy/buttons on mobile).
+   Legacy pages that still use plain CSS classes (not Tailwind utilities)
+   rely on this rule for vertical rhythm, so it stays — just without the
+   horizontal collision. */
 main {
-  padding: 36px 0 72px;
+  padding-top: 36px;
+  padding-bottom: 72px;
 }
 
 .hero {
@@ -968,6 +995,7 @@ footer {
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-action: var(--action);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -991,6 +1019,7 @@ footer {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-editorial-frame: var(--editorial-frame);
 }
 
 .dark {
@@ -1002,6 +1031,7 @@ footer {
   --popover-foreground: #E0E7FF;
   --primary: #3B82F6;
   --primary-foreground: #FFFFFF;
+  --action: #2E5FA7;
   --secondary: #1A1A26;
   --secondary-foreground: #E0E7FF;
   --muted: #1A1A26;
@@ -1183,5 +1213,48 @@ footer {
   .article-content th,
   .article-content td {
     padding: 7px 8px;
+  }
+}
+
+/*
+ * Printing the decision guide, quote calculator, or quiz decision brief
+ * should produce a legible, ink-friendly page: white background, black
+ * text, no dark card backgrounds that clip or hide values, no decorative
+ * chrome. Elements marked print:hidden (nav, header, buttons) are already
+ * removed by Tailwind's print variant; this covers the remaining surfaces.
+ */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  main {
+    max-width: none !important;
+  }
+
+  .card,
+  [data-slot="card"],
+  section {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+    border-color: #CCCCCC !important;
+    box-shadow: none !important;
+  }
+
+  .text-muted-foreground,
+  [class*="text-zinc-"],
+  [class*="text-blue-"] {
+    color: #1A1A1A !important;
+  }
+
+  a {
+    color: #000000 !important;
+    text-decoration: underline !important;
+  }
+
+  img,
+  svg:not([role="img"]) {
+    display: none !important;
   }
 }

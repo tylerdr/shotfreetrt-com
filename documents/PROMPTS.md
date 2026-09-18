@@ -5,6 +5,161 @@
 
 ---
 
+## 2026-09-18 00:52 UTC
+
+**Tyler's exact words:**
+> Final bounded correction pass. You remain sole app writer in this isolated ShotFreeTRT worktree; other agents are reviewing, do not revert their changes. Start after independent review finishes. No merge/deploy/payment activation. Fix these confirmed release issues only, with focused validation and commit/push PR9:
+1. Browser mobile390x844 main has class px-4 but computed padding 28px 0px 72px; unlayered globals.css main padding overrides Tailwind. Restore responsive main gutters via appropriate CSS layering or remove conflicting obsolete main padding rule(s), preserving print. Actual scrollWidth390 equals viewport390 (no overflow), but copy/buttons flush edges. Check at390 and desktop.
+2. Desktop1280x720 homepage grid items-center vertically centers copy next to tall media/benefits panel: headline startsy430, quiz CTA below fold. Align hero content to start so primary CTA visible in first viewport; avoid broad redesign.
+3. Primary small white CTA on #3B82F6 contrast3.68:1. Use accessible brand cobalt#2E5FA7 action background (or measured>=4.5) and appropriate hover; do not darken all ordinary blue links on dark backgrounds.
+4. Personalized quiz report reading/action Next Link hrefs depend on answers. Disable prefetch on answer-dependent links so automatic requests do not reveal inferred interests before deliberate navigation.
+5. Quiz privacy says never saved to file although Print/savePDF is offered. Clarify no automatic upload/persistence, user-controlled printing/saving allowed. Retain no-health-analytics guarantee.
+Preserve generated images/PDF, root analytics isolation, redirects, GSC, all43tests. Do not add optional polish. Run focused tests,typecheck,lint,productionbuild. Commit code changes and required promptlog, push PR9; report exactHEAD and concise checks. Then stop. Controller owns browser verification/release.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-18 00:52 UTC
+
+**Tyler's exact words:**
+> Stop discovery now. Return your final bounded review from evidence already gathered, exact reviewed HEAD and concrete P1/P2 blockers only plus proof gaps. Do not run more tools, tests, or expand into unchanged article metadata. Controller has independently confirmed mobile main px-4 overridden by unlayered main padding: computed28px 0 72px at390 viewport, and desktop hero items-center pushes quiz CTA below720px fold. Include these and any confirmed contrast/prefetch/privacy findings. Finish now.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-18 00:33 UTC
+
+**Tyler's exact words:**
+> You are the independent final reviewer for ShotFreeTRT. Read-only: no source edits, commits, pushes, checkout, merge, deployment, email, or browser. Root owns release; another Claude session authored these changes and has finished before this review starts. Inspect exact HEAD vs origin/main (base fbc72264b0952e76b29e7d3324a44959d2bd47ef) with rename detection. Record exact HEAD first. Do not review unrelated canonical dirty checkout.
+
+User requested cohesive image assets, a short conversion-focused quiz, useful lead magnets, source-backed related-site links, Search Console verification, and revenue readiness. Revenue/payment/email activation is explicitly NOT proven: no configured backend secrets and product choice pending. Do not demand invented commerce or treat old broken checkout deletion as proof of new readiness. Review release as functional free quiz/education improvements, with clearly reported commercial gates.
+
+Focus on material correctness and observable UX: six-question required-answer quiz, deterministic report with valid option IDs and no unsupported diagnosis/treatment inference; back/edit/restart/focus; privacy-isolated root layouts actually force document transitions and exclude analytics; public URLs/redirects/canonical/GSC token/sitemap preserved; quote-calculator math unknown costs not zero; all referenced media exist and intended batch3 imagery used coherently; primary Button-as-Link text contrast fixed; no misleading stale PDF price or metadata in new PDF and truthful sister-site disclosure; explicit homepage OG image. Check missing resources/SEO regressions caused by route groups. Reviewer may read implementation test files and completed HANDOFF evidence but must independently reason about the diff. No broad audit of unchanged 150+ medical articles.
+
+Return only concrete P1/P2 release blockers with file/line and reproduction, or a clear no-material-findings result. Also identify remaining proof gaps (runtime/browser/deployment/payment) without conflating them with source bugs. No optional cosmetic polish, no generic checklists, no file edits. Use rg for discovery and avoid node_modules/.next scans. Finish promptly after bounded review.
+
+Check the actual primary CTA contrast values as well as inheritance. White small text on #3B82F6 is below 4.5:1; if final CSS still uses that pair, flag a targeted accessible action color correction rather than a broad theme redesign.
+
+Efficiency: previous independent review already covered initial commit 022ab08 against main and found quote arithmetic sound. Concentrate on HEAD changes since 022ab08 plus surviving integration points; do not dump lockfile or thousands of deleted legacy quiz lines. Review route moves with rename detection. No rebuilding or dependency installation during read-only review.
+
+Privacy counterexample to assess: personalized report Link hrefs depend on fertility/testing/route answers. Next.js default Link prefetch may automatically request those article URLs when results enter the viewport, before the visitor clicks, revealing answer-derived interests to server logs despite local-only wording. Check and flag if result/read-next/answer-dependent CTA links lack prefetch={false}; ordinary deliberate user navigation is fine.
+
+Also ensure privacy wording allows the deliberate Print/Save PDF feature: avoid absolute "never saved to a file" when the user can save the report. The accurate promise is no automatic upload/persistence; user-initiated printing/saving is under their control. Treat as a small copy correction, not a redesign.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-18 00:12 UTC
+
+**Tyler's exact words:**
+> Continue and finish the same scoped correction pass; no work discarded. Controller found the missing PDF renderer so you need not keep probing: bundled Python /Users/td/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 has reportlab and pypdf (fresh import checks passed). Use that Python to generate a clean branded PDF from the corrected Markdown via ReportLab Platypus; pandoc can supply parsed intermediate if helpful. Do not install or explore more tools. All three PDF copies should match, metadata title clean, no stale price/outcome promises, readable headings/lists/page numbers and link back to site/quiz/decision-guide. Use pdfinfo/pdftotext and pdftoppm for focused QA. One additional precision correction: quiz answers are memory-only and refresh clears them, but browser back-forward cache may preserve a document; do not promise that leaving a page instantly destroys all answers. Remove that absolute leaving-page wording, keep accurate no server/storage/analytics promise. Finish original image/privacy/CTA/redirect/OG fixes and focused tests, typecheck/lint/build; commit/push existing draft PR9 and stop with exact handoff. No merge/deploy or further broad research. Previous root reviews and native QA passed baseline functionality. Completion now takes priority over optional polish.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-18 00:01 UTC
+
+**Tyler's exact words:**
+> Continue your correction pass from existing edits, preserving all work. Controller interrupted only to deliver fresh browser and independent artifact-review blockers before you run final checks. Read ../browser-qa-notes.txt now and incorporate those bounded corrections, then finish original scope, tests/typecheck/lint/build, commit/push/update draft PR9, and stop with exact handoff. No merge/deploy. No new exploration or redesign beyond these fixes. Use login:false for shell calls where supported to avoid slow shell startup.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-17 23:50 UTC
+
+**Tyler's exact words:**
+> <task-notification>
+<task-id>bataoghvu</task-id>
+<tool-use-id>toolu_019QLKJ7buLcmyqfbZcV7HTK</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-td-Documents-Codex-2026-09-17-own-drugfreetrt-com-candidate-source-repository-work-shotfreetrt-trust-conversion-20260917/aff93027-2e2d-456c-a36a-3c8d0eb10e35/tasks/bataoghvu.output</output-file>
+<status>completed</status>
+<summary>Background command "Clean stale build cache and retype-check" completed (exit code 0)</summary>
+</task-notification>
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-17 23:39 UTC
+
+**Tyler's exact words:**
+> Handoff: prior Claude writer completed commit 022ab08d12d2048a96e89608504c93f699905c6a and draft PR #9, then was stopped cleanly by controller. You are the sole new writer. Worktree is isolated and clean; canonical dirty checkout is not yours. Read current HANDOFF for completed checks, then execute this bounded correction pass. Root retains browser and release authority.
+
+Finish the current ShotFreeTRT release in the same worktree, sole writer. Preserve the user-requested quiz and all working changes. Do not merge or deploy.
+
+Final image direction: ten new WEB-generated originals exist at ../../outputs/shotfreetrt-assets/batch3/sft-web-batch3-01.png through -10.png. They have a flat etched editorial style but retain a soft light vignette. Use the strongest nonclinical assets in place of batch2 assets. Place them on deliberate warm-bone (#E9E5DA) editorial figure surfaces, within the dark site, rather than letting white glows float on black. Preserve actual alpha; optimize to WebP, keep useful responsive dimensions. Check asset manifest if present. No additional generation or programmatic background removal. Use only helpful placements; avoid huge decorative art pushing quiz CTA below fold.
+
+Privacy blocker: GoogleAnalytics.tsx suppresses explicit page_view but still injects gtag on quiz and guide, and client navigation retains it. Ensure the local-only promise is accurate. A robust route-isolation solution (full-document navigation into these routes, no third-party analytics scripts there) is preferred if simple; otherwise conservatively leave GA disabled pending privacy-safe measurement. Do not pretend pathname checks unload an already loaded SDK. Keep no answer values in analytics, URL, storage, or email. Narrow privacy wording to quiz answers / quote inputs, not an impossible claim that the page never makes network requests.
+
+Quiz logic final checks: validate option IDs, not just truthy answers; tested-but-unsure does not prove the user lacks a diagnosis, and already-paying does not prove they lack a complete quote. Make reasons match only selected answers. Review keyboard focus on question transitions and result announcement, back/edit/restart and print.
+
+Commerce audit: production has only GA ID, no Stripe/entitlement/email secrets. Existing $19 product is branded AliveLongevity. Keep payment and email claims truthful; do not repurpose or activate that product. User commercial-path clarification is pending. Free quiz, printable report, useful guide, cost planner and contextual article/owned-site links must work now.
+
+Complete focused behavioral tests, lint, tsc and production build. Document exact results and remaining external activation gates. Commit and push to the existing branch and update existing draft PR #9 (https://github.com/tylerdr/shotfreetrt-com/pull/9); do not create a duplicate PR. Report exact SHA. Do not include tsconfig.tsbuildinfo or unrelated generated artifacts. Stop after clear handoff for independent review.
+
+Independent review also found DecisionQuizEngine privacy copy says "No symptoms...or health details are collected" despite asking about symptoms/testing/fertility. Replace with accurate limited in-memory answer handling, distinguish no transmission from no collection, and no misleading health-data claims.
+
+Verified batch3 mapping: 01 notebook/compass (home); 02 blue specimen tubes/report (lab/start-here); 03 blank conversation cards (appointment questions/about); 04 checklist/clock (guide/monitoring); 05 botanical cards/shell (OMIT, not TRT-relevant); 06 coffee/moon (sleep/caffeine article); 07 notes/magnifier (resources/evidence); 08 dumbbell/meal (training/metabolic article); 09 planner notebook (guide/Blueprint); 10 calculator/coins (pricing/quote planner). Use purposefully, no decorative overload. Best priority assets are 01,02,04,06,09,10 plus relevant 07/08.
+
+Copy corrections from handoff: AliveLongevity and PeakedLabs ARE user-owned sister sites. Do not claim "not an affiliated service". Label related reading from our network accurately without implying clinical endorsement. Keep generated-art production details out of public captions: no "decorative, not a clinical diagram" captions; use a helpful content-specific caption or omit it, with empty alt for purely decorative art. A read-only reviewer is checking the existing Blueprint PDF; hold final claims about its quality pending root findings.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-17 22:47 UTC
+
+**Tyler's exact words:**
+> Important user correction supersedes your prior instruction to retire quiz: "Quiz funnels are killer so we should keep a quiz funnel ideally, in addition to whatever lead magnets make sense. it can be for a recommendation or report or whatever makes sense, either deterministic or using AI to generate the result based on the quiz. But please ensure everything is conversion optimized and ready for revenue and scale."
+Resume from existing edits, do NOT discard other work. Root interrupted only to steer this correction. Preserve completed lint/trust/media fixes. RootGSCverifiedowner+sitemapSuccess170pages.
+Build a real highquality short quiz funnel now, deterministic is correct unless existing configuredAI can be proven. Use e.g. 6 concise multiple-choice questions to understand visitor intent, testing stage, fertility conversation priority, route questions, cost clarity, and next-step timing. Avoid collecting numericlabs/diagnosing or treatmenteligibility. Progress, backbutton, keyboardmobileaccessible, answerpersistenceonly incomponentmemory, no mandatoryemailwall. Clear personalized result: Your TRT Decision Brief with transparent reasons tied toanswers, prioritized questions/checklist, selected educationalreading paths, relevant quoteplannerCTA. Route preferences inform what toread/ask—not prescribedtreatment. Useful detailed onpage report and print/savePDF via printstyles, restart/editanswers. Copy truthfully personalized/deterministic—notAI. Funnel should retain /quiz/healthspan and /quiz/healthspan/advanced as functioning entry URLs/canonical redirects appropriately; nodeadlegacyresultlinks, nofakeclinicalscore. New authoredquiz canreplaceunsafeoldcode youremoved.
+Revenue funnel: HomeprimaryCTA quiz, secondaryfreeguide; resultprimary action appropriate decisionguide/comparecosts + downloadable/printableleadmagnet. ContextualCTA on relevantarticles. Optionalemail delivery ONLY if actual durableprovider configured/testable; doNOTimplement fakeform or claimdelivered withoutacceptedresponse. Never transmit quizanswers/labhealthdetails toanalyticsoremail. Removeanalytics injection/events onquiz/report/decisionguide screens so local-onlypromise istrue. Keepmail/purchasegates honest; rootparallelcommerceaudit checks availableinfrastructure. Prepare secure purchaseflow onlywith existing authorizedprice/productandfulfillment verification, noinventedbusinesscommitment. We need deliverusableconversionfunnel thisturn, notjustplan.
+Rootreviewnotes read ../release-review-notes.txt. ImagesnewcleanbatchgeneratedWEBrootwillharvest; useexisting7 provisionallyandawaitreplacement. PreservePR8features/sourcepricing. Fixbaselinegates, focusedbehavioraltests include quizbranching/back/completion/requiredanswers/nohealthscore/privacy + quote/math + endpointgates. Build/typecheck/lint, commit, NEWdraftPR; nomerge/deploy. Returnexactsession/head/testreport. Singlewriter; nootheragentsmaywriteapp. Completeboundedimplementationnow, no endlessbroadresearch.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
+## 2026-09-17 22:28 UTC
+
+**Tyler's exact words:**
+> You are the single Claude Code implementation writer for ShotFreeTRT. User explicitly requested orchestration through Claude and ChatGPT WEB, images integrated, site updates completed and GSC working. Work ONLY in current isolated worktree feat/shotfreetrt-trust-conversion-20260917. Other agents exist: never overwrite their edits or touch canonical dirty August checkout. Base includes researched PR8 from ChatGPT WEB; preserve its decision-guide, quote planner, source-backed pricing and proposal gates. Root orchestrator handles merge/deploy/browser. You may commit and open a draft PR but NEVER merge/deploy, change credentials/billing, send communications or enable purchases.
+Read CLAUDE.md and required docs, append user prompt to documents/PROMPTS.md first. Then implement bounded complete release:
+1. Integrate seven existing ChatGPT WEB illustrations from /Users/td/Documents/Codex/2026-09-17/own-drugfreetrt-com-candidate-source-repository/outputs/shotfreetrt-assets/batch2/sft-web-batch2-{01,02,04,05,06,08,09}.png. They are RGBA transparent outside soft artistic vignette; reviewer approves decorative use on existing dark ink backgrounds. Do not claim clinical diagrams or perfect halo removal. DO NOT use03,07,10. No image editing/cropping/background manipulation viaPython or other scripts; resizing/format optimization using sharp is authorized for responsive web delivery. Preserve masters outside repo, integrate webp underpublic/media. Match brief outputs/shotfreetrt-brand-brief.md. Home hero01, decisionguide04, resources02, pricing05, relevant sleep article06, healthhabitsarticle08, planning/guide09. Meaningful captions without medical claims or emptyalt if purelydecorative; width/height/sizes, no huge payloads. Track provenance in docs.
+2. Keep PR8 consumer education direction. Correct old About/Start Here to same scope. Add relevant contextual editorial references to VERIFIED actual PeakedLabs and AliveLongevity articles/tools; no linkfarm/no medicalproof using sisterblogs. Known destinations https://peakedlabs.com/blog/how-much-does-trt-cost and https://alivelongevity.com/protocol (verifyHTTPandtitle). Preserve articleURLs/no bulknoindex.
+3. Remove unsupported AI language, precise TRT candidacy score, Roast Me and treatment recommendation presentation from legacy quiz routes. Prefer retire misleading legacy UI in favor of real decision-guide/clinician-preparation route with clear navigation, rather than build a new medical algorithm. Retire unused quiz API safely if appropriate with focused tests; do not expose heuristic scores asvalidated. Avoid broadmedicalcorpusrewrite.
+4. Newsletter has no durable backend; replace misleading signup/delivery promises with useful guideCTA and failclosed API (no filesystemsubscriber writes, nofake success). Existing paidguide fulfillment not verified: disable new purchasecreation unless all actual validatedreadinessgates; remove misleading $19 promises/paid-access claim if staticPDF stillpublic. Do not delete legacyPDF assets or enableStripe/Supabase/providers. Ensure no inert buttons or deadforms. Audit affected CTAs.
+5. Correct OGdeclared dimensions torealfile dimensions or actualmatchingasset; fixmissinglogo reference with existing validlogo. Preserve exactGSCverificationtoken. Keep honest sitemaplastmod fromPR8. GSCrootalready verifiedowner andsitemapSuccess170pages Sept17.
+6. Repair broken Next16 lintscript and preexistingarticle TypeScript shape errors narrowly if feasible so real lint/typecheck/build pass; do not weakenchecks or blanketany. Tests mustbehaviorallyverify quote math, retiredquiz, newsletter/purchase failclosed. Run build, lint,typecheck,focusedtests and gitdiffcheck. No fakepassing underignoreBuildErrors; reportbaseline gaps preciselyifcannotfix.
+7. Requiredhandoffdocs plusprovenance; commitnormal. Open NEWdraftPR againstmain (includesPR8 ancestry) using bodyfile and disclose relationship. RootwillmergePR8 thenretarget/rebaseifneeded. Need exacthead, tests, changedfiles, previewURL and remainingrisks. Do not spend time broadresearch or generatedtext; execute highestvalueboundedpatch now. You may use Read/Write/Edit/Bash, no browser; root owns browser. Report tostdout conciseJSON result atcompletion.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
 ## 2026-09-17 — ShotFreeTRT growth, research, assets, and GSC setup
 
 **Tyler's exact words:**

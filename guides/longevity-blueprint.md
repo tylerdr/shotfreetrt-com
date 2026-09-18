@@ -1,8 +1,10 @@
 # The Longevity Blueprint (2026 Edition)
 
 **Evidence-based strategy guide for extending healthspan and reducing risk over the next decade.**  
-**Digital guide price:** **$24**  
+**Price:** Free  
 **Format:** Practical implementation manual + 90-day dashboard system
+
+Published by [ShotFreeTRT](https://shotfreetrt.com) — take the free [TRT decision quiz](https://shotfreetrt.com/quiz/healthspan) or open the [decision guide and quote calculator](https://shotfreetrt.com/decision-guide).
 
 > **Medical Disclaimer (Read First)**  
 > This educational guide is not medical advice and does not diagnose, treat, cure, or prevent disease. Use it to improve your questions, habits, and measurement systems. Any medication, peptide, hormone, or supplement decision should be made with a qualified clinician who has access to your labs, medications, and full history.
@@ -19,7 +21,7 @@ Use this guide in three passes:
 2. **Pass 2 (60 minutes):** Build your training, nutrition, and recovery schedule from the templates.
 3. **Pass 3 (30 minutes/week):** Run your dashboard review loop, adjust one variable at a time, and retest.
 
-If you execute this process consistently for 12 months, you can meaningfully improve cardiometabolic risk, functional capacity, body composition trends, and day-to-day energy even without advanced therapeutics.
+Executing this process consistently for 12 months can support cardiometabolic risk factors, functional capacity, body composition trends, and day-to-day energy, even without advanced therapeutics. Individual results vary by starting point, health status, and adherence, and are not a substitute for clinical monitoring.
 
 ---
 
@@ -793,11 +795,11 @@ Long-term healthspan is built by cumulative execution, not novelty. Most people 
 
 ### 1) Do I need advanced therapies to make meaningful progress?
 
-No. Most adults can generate major improvements through training consistency, dietary pattern quality, sleep regularity, and biomarker-guided clinical care.
+No. Many adults see meaningful improvement through training consistency, dietary pattern quality, sleep regularity, and biomarker-guided clinical care, but results vary by starting point, health status, and adherence, and are not guaranteed.
 
 ### 2) How fast should I expect results?
 
-Subjective energy and sleep can improve in 2-4 weeks. Fitness and metabolic markers often show measurable shifts by 8-12 weeks with adherence.
+For many people, subjective energy and sleep improve within 2-4 weeks, and fitness and metabolic markers show measurable shifts by 8-12 weeks with adherence. These are general patterns, not guarantees — some markers will not change without medical evaluation and treatment.
 
 ### 3) Should I prioritize fat loss or fitness first?
 
@@ -1125,6 +1127,17 @@ Checklist before buying any “longevity product”:
 28. Laukkanen T, Khan H, Zaccardi F, Laukkanen JA. Association Between Sauna Bathing and Fatal Cardiovascular and All-Cause Mortality Events. *JAMA Intern Med*. 2015;175(4):542-548. https://doi.org/10.1001/jamainternmed.2014.8187
 29. Whelton PK, Carey RM, Aronow WS, et al. 2017 Guideline for the Prevention, Detection, Evaluation, and Management of High Blood Pressure in Adults. *Hypertension*. 2018;71(6):e13-e115. https://doi.org/10.1161/HYP.0000000000000065
 30. Ridker PM, Everett BM, Thuren T, et al. Antiinflammatory Therapy with Canakinumab for Atherosclerotic Disease. *N Engl J Med*. 2017;377(12):1119-1131. https://doi.org/10.1056/NEJMoa1707914
+
+---
+
+## About ShotFreeTRT
+
+This guide is published by [ShotFreeTRT](https://shotfreetrt.com), a free resource for comparing testosterone treatment options, understanding clinic costs, and preparing for a clinician visit.
+
+- Take the free [TRT decision quiz](https://shotfreetrt.com/quiz/healthspan) for a personalized checklist and reading list.
+- Open the [decision guide and quote calculator](https://shotfreetrt.com/decision-guide) to prepare appointment questions and compare written clinic quotes.
+
+Education, not prescriptions. Treatment decisions belong with a licensed clinician.
 
 ---
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { trackPageView } from "@/lib/analytics";
+import { isAnalyticsExemptPath, trackPageView } from "@/lib/analytics";
 
 const TENANT_ID = "015fd669-36bc-4847-9d7d-d0ad20bf90b5";
 
@@ -15,7 +15,9 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (pathname !== lastPathname.current) {
       lastPathname.current = pathname;
-      trackPageView(TENANT_ID, { path: pathname });
+      if (!isAnalyticsExemptPath(pathname)) {
+        trackPageView(TENANT_ID, { path: pathname });
+      }
     }
   }, [pathname]);
 

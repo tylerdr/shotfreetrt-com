@@ -6,7 +6,8 @@ export const testosteroneAndMetforminArticle: BlogArticle = {
   description:
     "Metformin is one of the most commonly prescribed drugs for insulin resistance and type 2 diabetes — and both conditions are strongly linked to low testosterone. Here's what the research actually shows about how metformin affects testosterone levels, and how to think about sequencing.",
   publishedAt: "2026-03-30",
-  readingTime: "13 min read",
+  author: "ShotFreeTRT Editorial Team",
+  readTime: "13 min read",
   category: "diagnostics",
   keywords: [
     "testosterone and metformin",
@@ -20,6 +21,7 @@ export const testosteroneAndMetforminArticle: BlogArticle = {
     "low T insulin resistance",
     "metformin TRT sequencing",
   ],
+  sections: [],
   content: `
 <p>Metformin is prescribed to tens of millions of men for type 2 diabetes, prediabetes, and insulin resistance. And insulin resistance is one of the strongest modifiable drivers of low testosterone in men. So the overlap is enormous: a large percentage of men presenting for TRT evaluation are already on metformin, or their doctor is about to prescribe it.</p>
 
