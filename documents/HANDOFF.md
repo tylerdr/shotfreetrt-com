@@ -3,52 +3,52 @@
 **Date:** 2026-09-18  
 **Branch:** `feature/concern-journeys-20260918`  
 **PR:** https://github.com/tylerdr/shotfreetrt-com/pull/13  
-**Application base:** `main@205a12ba4ac7650ac2160ec79f135b38ddf97a4d`  
-**Status:** implementation prepared in a draft PR; full build/browser/production acceptance not verified. No new paid offer or affiliate program activated.
+**Base:** `main@205a12ba4ac7650ac2160ec79f135b38ddf97a4d`  
+**Status:** functional application checks pass; draft held for dependency remediation, integrated browser and live-domain acceptance. No paid offer or affiliate activation.
 
 ## Read first
 
-- [Mars public-funnel audit, adaptation matrix, experiments and revenue gates](MARS-FUNNEL-AUDIT-2026-09-18.md)
-- [Exact user scope](PROMPT-MARS-2026-09-18.md)
-- [Prior release-identity discrepancy](LIVE-RELEASE-DRIFT-2026-09-17.md)
-- Existing [BACKLOG.md](BACKLOG.md) for prior clinical, commerce and indexing obligations. Its unfinished work is not erased by the new journeys.
+- [Mars audit, adaptations and conversion experiments](MARS-FUNNEL-AUDIT-2026-09-18.md)
+- [Verified application evidence, dependency findings and release/revenue gates](RELEASE-GATES-2026-09-18.md)
+- [Exact user request](PROMPT-MARS-2026-09-18.md)
+- [Earlier copy-drift investigation](LIVE-RELEASE-DRIFT-2026-09-17.md)
+- [Backlog](BACKLOG.md), including preserved prior medical, commercial and indexing obligations
 
-## Actual changes in this workstream
+## Implemented
 
-Four topic-specific public education paths and four noindex quiz variants reuse the existing six-question, non-clinical engine. They reorder questions without preselecting answers or changing the answer-to-brief logic. The new paths are energy/testing, fertility questions, needle-free options and clinic costs. Public topics and quiz variants live in the existing analytics-isolated root. Result links retain disabled prefetch.
+Four distinct public topic guides and four noindex quiz variants reuse the existing six-question decision engine. Entry changes question order, never preselects answers or creates a diagnosis/treatment score. Homepage, navigation and eleven explicitly mapped article slugs lead to the relevant path. Existing approved illustrations, short source-linked lessons, output previews, FAQs, repeated contextual CTAs and a mobile sticky CTA make the pages easier to scan. Card actions were corrected to wrap at narrow grid widths.
 
-The homepage/navigation now offer a concern-led entrance; eleven explicitly mapped article slugs receive a contextual CTA. Existing approved illustrations are reused with short takeaways, an output preview, FAQs, a next-question panel and a mobile sticky CTA. A follow-up fixes potential button overflow in narrow four-column cards.
+The result now leads with its next useful action. A separate component receives no answers or concern identifier and provides generic site-link copying and a one-time seven-day calendar-file download. Both are deliberate user actions; no email, appointment, referral record or server-side health record is created.
 
-The brief now places its next useful action before the longer result. A separate component, which receives no answers or concern identifier, offers generic site-link copying and a one-time calendar-file download seven days later. No email, calendar event, referral record or server-side answer record is created automatically.
+Topics and quiz variants use the existing analytics-isolated root; answer-dependent links keep `prefetch={false}`. Metadata includes canonical/OG fields, visible/schema breadcrumbs, public-topic sitemap entries, noindex variants, safe JSON and article image/word-count fixes. Existing article bodies remain unchanged; PR #10's source-refreshed articles are not silently merged or medically approved.
 
-Metadata changes include public canonicals/OG images, visible breadcrumbs with matching structured data, public-topic sitemap entries, noindex quiz variants, safe JSON serialization, and article image/word-count corrections. No indexing, AI-citation or conversion gain is established.
+## Actual test/build receipts
 
-## Exact verification achieved
+[CI run 35395430216](https://github.com/tylerdr/shotfreetrt-com/actions/runs/35395430216) tested head `1e6cf20940c64a7236ad60ab27256f87b3561a1b` against main205a:
+- **73/73 tests pass**, zero failures.
+- **Lint passes**, zero errors, one pre-existing warning in `commitlint.config.js`.
+- **Full TypeScript and Next build pass**; **188/188 pages** generated.
+- The obsolete truthiness-source assertion was corrected to validate actual option IDs; a behavioral invalid-answer regression was added.
 
-- Local copy of `src/lib/brief-reminder.ts` was checked against its actual Git blob SHA: `1edad86e6b5accfea9ea9112464a6befeff387a1`. The copies are byte-identical.
-- Six focused calendar-export checks passed under UTC and again under America/Los_Angeles: next-week date, exclusive end date, year and leap-year boundaries, invalid date/identifier rejection, generic contents and line endings. These are not full application tests.
-- Twenty-one new journey regression cases are committed. The normal build command is `npm test && npm run lint && next build`. No successful run of that complete chain is claimed for this PR.
-- The first preview `dpl_tEgBcaPHxfXzJJJ9K5sjcot5ooja` for `00c1e6acf9792e8c3d9e4f2f466d85a23a5778f6` remained INITIALIZING on repeated reads. Subsequent code commits need their own exact-head verification.
-- Vercel's exposed build-log and deployment actions returned `Tool ... not found`. Authenticated preview fetching failed to create a shareable URL. A full hosted browser run did not occur.
+[CI run 35395754890](https://github.com/tylerdr/shotfreetrt-com/actions/runs/35395754890), application job `105764094686`, tested head `55f7df6b1e90bb4bd8ad31be139e5b1eb7e8abf1`. Its test/lint/build step and the additional **rendered-HTML acceptance step both passed**. The latter checks all eleven topic, quiz and worksheet documents, canonical/H1/OG/noindex/sitemap facts, and absence of the GA loader in isolated documents. A CI-only test GA ID makes the comparison non-vacuous by requiring the main root to contain the loader. No browser executes that build and it is not deployed/uploaded.
 
-## Production status — do not conflate merge, build and live acceptance
+Local calendar-export checks passed six cases under UTC and again under America/Los_Angeles. The tested source is byte-identical to blob `1edad86e6b5accfea9ea9112464a6befeff387a1`.
 
-The separately reviewed diagnostic PR #12 was marked ready and merged at exact head `32122b747eb4f9dc9bffd14f9b6d7bfc3231fdec`, producing main merge `205a12ba4ac7650ac2160ec79f135b38ddf97a4d`. This was a real GitHub merge, not a production-verification receipt.
+These receipts do **not** establish browser interaction/accessibility, actual live release, clinical review, search indexing or paid fulfillment. Later documentation commits do not change application source, but final merge/deployment must still reference the exact approved head.
 
-At the last successful domain lookup, `shotfreetrt.com` still mapped to READY production deployment `dpl_9nZFzYSLB7hLctv4jP8Uy9rnZ1ob`, Git SHA `ee2b5ca36fde9f4f605687db84170ba466f564e9`. No deployment of the new funnel to the public domain has been verified. Do not close the prior copy-drift investigation merely because the headers were merged into source.
+## Material release blockers
 
-A reusable, read-only checker is now included: `node scripts/verify-production-funnel.mjs <expected-merge-sha>`. It fails on a mismatched release before checking topic/quiz HTML, canonicals, noindex, sitemap, images and GA-loader absence. It explicitly reports HTTP-only evidence, not browser interaction, clinical approval or paid fulfillment. It has not produced a successful production receipt in this session.
+1. **Dependency baseline:** runtime audit reports eleven affected package entries, including the existing pinned Next.js 16.1.6 with critical advisories. See RELEASE-GATES for applicability limits and the verified 16.3.5 remediation candidate. No exploit or compromise was demonstrated. No blind force-upgrade or uncommitted lockfile substitution was performed. Functional CI success is not security clearance.
+2. **Live-domain identity:** PR #12 really merged to main205a and Vercel lists its READY production-target deployment `dpl_CVDbyuwHkZBwmLZ21LSqEkvbGtRz`. A subsequent domain lookup still returned older production `dpl_9nZFzYSLB7hLctv4jP8Uy9rnZ1ob` at `ee2b5ca36fde9f4f605687db84170ba466f564e9`. This discrepancy is not reconciled. The new PR13 journeys are not claimed live.
+3. **Integrated browser checks:** full mobile/keyboard/back/edit/restart/clipboard/download/print and real network inspection remain open. Vercel build-log/deploy actions returned tool-not-found; preview share URL generation failed. No remote browser result is claimed.
+4. **Commercial path:** no accepted ShotFreeTRT-specific paid offer or signed affiliate terms were established. A narrow live Stripe name search found no `ShotFree` products; that is not an exhaustive alias audit. The earlier dossier and clinic-pilot ideas remain proposals. No payment, email or referral/commission path is enabled here.
 
-## Next agent-owned actions
+## Next agent-owned execution
 
-1. Obtain actual exact-head test, lint, TypeScript and build results; resolve any failures before requesting release approval.
-2. Complete integrated mobile/desktop, radio/keyboard/focus, back/edit/restart, download/clipboard-error and print checks. Inspect real network requests on isolated routes and cross-root navigation.
-3. Inspect the pending PR #10 article-catalog/template changes before integration. This PR also touches the article template and sitemap; preserve both the researched content and concern-specific handoffs in any reconciliation. No broad legacy medical-content approval is implied.
-4. Release only the approved, tested head through the existing gate. Confirm the actual root and www domains, immutable deployment, headers and `/api/release` agree; then run the HTTP checker and browser smoke tests.
-5. Evaluate the proposed concern-entry and contextual-CTA experiments without adding unapproved health-data analytics or outbound sending. Amble reconciliation remains pending because no accessible connector was discovered.
+First resolve the dependency baseline with an actual committed lockfile and rerun acceptance. Then verify integrated browser behavior and reconcile the approved immutable deployment, root/www aliases, release headers and `/api/release`. `scripts/verify-production-funnel.mjs <approved-merge-sha>` is a reusable HTTP-only acceptance check; no successful production receipt from it is claimed.
 
-## Revenue activation remains separate
+Before combining #10 and #13, reconcile their overlapping article-template and sitemap changes explicitly, preserving both the researched content catalog and contextual journey CTAs. Keep prior legacy-medical-content review requirements.
 
-A narrow live Stripe search for products named `ShotFree` returned no matches. No approved paid offer, signed affiliate agreement or verified payment/lead fulfillment was retrieved. This is not a comprehensive financial audit or a claim that no alias exists. Do not enable a new price, commission, subscription, medical service, mailing list or payment button solely to label the site revenue-ready.
+Prepare the exact paid deliverable or partner arrangement, approval, terms, disclosures, fulfillment/refund tests and support owner before commercial activation. Do not assign routine operations to Tyler or treat a quiz completion as revenue.
 
-The necessary commercial decision is an exact authorized offer or partner arrangement with deliverable acceptance, claims/disclosure review, payment/refund or commission rules, fulfillment tests and an agent-owned support process. Pending that decision, the actual public product remains free.
+Amble discovery returned no accessible connector. Roadmap/experiment reconciliation is pending; no accepted thesis write, task dispatch or canonical execution receipt is fabricated. Prior recorded Search Console ownership and sitemap submission are preserved; this session obtained no new ranking, traffic or indexing-performance dataset.
