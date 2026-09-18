@@ -4,6 +4,20 @@
 
 ---
 
+## 2026-09-17 — Release identity / public copy-drift diagnostic (Tai review)
+
+**Branch:** `fix/release-identity-copy-drift-20260917` from `main@ee2b5ca36fde9f4f605687db84170ba466f564e9`; draft PR #12, not merged or promoted.
+
+**Context:** current repository source and Vercel production metadata identify the decision-first release, but a fresh independent public-web fetch of `https://shotfreetrt.com/` returned older treatment-plan homepage copy. This is a release-integrity discrepancy, not yet proof of an origin rollback: the independent fetch may be stale or routed through another cache/path.
+
+**Prepared:** response headers `X-ShotFreeTRT-Release` and `X-ShotFreeTRT-Copy-Contract`, an uncached `/api/release` endpoint, a regression test that rejects the retired homepage treatment-plan claims, and a source-bounded reconciliation checklist in `documents/LIVE-RELEASE-DRIFT-2026-09-17.md`.
+
+**Verification:** normal PR preview build passed TypeScript/Next production build. A separate verification-only branch added a temporary Vercel build override and passed 51/51 tests, `eslint .`, and the full 179-page Next.js build at deployment `dpl_8tSWCfMye52DFTFvpTk81A93PyqW`. The QA override is not part of PR #12 and must not be merged. No production custom-domain acceptance is claimed until PR #12 is separately authorized, merged and deployed.
+
+**Boundaries:** no clinical content, treatment logic, payment/email path, analytics, DNS/domain setting, cache purge, outreach, production activation or Amble state was changed.
+
+---
+
 ## 2026-09-18 — Release closeout archive (Codex orchestrator)
 
 **Branch:** `chore/shotfreetrt-release-closeout-20260917` from merged production `main` at `9c0b6ad7717ca231930cafc62bbd806672f99f20`
@@ -59,7 +73,7 @@
 **Branch:** feat/shotfreetrt-trust-conversion-20260917 (draft PR against main; not merged)
 
 **Shipped:**
-- Rebuilt the TRT decision quiz from scratch as a deterministic, non-clinical funnel: 6 questions (intent, testing stage, fertility priority, route preference, cost clarity, timing), an in-memory-only `DecisionQuizEngine`, and a `DecisionBrief` result (situation summary, prioritized checklist with reasons, reading paths, print/save-as-PDF). Retired the old heuristic scorer (numeric "TRT candidacy score," "Roast Me" mode, lab-input "advanced" quiz) — deleted the API route, engine components, and lib modules that produced it. `/quiz`, `/quiz/healthspan/advanced`, and `/quiz/healthspan/result/[shareId]` all still resolve (redirect into the real quiz); `/quiz/healthspan` now renders it.
+- Rebuilt the TRT decision quiz from scratch as a deterministic, non-clinical funnel: 6 questions (intent, testing stage, fertility priority, route preference, cost clarity, timing), an in-memory-only `DecisionQuizEngine`, and a `DecisionBrief` result (situation summary, prioritized checklist with reasons, reading paths, print/save-as-PDF). Retired the old heuristic scorer (numeric "TRT candidacy score," "Roast Me" mode, lab-input "advanced" assessment that scored total/free T, LH, FSH, prolactin, TSH, hematocrit, and PSA into a treatment-path recommendation) — deleted the API route, engine components, and lib modules that produced it. `/quiz`, `/quiz/healthspan/advanced`, and `/quiz/healthspan/result/[shareId]` all still resolve (redirect into the real quiz); `/quiz/healthspan` now renders it.
 - Made the homepage quiz-first (primary CTA) with the free decision guide as secondary; wired contextual quiz links into the blog template, blog listing, resources, and start-here pages.
 - Made the "local-only" privacy promise on `/quiz/*` and `/decision-guide` actually true: both the custom Supabase pageview tracker and Google Analytics now skip those paths entirely, including the automatic first-load GA pageview.
 - Newsletter capture now fails closed: `/api/newsletter` no longer writes to disk and no longer fakes a success response; it always returns 503 with a link to the real free guide. Removed the dead `<form action="#">` newsletter component in favor of a real CTA link.
