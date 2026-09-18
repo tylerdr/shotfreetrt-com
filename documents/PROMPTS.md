@@ -5,6 +5,17 @@
 
 ---
 
+## 2026-09-17 21:25 UTC
+
+**Controller audit dispatch (not user-authored):**
+> Read-only bounded source audit. Repository cwd is isolated ShotFreeTRT current-main worktree; no edits, browser, purchases, billing or credentials. Inspect CLAUDE.md, package.json, next config, src/app/layout.tsx, sitemap.ts, robots.ts, resources/page.tsx, quiz result implementation, newsletter form and article registry/generator if discoverable. Report top 8 concrete findings with file paths and actionable fixes, distinguishing verified source from production unknowns. Focus unsupported AI/medical scoring claims, broken useful links, source/citations, content generator safety, commerce fulfillment evidence, relevant sister-site crosslinks. Also review three-line Google verification metadata change for correctness. User wants ChatGPT WEB deep research to inform later implementation; no broad rewriting now. Keep output under 1800 words and disclose actual model. This is non-Fable audit. End when report complete.
+
+**Classified as:** `pending-review`
+**Spec impact:** pending
+
+
+---
+
 ## 2026-09-17 — ShotFreeTRT growth, research, assets, and GSC setup
 
 **Tyler's exact words:**
