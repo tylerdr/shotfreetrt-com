@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { BriefNextSteps } from "@/components/journeys/BriefNextSteps";
+import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import type { Journey } from "@/lib/journeys";
 import { buildDecisionBrief, isQuizComplete, QUIZ_QUESTIONS, type QuestionId, type QuizAnswers } from "@/lib/quiz/decision-quiz";
 
@@ -45,6 +46,11 @@ export function DecisionQuizEngine({ journey }: { journey?: Journey }) {
     <Card><CardHeader><CardTitle className="text-lg">Your situation, in your own answers</CardTitle></CardHeader><CardContent><ul className="list-disc space-y-2 pl-5">{brief.situationSummary.map((line) => <li key={line}>{line}</li>)}</ul></CardContent></Card>
     <Card><CardHeader><CardTitle className="text-lg">Read next</CardTitle></CardHeader><CardContent className="space-y-4">{brief.readingPaths.map((path) => <div key={path.href}><Link href={path.href} prefetch={false} className="font-medium underline">{path.title}</Link><p className="text-sm text-muted-foreground">{path.description}</p></div>)}</CardContent></Card>
     <div className="flex flex-wrap gap-3 print:hidden"><Button type="button" variant="outline" onClick={() => window.print()}>Print or save as PDF</Button><Button type="button" variant="ghost" onClick={() => { setShowResult(false); setStepIndex(0); }}>Edit my answers</Button><Button type="button" variant="ghost" onClick={startOver}>Start over</Button></div>
+    <LeadCaptureForm
+      id="quiz-result-lead-email"
+      source="quiz-result"
+      description="Email the existing decision guide and private quiz link to yourself. Your answers stay in this page's memory and are never included."
+    />
     <BriefNextSteps />
     <p className="text-sm text-muted-foreground print:hidden">Your answers have not been transmitted by this quiz. Refreshing clears the in-memory brief. Printing or saving it is your choice.</p>
   </section>;

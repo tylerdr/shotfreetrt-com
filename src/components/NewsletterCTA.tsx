@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
+import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 
 type NewsletterCTAProps = {
   title?: string;
@@ -10,13 +10,10 @@ type NewsletterCTAProps = {
   compact?: boolean;
 };
 
-// There is no durable email-delivery backend. Rather than collect addresses
-// a subscriber will never actually receive anything from, this links to a
-// real, working, free resource instead of an email form.
 export function NewsletterCTA({
   title = "Get the free decision guide",
-  description = "No email required. Read the appointment checklist, compare written clinic quotes with the calculator, and see dated provider price examples.",
-  buttonLabel = "Open the decision guide",
+  description = "Receive the existing appointment checklist and private quiz link. This is an educational resource, not a diagnosis or treatment recommendation.",
+  buttonLabel = "Email me the guide",
   href = "/decision-guide",
   compact = false
 }: NewsletterCTAProps) {
@@ -27,9 +24,8 @@ export function NewsletterCTA({
     >
       <h2>{title}</h2>
       <p>{description}</p>
-      <Button asChild>
-        <Link href={href}>{buttonLabel}</Link>
-      </Button>
+      <LeadCaptureForm source="newsletter-cta" submitLabel={buttonLabel} />
+      <p className="text-sm"><Link href={href}>Open the guide without email →</Link></p>
     </section>
   );
 }

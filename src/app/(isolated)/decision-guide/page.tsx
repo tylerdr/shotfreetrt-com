@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EditorialImageFrame } from "@/components/EditorialImageFrame";
+import { LeadCaptureForm } from "@/components/LeadCaptureForm";
 import QuotePlanner from "@/components/QuotePlanner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { decisionFaqs, EVIDENCE_DATE, sources, visitQuestions } from "@/lib/decision-guide";
@@ -42,5 +43,14 @@ export default function DecisionGuidePage() {
       {decisionFaqs.map((faq) => <Card key={faq.question}><CardHeader><CardTitle className="text-lg">{faq.question}</CardTitle></CardHeader><CardContent><p>{faq.answer}</p><a className="mt-3 inline-block text-sm" href={faq.source} rel="noreferrer">Read the source</a></CardContent></Card>)}
     </section>
     <p className="print:hidden"><Link href="/pricing">See dated provider price examples →</Link></p>
+    <section className="cta print:hidden" aria-labelledby="guide-email-title">
+      <h2 id="guide-email-title">Keep the guide for your appointment</h2>
+      <p>Email the existing checklist and private quiz link to yourself. This opt-in does not diagnose, prescribe, or open clinic enrollment.</p>
+      <LeadCaptureForm
+        id="decision-guide-lead-email"
+        source="decision-guide"
+        description="We will save your opt-in and send the existing decision guide links when verified delivery is configured."
+      />
+    </section>
   </div>;
 }
