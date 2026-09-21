@@ -2,22 +2,75 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { isAnalyticsExemptPath } from "../src/lib/analytics.ts";
+import {
+  buildConfirmationIdempotencyKey,
+  buildSubscriberPayload,
+  getLeadCaptureConfig,
+  normalizeEmail
+} from "../src/lib/lead-capture.ts";
 
 function read(relativePath) {
   return readFileSync(new URL(relativePath, import.meta.url), "utf8");
 }
 
-test("newsletter API fails closed: no filesystem persistence, no fake success", () => {
+test("newsletter API uses durable tenant-scoped storage and fails closed when it is not configured", () => {
   const source = read("../src/app/api/newsletter/route.ts");
+  const config = read("../src/lib/lead-capture.ts");
   assert.doesNotMatch(source, /writeFile|readFile|fs\.|subscribers\.json/);
-  assert.match(source, /status: 503/);
-  assert.doesNotMatch(source, /status: 200|status: 201/);
+  assert.match(source, /storage_unavailable/);
+  assert.match(source, /confirmation_status/);
+  assert.match(config, /SHOTFREETRT_SUPABASE_URL/);
+  assert.match(config, /SHOTFREETRT_SUPABASE_SERVICE_ROLE_KEY/);
+  assert.match(config, /SHOTFREETRT_TENANT_ID/);
 });
 
-test("newsletter CTA is a real link, not a dead form posting nowhere", () => {
+test("lead capture normalizes the address, preserves exact source fields, and creates a stable retry key", () => {
+  const email = normalizeEmail("  QA+ShotFreeTRT@Example.com ");
+  assert.equal(email, "qa+shotfreetrt@example.com");
+  assert.equal(buildConfirmationIdempotencyKey(email), buildConfirmationIdempotencyKey(email));
+  const payload = buildSubscriberPayload({
+    config: { tenantId: "shotfreetrt-tenant" },
+    email,
+    source: "Decision Guide",
+    sourceUrl: "/decision-guide",
+    subscribedAt: "2026-09-21T00:00:00.000Z"
+  });
+  assert.deepEqual(payload, {
+    tenant_id: "shotfreetrt-tenant",
+    email: "qa+shotfreetrt@example.com",
+    source: "decision-guide",
+    source_url: "/decision-guide",
+    subscribed_at: "2026-09-21T00:00:00.000Z"
+  });
+});
+
+test("lead capture configuration requires project-specific tenant storage and TLS", () => {
+  assert.equal(getLeadCaptureConfig({}), null);
+  assert.equal(getLeadCaptureConfig({
+    SHOTFREETRT_SUPABASE_URL: "http://example.supabase.co",
+    SHOTFREETRT_SUPABASE_SERVICE_ROLE_KEY: "service-role",
+    SHOTFREETRT_TENANT_ID: "tenant"
+  }), null);
+  const config = getLeadCaptureConfig({
+    SHOTFREETRT_SUPABASE_URL: "https://example.supabase.co/",
+    SHOTFREETRT_SUPABASE_SERVICE_ROLE_KEY: "service-role",
+    SHOTFREETRT_TENANT_ID: "tenant",
+    RESEND_API_KEY: "resend",
+    RESEND_FROM_EMAIL: "resources@example.com"
+  });
+  assert.equal(config?.supabaseUrl, "https://example.supabase.co");
+  assert.equal(config?.tenantId, "tenant");
+  assert.equal(config?.resendFromEmail, "resources@example.com");
+});
+
+test("newsletter CTA posts through the durable lead form and keeps a direct guide link", () => {
   const source = read("../src/components/NewsletterCTA.tsx");
-  assert.doesNotMatch(source, /<form|action="#"/);
-  assert.match(source, /href="\/decision-guide"|href=\{href\}/);
+  const form = read("../src/components/LeadCaptureForm.tsx");
+  assert.match(source, /LeadCaptureForm/);
+  assert.match(source, /href=\{href\}/);
+  assert.match(form, /fetch\("\/api\/newsletter"/);
+  assert.match(form, /consent/);
+  assert.match(form, /storage service|save your email/);
 });
 
 test("purchase flow is fully disabled: no BuyButton, checkout route, or $19 claim", () => {
