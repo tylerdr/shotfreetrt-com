@@ -11,7 +11,12 @@ export type ClinicWorkloadEstimate = {
   staffCapacityCostPerMonth: number;
   targetHoursMovedPreVisit: number;
   targetCapacityValuePerMonth: number;
+  recurringFeeBenchmarkHours: number;
+  recurringFeeBenchmarkPercentOfRepeatedLoad: number;
+  targetCapacityValueToRecurringFeeRatio: number;
 };
+
+const CLINIC_MONTHLY_FEE = 1_000;
 
 function isFiniteInRange(value: number, min: number, max: number): boolean {
   return Number.isFinite(value) && value >= min && value <= max;
@@ -27,12 +32,18 @@ export function estimateClinicWorkload(input: ClinicWorkloadInput): ClinicWorklo
   const repeatedHoursPerMonth = inquiriesPerMonth * input.repeatedMinutesPerInquiry / 60;
   const staffCapacityCostPerMonth = repeatedHoursPerMonth * input.loadedHourlyCost;
   const targetShare = input.preVisitTargetPercent / 100;
+  const targetHoursMovedPreVisit = repeatedHoursPerMonth * targetShare;
+  const targetCapacityValuePerMonth = staffCapacityCostPerMonth * targetShare;
+  const recurringFeeBenchmarkHours = CLINIC_MONTHLY_FEE / input.loadedHourlyCost;
 
   return {
     inquiriesPerMonth,
     repeatedHoursPerMonth,
     staffCapacityCostPerMonth,
-    targetHoursMovedPreVisit: repeatedHoursPerMonth * targetShare,
-    targetCapacityValuePerMonth: staffCapacityCostPerMonth * targetShare,
+    targetHoursMovedPreVisit,
+    targetCapacityValuePerMonth,
+    recurringFeeBenchmarkHours,
+    recurringFeeBenchmarkPercentOfRepeatedLoad: recurringFeeBenchmarkHours / repeatedHoursPerMonth * 100,
+    targetCapacityValueToRecurringFeeRatio: targetCapacityValuePerMonth / CLINIC_MONTHLY_FEE,
   };
 }
