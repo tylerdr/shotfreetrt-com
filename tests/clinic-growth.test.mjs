@@ -26,6 +26,9 @@ test("clinic workload preview turns real operating inputs into a monthly baselin
   assert.ok(Math.abs(estimate.staffCapacityCostPerMonth - 1011.1111) < 0.001);
   assert.ok(Math.abs(estimate.targetHoursMovedPreVisit - 7.2222) < 0.001);
   assert.ok(Math.abs(estimate.targetCapacityValuePerMonth - 252.7778) < 0.001);
+  assert.ok(Math.abs(estimate.recurringFeeBenchmarkHours - 28.5714) < 0.001);
+  assert.ok(Math.abs(estimate.recurringFeeBenchmarkPercentOfRepeatedLoad - 98.9011) < 0.001);
+  assert.ok(Math.abs(estimate.targetCapacityValueToRecurringFeeRatio - 0.2528) < 0.001);
 });
 
 test("clinic workload preview rejects impossible inputs", () => {
@@ -59,13 +62,19 @@ test("clinic lead intent receives its own useful confirmation journey", () => {
 test("clinic page provides value before capture and preserves a working next step", () => {
   const page = read("../src/app/(main)/for-clinics/page.tsx");
   const form = read("../src/components/clinics/ClinicInterestForm.tsx");
+  const calculator = read("../src/components/clinics/ClinicWorkloadCalculator.tsx");
   const route = read("../src/app/api/newsletter/route.ts");
 
   assert.match(page, /ClinicWorkloadCalculator/);
   assert.match(page, /ClinicInterestForm/);
   assert.match(page, /\$2,000 launch \+ \$1,000\/month/);
+  assert.match(page, /id="launch-request"/);
   assert.match(page, /robots:\s*\{ index: true, follow: true \}/);
   assert.doesNotMatch(page, /Pilot enrollment is not open yet/);
+
+  assert.match(calculator, /recurringFeeBenchmarkHours/);
+  assert.match(calculator, /purchase-decision arithmetic/i);
+  assert.match(calculator, /href="#launch-request"/);
 
   assert.match(form, /shotfreetrt-clinic-interest/);
   assert.match(form, /fetch\("\/api\/newsletter"/);
