@@ -101,7 +101,7 @@ export default function ForClinicsPage() {
 
       <ClinicWorkloadCalculator />
 
-      <section className="grid gap-6 rounded-xl border p-6 md:grid-cols-[1fr_1.15fr] md:p-8">
+      <section id="launch-request" className="grid scroll-mt-28 gap-6 rounded-xl border p-6 md:grid-cols-[1fr_1.15fr] md:p-8">
         <div className="space-y-3">
           <p className="text-sm font-semibold uppercase tracking-widest text-primary">Clinic launch</p>
           <h2 className="text-2xl font-bold sm:text-3xl">Get the clinic launch overview.</h2>
