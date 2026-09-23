@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +16,11 @@ const currency = new Intl.NumberFormat("en-US", {
 
 const number = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 1,
+});
+
+const percent = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 0,
+  style: "percent",
 });
 
 export function ClinicWorkloadCalculator() {
@@ -95,23 +102,40 @@ export function ClinicWorkloadCalculator() {
         </div>
 
         {estimate ? (
-          <div className="grid gap-4 rounded-xl bg-secondary/60 p-5 sm:grid-cols-2 lg:grid-cols-4" aria-live="polite">
-            <div>
-              <p className="text-sm text-muted-foreground">Monthly inquiries</p>
-              <p className="text-2xl font-bold">{number.format(estimate.inquiriesPerMonth)}</p>
+          <div className="space-y-4" aria-live="polite">
+            <div className="grid gap-4 rounded-xl bg-secondary/60 p-5 sm:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <p className="text-sm text-muted-foreground">Monthly inquiries</p>
+                <p className="text-2xl font-bold">{number.format(estimate.inquiriesPerMonth)}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Staff hours repeating basics</p>
+                <p className="text-2xl font-bold">{number.format(estimate.repeatedHoursPerMonth)} hrs</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Staff capacity devoted</p>
+                <p className="text-2xl font-bold">{currency.format(estimate.staffCapacityCostPerMonth)}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Your pre-visit target</p>
+                <p className="text-2xl font-bold">{number.format(estimate.targetHoursMovedPreVisit)} hrs / mo</p>
+                <p className="text-xs text-muted-foreground">about {currency.format(estimate.targetCapacityValuePerMonth)} of staff capacity</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Staff hours repeating basics</p>
-              <p className="text-2xl font-bold">{number.format(estimate.repeatedHoursPerMonth)} hrs</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Staff capacity devoted</p>
-              <p className="text-2xl font-bold">{currency.format(estimate.staffCapacityCostPerMonth)}</p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Your pre-visit target</p>
-              <p className="text-2xl font-bold">{number.format(estimate.targetHoursMovedPreVisit)} hrs / mo</p>
-              <p className="text-xs text-muted-foreground">about {currency.format(estimate.targetCapacityValuePerMonth)} of staff capacity</p>
+
+            <div className="grid gap-4 rounded-xl border p-5 md:grid-cols-[1fr_auto] md:items-center">
+              <div className="space-y-2">
+                <p className="font-semibold">Put the $1,000 monthly fee next to your own operating baseline.</p>
+                <p className="text-sm text-muted-foreground">
+                  At {currency.format(loadedHourlyCost)}/hour, the monthly fee equals {number.format(estimate.recurringFeeBenchmarkHours)} hours of loaded staff capacity — {number.format(estimate.recurringFeeBenchmarkPercentOfRepeatedLoad)}% of the repeated-question workload above. Your current pre-visit target represents {percent.format(estimate.targetCapacityValueToRecurringFeeRatio)} of the monthly fee in staff-capacity terms.
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  This is purchase-decision arithmetic, not a savings forecast. Use it alongside booking readiness, patient experience, and conversion quality when deciding whether the launch earns its keep.
+                </p>
+              </div>
+              <Button asChild>
+                <Link href="#launch-request">Get the clinic launch overview</Link>
+              </Button>
             </div>
           </div>
         ) : (
