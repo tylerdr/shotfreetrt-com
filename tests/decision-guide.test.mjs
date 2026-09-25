@@ -22,9 +22,11 @@ test("calculator cannot upload or persist entered quotes", () => {
   assert.doesNotMatch(component, /fetch\(|localStorage|sessionStorage|sendBeacon|gtag\(|trackEvent|XMLHttpRequest/);
   assert.match(component, /clipboard.writeText\(`\$\{window.location.origin\}\/decision-guide`\)/);
 });
-test("pilot stays noindex and needs explicit activation", () => {
+test("clinic acquisition page is indexable, useful before capture, and keeps optional direct enrollment gated", () => {
   const page = readFileSync(new URL("../src/app/(main)/for-clinics/page.tsx", import.meta.url), "utf8");
-  assert.match(page, /index: false/);
+  assert.match(page, /index: true/);
+  assert.match(page, /ClinicWorkloadCalculator/);
+  assert.match(page, /ClinicInterestForm/);
   assert.match(page, /CLINIC_PILOT_ENROLLMENT_ENABLED !== "true"/);
-  assert.match(page, /Pilot enrollment is not open yet/);
+  assert.doesNotMatch(page, /Pilot enrollment is not open yet/);
 });

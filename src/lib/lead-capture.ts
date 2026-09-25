@@ -3,6 +3,8 @@ import { createHash } from "node:crypto";
 export const DEFAULT_LEAD_SOURCE = "shotfreetrt-free-resource";
 export const DEFAULT_RESOURCE_PATH = "/decision-guide";
 export const DEFAULT_QUIZ_PATH = "/quiz/healthspan";
+export const CLINIC_LEAD_SOURCE = "shotfreetrt-clinic-interest";
+export const CLINIC_RESOURCE_PATH = "/for-clinics";
 
 export type LeadCaptureConfig = {
   supabaseUrl: string;
@@ -91,28 +93,38 @@ export function buildSubscriberPayload({
   };
 }
 
-export function buildConfirmationIdempotencyKey(email: string): string {
-  return `shotfreetrt-resource-${createHash("sha256").update(normalizeEmail(email)).digest("hex")}`;
+export function buildConfirmationIdempotencyKey(email: string, source: unknown = DEFAULT_LEAD_SOURCE): string {
+  const key = `${normalizeEmail(email)}|${normalizeSource(source)}`;
+  return `shotfreetrt-resource-${createHash("sha256").update(key).digest("hex")}`;
 }
 
-export function buildConfirmationMessage(): string {
+export function buildConfirmationMessage(source: unknown = DEFAULT_LEAD_SOURCE): string {
+  if (normalizeSource(source) === CLINIC_LEAD_SOURCE) {
+    return `Your ShotFreeTRT clinic launch overview is ready at ${CLINIC_RESOURCE_PATH}. Use the workload calculator with your own numbers, then walk the patient-facing experience at ${DEFAULT_RESOURCE_PATH}.`;
+  }
+
   return `Your ShotFreeTRT decision resources are ready. Start with ${DEFAULT_RESOURCE_PATH}, then use the private quiz at ${DEFAULT_QUIZ_PATH}. These pages are educational and do not diagnose, prescribe, or assess treatment eligibility.`;
 }
 
-export function buildConfirmationEmail(email: string): {
+export function buildConfirmationEmail(email: string, source: unknown = DEFAULT_LEAD_SOURCE): {
   from: string;
   to: string[];
   subject: string;
   text: string;
   headers: Record<string, string>;
 } {
+  const normalizedSource = normalizeSource(source);
+  const clinicLead = normalizedSource === CLINIC_LEAD_SOURCE;
+
   return {
     from: "ShotFreeTRT <resources@shotfreetrt.com>",
     to: [email],
-    subject: "Your ShotFreeTRT decision resources",
-    text: `${buildConfirmationMessage()}\n\nDecision guide: https://shotfreetrt.com${DEFAULT_RESOURCE_PATH}\nPrivate quiz: https://shotfreetrt.com${DEFAULT_QUIZ_PATH}`,
+    subject: clinicLead ? "Your ShotFreeTRT clinic launch overview" : "Your ShotFreeTRT decision resources",
+    text: clinicLead
+      ? `${buildConfirmationMessage(normalizedSource)}\n\nClinic launch overview: https://shotfreetrt.com${CLINIC_RESOURCE_PATH}\nPatient-facing demo: https://shotfreetrt.com${DEFAULT_RESOURCE_PATH}`
+      : `${buildConfirmationMessage(normalizedSource)}\n\nDecision guide: https://shotfreetrt.com${DEFAULT_RESOURCE_PATH}\nPrivate quiz: https://shotfreetrt.com${DEFAULT_QUIZ_PATH}`,
     headers: {
-      "Idempotency-Key": buildConfirmationIdempotencyKey(email)
+      "Idempotency-Key": buildConfirmationIdempotencyKey(email, normalizedSource)
     }
   };
 }
