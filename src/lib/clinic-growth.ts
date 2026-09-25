@@ -47,3 +47,40 @@ export function estimateClinicWorkload(input: ClinicWorkloadInput): ClinicWorklo
     targetCapacityValueToRecurringFeeRatio: targetCapacityValuePerMonth / CLINIC_MONTHLY_FEE,
   };
 }
+
+
+export function buildClinicDecisionBrief(
+  input: ClinicWorkloadInput,
+  estimate: ClinicWorkloadEstimate,
+): string {
+  const monthlyFee = CLINIC_MONTHLY_FEE.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
+  const hours = (value: number) => value.toLocaleString("en-US", { maximumFractionDigits: 1 });
+  const money = (value: number) => value.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
+
+  return [
+    "ShotFreeTRT clinic launch decision brief",
+    "",
+    `Current inquiry load: ${input.inquiriesPerWeek}/week`,
+    `Repeated basics: ${input.repeatedMinutesPerInquiry} minutes/inquiry`,
+    `Loaded staff cost: ${money(input.loadedHourlyCost)}/hour`,
+    `Estimated repeated-question workload: ${hours(estimate.repeatedHoursPerMonth)} staff hours/month`,
+    `Estimated staff capacity devoted: ${money(estimate.staffCapacityCostPerMonth)}/month`,
+    `Pre-visit education target: ${input.preVisitTargetPercent}% (${hours(estimate.targetHoursMovedPreVisit)} hours/month)`,
+    "",
+    `Offer to evaluate: $2,000 launch + ${monthlyFee}/month`,
+    `Monthly fee benchmark: ${hours(estimate.recurringFeeBenchmarkHours)} loaded staff hours at the current rate`,
+    "",
+    "Decision test:",
+    "1. Walk the patient-facing demo.",
+    "2. List the three route/cost/testing questions staff repeats most often.",
+    "3. Decide whether moving enough of those basics pre-visit would justify the monthly fee alongside booking readiness and patient experience.",
+  ].join("\n");
+}
